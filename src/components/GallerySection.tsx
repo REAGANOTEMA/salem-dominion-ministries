@@ -77,8 +77,8 @@ const GallerySection: React.FC<GallerySectionProps> = ({
       
       if (data.success) {
         const uniqueCategories = Array.from(
-          new Set(data.data.items.map((item: GalleryItem) => item.category).filter(Boolean)
-        ) as string[];
+          new Set(data.data.items.map((item: GalleryItem) => item.category).filter(Boolean))
+        );
         setCategories(uniqueCategories);
       }
     } catch (error) {
