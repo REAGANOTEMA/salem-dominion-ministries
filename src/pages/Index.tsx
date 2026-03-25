@@ -1,9 +1,12 @@
-import { Link } from "react-router-dom";
-import { Clock, Calendar, Heart, PlayCircle, BookOpen, Users } from "lucide-react";
-import HeroSlider from "@/components/HeroSlider";
-import SectionHeading from "@/components/SectionHeading";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { BookOpen, Heart, Calendar, Clock, MapPin, Phone, Mail, ChevronRight, PlayCircle, Users } from 'lucide-react';
+import Navbar from '../components/Navbar';
+import Footer from '../components/Footer';
+import HeroSlider from '../components/HeroSlider';
+import SectionHeading from '../components/SectionHeading';
+import NewsSection from '../components/NewsSection';
+import GallerySection from '../components/GallerySection';
 import heroWorship from "@/assets/hero-worship.jpg";
 import heroCommunity from "@/assets/hero-community.jpg";
 import heroChoir from "@/assets/hero-choir.jpg";
@@ -307,6 +310,32 @@ const Index = () => {
               <p className="font-gabriola text-muted-foreground text-sm">Support the ministry</p>
             </Link>
           </div>
+        </div>
+      </section>
+
+      {/* News Section */}
+      <section className="py-20 bg-gradient-to-br from-gold/5 via-background to-navy/5 relative overflow-hidden">
+        {/* Animated background */}
+        <div className="absolute inset-0 bg-gradient-to-tr from-gold/3 via-transparent to-navy/3"></div>
+        <div className="absolute top-20 left-20 w-32 h-32 bg-gradient-gold rounded-full opacity-4 blur-2xl floating"></div>
+        <div className="absolute bottom-20 right-20 w-40 h-40 bg-gradient-navy rounded-full opacity-4 blur-2xl floating-delayed"></div>
+        
+        <div className="container mx-auto px-4 relative z-10">
+          <SectionHeading title="Latest News & Updates" subtitle="Stay informed with church announcements and events" />
+          <NewsSection showBreaking={true} limit={6} />
+        </div>
+      </section>
+
+      {/* Gallery Section */}
+      <section className="py-20 bg-gradient-to-br from-navy/5 via-background to-gold/5 relative overflow-hidden">
+        {/* Animated background */}
+        <div className="absolute inset-0 bg-gradient-to-bl from-navy/3 via-transparent to-gold/3"></div>
+        <div className="absolute top-20 right-20 w-36 h-36 bg-gradient-gold rounded-full opacity-4 blur-2xl floating"></div>
+        <div className="absolute bottom-20 left-20 w-44 h-44 bg-gradient-navy rounded-full opacity-4 blur-2xl floating-delayed"></div>
+        
+        <div className="container mx-auto px-4 relative z-10">
+          <SectionHeading title="Church Gallery" subtitle="Experience our community through images and videos" />
+          <GallerySection showFilters={true} limit={8} />
         </div>
       </section>
 
