@@ -46,8 +46,10 @@ switch ($method) {
                 break;
                 
             case 'register':
-                $name = $input['name'] ?? '';
+                $firstName = $input['firstName'] ?? '';
+                $lastName = $input['lastName'] ?? '';
                 $email = $input['email'] ?? '';
+                $phone = $input['phone'] ?? '';
                 $password = $input['password'] ?? '';
                 $role = $input['role'] ?? 'user';
                 
@@ -65,14 +67,14 @@ switch ($method) {
                 
                 $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
                 $result = $db->insert(
-                    "INSERT INTO users (name, email, password, role, created_at) VALUES (?, ?, ?, ?, NOW())",
-                    [$name, $email, $hashedPassword, $role]
+                    "INSERT INTO users (first_name, last_name, email, phone, password, role, created_at) VALUES (?, ?, ?, ?, ?, ?, NOW())",
+                    [$firstName, $lastName, $email, $phone, $hashedPassword, $role]
                 );
                 
                 if ($result['success']) {
                     echo json_encode([
                         'success' => true,
-                        'message' => 'Registration successful',
+                        'message' => 'Account created successfully',
                         'user_id' => $result['insert_id']
                     ]);
                 } else {
@@ -81,6 +83,82 @@ switch ($method) {
                         'success' => false,
                         'message' => 'Registration failed',
                         'error' => $result['error']
+                    ]);
+                }
+                break;
+                
+            case 'upload_profile':
+                // Handle profile image upload
+                if (!isset($_FILES['profile_image'])) {
+                    http_response_code(400);
+                    echo json_encode([
+                        'success' => false,
+                        'message' => 'No image file provided'
+                    ]);
+                    break;
+                }
+                
+                $userId = $input['user_id'] ?? '';
+                $file = $_FILES['profile_image'];
+                
+                // Validate file
+                $allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+                $maxSize = 5 * 1024 * 1024; // 5MB
+                
+                if (!in_array($file['type'], $allowedTypes)) {
+                    http_response_code(400);
+                    echo json_encode([
+                        'success' => false,
+                        'message' => 'Invalid file type. Only JPEG, PNG, and GIF are allowed.'
+                    ]);
+                    break;
+                }
+                
+                if ($file['size'] > $maxSize) {
+                    http_response_code(400);
+                    echo json_encode([
+                        'success' => false,
+                        'message' => 'File too large. Maximum size is 5MB.'
+                    ]);
+                    break;
+                }
+                
+                // Create upload directory if it doesn't exist
+                $uploadDir = '../uploads/profiles/';
+                if (!file_exists($uploadDir)) {
+                    mkdir($uploadDir, 0777, true);
+                }
+                
+                // Generate unique filename
+                $filename = uniqid() . '_' . basename($file['name']);
+                $filepath = $uploadDir . $filename;
+                
+                // Move file
+                if (move_uploaded_file($file['tmp_name'], $filepath)) {
+                    // Update user profile
+                    $result = $db->update(
+                        "UPDATE users SET profile_image = ?, updated_at = NOW() WHERE id = ?",
+                        [$filename, $userId]
+                    );
+                    
+                    if ($result['success']) {
+                        echo json_encode([
+                            'success' => true,
+                            'message' => 'Profile image uploaded successfully',
+                            'filename' => $filename
+                        ]);
+                    } else {
+                        echo json_encode([
+                            'success' => false,
+                            'message' => 'Failed to update profile',
+                            'error' => $result['error']
+                        ]);
+                    }
+                } else {
+                    http_response_code(500);
+                    echo json_encode([
+                        'success' => false,
+                        'message' => 'Failed to upload file'
                     ]);
                 }
                 break;
