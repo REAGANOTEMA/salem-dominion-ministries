@@ -48,18 +48,21 @@ foreach ($gallery_items as $item) {
 $news_items = [
     [
         'title' => 'Annual Prayer & Fasting Week',
+        'slug' => 'annual-prayer-fasting-week',
         'content' => 'Join us for a week of dedicated prayer and fasting as we seek God\'s guidance for the new year.',
         'category' => 'events',
         'status' => 'published'
     ],
     [
         'title' => 'New Youth Ministry Program',
+        'slug' => 'new-youth-ministry-program',
         'content' => 'We are excited to launch our new youth ministry program focused on spiritual growth and leadership development.',
         'category' => 'ministry',
         'status' => 'published'
     ],
     [
         'title' => 'Community Service Day',
+        'slug' => 'community-service-day',
         'content' => 'Our church family will be serving the local community through various outreach activities this weekend.',
         'category' => 'outreach',
         'status' => 'published'
@@ -68,8 +71,8 @@ $news_items = [
 
 foreach ($news_items as $item) {
     $result = $db->insert(
-        "INSERT INTO news (title, content, category, status, created_at) VALUES (?, ?, ?, ?, NOW())",
-        [$item['title'], $item['content'], $item['category'], $item['status']]
+        "INSERT INTO news (title, slug, content, category, status, created_at) VALUES (?, ?, ?, ?, ?, NOW())",
+        [$item['title'], $item['slug'], $item['content'], $item['category'], $item['status']]
     );
     if ($result['success']) {
         echo "✅ Added news item: {$item['title']}\n";
