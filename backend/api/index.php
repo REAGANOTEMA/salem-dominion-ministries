@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 require_once '../config/database.php';
 
 // Health check endpoint
-if ($_GET['route'] === 'health') {
+if (($_GET['route'] ?? null === 'health') || (strpos($_SERVER['REQUEST_URI'], 'health') !== false)) {
     echo json_encode([
         'status' => 'OK',
         'message' => 'Salem Dominion Ministries API is running',
