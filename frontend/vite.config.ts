@@ -6,14 +6,14 @@ import path from "path";
 export default defineConfig(({ mode }) => ({
   base: mode === 'production' ? '/salem-dominion-ministries/' : '/',
   server: {
-    host: "localhost",
+    host: "0.0.0.0", // Allow external access
     port: 5173,
     hmr: {
       overlay: false,
     },
     proxy: {
       '/api': {
-        target: 'http://localhost/salem-dominion-ministries/backend/api',
+        target: 'http://192.168.1.10/salem-dominion-ministries/backend/api',
         changeOrigin: true,
         secure: false,
         rewrite: (path) => path.replace(/^\/api/, '/index.php'),
