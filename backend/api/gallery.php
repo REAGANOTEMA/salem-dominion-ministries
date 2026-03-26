@@ -1,0 +1,119 @@
+<?php
+require_once '../config/database.php';
+$db = new Database();
+
+$method = $_SERVER['REQUEST_METHOD'];
+$input = json_decode(file_get_contents('php://input'), true);
+
+switch ($method) {
+    case 'GET':
+        $id = $_GET['id'] ?? '';
+        
+        if ($id) {
+            $result = $db->query("SELECT * FROM gallery WHERE id = ?", [$id]);
+            
+            if ($result['success'] && count($result['data']) > 0) {
+                echo json_encode([
+                    'success' => true,
+                    'data' => $result['data'][0]
+                ]);
+            } else {
+                http_response_code(404);
+                echo json_encode([
+                    'success' => false,
+                    'message' => 'Gallery item not found'
+                ]);
+            }
+        } else {
+            $result = $db->query("SELECT * FROM gallery ORDER BY created_at DESC");
+            
+            echo json_encode([
+                'success' => true,
+                'data' => $result['data']
+            ]);
+        }
+        break;
+        
+    case 'POST':
+        $title = $input['title'] ?? '';
+        $description = $input['description'] ?? '';
+        $image_url = $input['image_url'] ?? '';
+        $category = $input['category'] ?? '';
+        
+        $result = $db->insert(
+            "INSERT INTO gallery (title, description, image_url, category, created_at) VALUES (?, ?, ?, ?, NOW())",
+            [$title, $description, $image_url, $category]
+        );
+        
+        if ($result['success']) {
+            echo json_encode([
+                'success' => true,
+                'message' => 'Gallery item created successfully',
+                'gallery_id' => $result['insert_id']
+            ]);
+        } else {
+            http_response_code(500);
+            echo json_encode([
+                'success' => false,
+                'message' => 'Failed to create gallery item',
+                'error' => $result['error']
+            ]);
+        }
+        break;
+        
+    case 'PUT':
+        $id = $_GET['id'] ?? '';
+        $title = $input['title'] ?? '';
+        $description = $input['description'] ?? '';
+        $image_url = $input['image_url'] ?? '';
+        $category = $input['category'] ?? '';
+        
+        $result = $db->update(
+            "UPDATE gallery SET title = ?, description = ?, image_url = ?, category = ?, updated_at = NOW() WHERE id = ?",
+            [$title, $description, $image_url, $category, $id]
+        );
+        
+        if ($result['success']) {
+            echo json_encode([
+                'success' => true,
+                'message' => 'Gallery item updated successfully'
+            ]);
+        } else {
+            http_response_code(500);
+            echo json_encode([
+                'success' => false,
+                'message' => 'Failed to update gallery item',
+                'error' => $result['error']
+            ]);
+        }
+        break;
+        
+    case 'DELETE':
+        $id = $_GET['id'] ?? '';
+        
+        $result = $db->delete("DELETE FROM gallery WHERE id = ?", [$id]);
+        
+        if ($result['success']) {
+            echo json_encode([
+                'success' => true,
+                'message' => 'Gallery item deleted successfully'
+            ]);
+        } else {
+            http_response_code(500);
+            echo json_encode([
+                'success' => false,
+                'message' => 'Failed to delete gallery item',
+                'error' => $result['error']
+            ]);
+        }
+        break;
+        
+    default:
+        http_response_code(405);
+        echo json_encode([
+            'success' => false,
+            'message' => 'Method not allowed'
+        ]);
+        break;
+}
+?>
