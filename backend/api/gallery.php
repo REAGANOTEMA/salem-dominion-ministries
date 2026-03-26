@@ -37,12 +37,12 @@ switch ($method) {
     case 'POST':
         $title = $input['title'] ?? '';
         $description = $input['description'] ?? '';
-        $image_url = $input['image_url'] ?? '';
+        $file_url = $input['file_url'] ?? '';
         $category = $input['category'] ?? '';
         
         $result = $db->insert(
-            "INSERT INTO gallery (title, description, image_url, category, created_at) VALUES (?, ?, ?, ?, NOW())",
-            [$title, $description, $image_url, $category]
+            "INSERT INTO gallery (title, description, file_url, category, created_at) VALUES (?, ?, ?, ?, NOW())",
+            [$title, $description, $file_url, $category]
         );
         
         if ($result['success']) {
@@ -65,12 +65,12 @@ switch ($method) {
         $id = $_GET['id'] ?? '';
         $title = $input['title'] ?? '';
         $description = $input['description'] ?? '';
-        $image_url = $input['image_url'] ?? '';
+        $file_url = $input['file_url'] ?? '';
         $category = $input['category'] ?? '';
         
         $result = $db->update(
-            "UPDATE gallery SET title = ?, description = ?, image_url = ?, category = ?, updated_at = NOW() WHERE id = ?",
-            [$title, $description, $image_url, $category, $id]
+            "UPDATE gallery SET title = ?, description = ?, file_url = ?, category = ?, updated_at = NOW() WHERE id = ?",
+            [$title, $description, $file_url, $category, $id]
         );
         
         if ($result['success']) {

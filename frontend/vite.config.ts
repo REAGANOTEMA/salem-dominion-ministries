@@ -13,7 +13,7 @@ export default defineConfig(({ mode }) => ({
     },
     proxy: {
       '/api': {
-        target: 'http://192.168.1.10/salem-dominion-ministries/backend/api',
+        target: 'http://localhost/salem-dominion-ministries/backend/api',
         changeOrigin: true,
         secure: false,
         rewrite: (path) => path.replace(/^\/api/, '/index.php'),
