@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 require_once '../config/database.php';
 
 // Health check endpoint
-if (($_GET['route'] ?? null === 'health') || (strpos($_SERVER['REQUEST_URI'], 'health') !== false)) {
+if (($_GET['route'] ?? '') === 'health' || (strpos($_SERVER['REQUEST_URI'], 'health') !== false)) {
     echo json_encode([
         'status' => 'OK',
         'message' => 'Salem Dominion Ministries API is running',
@@ -24,11 +24,32 @@ if (($_GET['route'] ?? null === 'health') || (strpos($_SERVER['REQUEST_URI'], 'h
 // Parse the request
 $request_uri = $_SERVER['REQUEST_URI'];
 $path = parse_url($request_uri, PHP_URL_PATH);
+
+// Remove subdirectory from path if present
+$base_path = '/salem-dominion-ministries';
+if (strpos($path, $base_path) === 0) {
+    $path = substr($path, strlen($base_path));
+}
+
 $path_parts = explode('/', trim($path, '/'));
 
-// Route handling
-$endpoint = $path_parts[1] ?? '';
-$id = $path_parts[2] ?? null;
+// Route handling - find the first non-empty part
+$endpoint = '';
+$id = null;
+
+for ($i = 0; $i < count($path_parts); $i++) {
+    $part = $path_parts[$i];
+    if (!empty($part)) {
+        if (empty($endpoint)) {
+            // Skip 'api' if it's the first part
+            if ($part !== 'api') {
+                $endpoint = $part;
+            }
+        } elseif ($id === null) {
+            $id = $part;
+        }
+    }
+}
 
 switch ($endpoint) {
     case 'auth':

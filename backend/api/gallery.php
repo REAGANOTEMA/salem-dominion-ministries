@@ -8,6 +8,8 @@ $input = json_decode(file_get_contents('php://input'), true);
 switch ($method) {
     case 'GET':
         $id = $_GET['id'] ?? '';
+        $status = $_GET['status'] ?? '';
+        $limit = $_GET['limit'] ?? '';
         
         if ($id) {
             $result = $db->query("SELECT * FROM gallery WHERE id = ?", [$id]);
@@ -25,7 +27,22 @@ switch ($method) {
                 ]);
             }
         } else {
-            $result = $db->query("SELECT * FROM gallery ORDER BY created_at DESC");
+            $query = "SELECT * FROM gallery";
+            $params = [];
+            
+            if ($status) {
+                $query .= " WHERE status = ?";
+                $params[] = $status;
+            }
+            
+            $query .= " ORDER BY created_at DESC";
+            
+            if ($limit && is_numeric($limit)) {
+                $query .= " LIMIT ?";
+                $params[] = (int)$limit;
+            }
+            
+            $result = $db->query($query, $params);
             
             echo json_encode([
                 'success' => true,

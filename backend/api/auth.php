@@ -7,7 +7,7 @@ $input = json_decode(file_get_contents('php://input'), true);
 
 switch ($method) {
     case 'POST':
-        $action = $_GET['action'] ?? '';
+        $action = $input['action'] ?? $_GET['action'] ?? '';
         
         switch ($action) {
             case 'login':
@@ -19,8 +19,8 @@ switch ($method) {
                 if ($result['success'] && count($result['data']) > 0) {
                     $user = $result['data'][0];
                     
-                    if (password_verify($password, $user['password'])) {
-                        unset($user['password']);
+                    if (password_verify($password, $user['password_hash'])) {
+                        unset($user['password_hash']);
                         $token = generateJWT($user);
                         
                         echo json_encode([
@@ -46,12 +46,12 @@ switch ($method) {
                 break;
                 
             case 'register':
-                $firstName = $input['firstName'] ?? '';
-                $lastName = $input['lastName'] ?? '';
+                $first_name = $input['first_name'] ?? '';
+                $last_name = $input['last_name'] ?? '';
                 $email = $input['email'] ?? '';
                 $phone = $input['phone'] ?? '';
                 $password = $input['password'] ?? '';
-                $role = $input['role'] ?? 'user';
+                $role = $input['role'] ?? 'member';
                 
                 // Check if user exists
                 $existing = $db->query("SELECT id FROM users WHERE email = ?", [$email]);
@@ -67,8 +67,8 @@ switch ($method) {
                 
                 $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
                 $result = $db->insert(
-                    "INSERT INTO users (first_name, last_name, email, phone, password, role, created_at) VALUES (?, ?, ?, ?, ?, ?, NOW())",
-                    [$firstName, $lastName, $email, $phone, $hashedPassword, $role]
+                    "INSERT INTO users (first_name, last_name, email, phone, password_hash, role, created_at) VALUES (?, ?, ?, ?, ?, ?, NOW())",
+                    [$first_name, $last_name, $email, $phone, $hashedPassword, $role]
                 );
                 
                 if ($result['success']) {
