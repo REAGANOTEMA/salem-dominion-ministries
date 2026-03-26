@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { BookOpen, Heart, Calendar, Clock, MapPin, Phone, Mail, ChevronRight, PlayCircle, Users } from 'lucide-react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import HeroSlider from '../components/HeroSlider';
+import HeroSection from '../components/Hero/HeroSection';
 import SectionHeading from '../components/SectionHeading';
 import NewsSection from '../components/NewsSection';
 import GallerySection from '../components/GallerySection';
@@ -30,8 +30,8 @@ const Index = () => {
     <div className="min-h-screen">
       <Navbar />
 
-      {/* Hero Slider */}
-      <HeroSlider />
+      {/* Hero Section with Auth */}
+      <HeroSection />
 
       {/* Welcome Section */}
       <section className="py-20 bg-background relative overflow-hidden">

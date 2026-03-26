@@ -32,7 +32,11 @@ $id = $path_parts[2] ?? null;
 
 switch ($endpoint) {
     case 'auth':
-        require_once 'auth.php';
+        if ($id === 'verify') {
+            require_once 'auth_verify.php';
+        } else {
+            require_once 'auth.php';
+        }
         break;
     case 'users':
         require_once 'users.php';
@@ -60,6 +64,12 @@ switch ($endpoint) {
         break;
     case 'news':
         require_once 'news.php';
+        break;
+    case 'messages':
+        require_once 'messages.php';
+        break;
+    case 'notifications':
+        require_once 'notifications.php';
         break;
     default:
         http_response_code(404);
