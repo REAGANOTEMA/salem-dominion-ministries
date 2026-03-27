@@ -2,44 +2,57 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import PageHero from "@/components/PageHero";
 
-import pastorImg from "@/assets/pastor.jpeg";
-import halimaImg from "@/assets/halima.png";
-import damaliImg from "@/assets/damali.png";
-import geraldImg from "@/assets/gerald.png";
-import ireneImg from "@/assets/irene.png";
-import joyceImg from "@/assets/joyce.png";
+import pastorJoyceImg from "@/assets/PASTOR-NABULYA-JOYCE.jpeg";
+import apostleIreneImg from "@/assets/APOSTLE-IRENE-MIREMBE.jpeg";
+import evangelistHalimaImg from "@/assets/Evangelist-kisakye-Halima.jpeg";
+import pastorDamaliImg from "@/assets/Pastor-damali-namwuma.png";
+import pastorMiriamImg from "@/assets/Pastor-miriam-Gerald.jpeg";
+import pastorJothamImg from "@/assets/Pastor-jotham-Bright-Mulinde.jpeg";
+import pastorJonathanImg from "@/assets/pastor-jonathan-Ngobi.jpeg";
 
 const Leadership = () => {
   const leaders = [
     {
-      name: "Halima",
-      role: "Evangelist & Missions Director",
-      img: halimaImg,
-      bio: "Halima passionately leads evangelism and missions, coordinating outreach programs that impact communities spiritually and socially. Her leadership inspires members to share faith boldly while building meaningful connections that reflect Christ’s love and compassion.",
-    },
-    {
-      name: "Damali",
-      role: "Altar Director",
-      img: damaliImg,
-      bio: "Damali oversees altar ministry with deep spiritual sensitivity, guiding prayer moments and personal ministry. She creates an atmosphere where individuals encounter God, receive encouragement, and experience transformation through dedicated spiritual support.",
-    },
-    {
-      name: "Gerald",
-      role: "Men Fellowship Leader",
-      img: geraldImg,
-      bio: "Gerald leads the men’s fellowship by encouraging spiritual growth, accountability, and strong Christian leadership. He mentors men to live purposefully, strengthen families, and serve faithfully within both church and community.",
-    },
-    {
-      name: "Irene",
-      role: "Church Administrator",
-      img: ireneImg,
-      bio: "Irene ensures smooth church operations through strong organization, communication, and coordination. Her administrative leadership supports ministry effectiveness, helping teams function efficiently while maintaining excellence across church activities.",
-    },
-    {
-      name: "Joyce",
+      name: "Pastor Nabulya Joyce",
       role: "Church Treasurer",
-      img: joyceImg,
-      bio: "Joyce faithfully manages church finances with integrity, transparency, and stewardship. She ensures resources are handled responsibly, supporting ministry sustainability and enabling the church to fulfill its mission effectively.",
+      img: pastorJoyceImg,
+      bio: "Dedicated treasurer with over 10 years of service in financial stewardship and church administration. Ensures transparency and integrity in all church financial matters.",
+    },
+    {
+      name: "Apostle Irene Mirembe",
+      role: "Church Administrator",
+      img: apostleIreneImg,
+      bio: "Experienced church administrator with a passion for organizational excellence and spiritual leadership. Oversees daily operations and administrative functions.",
+    },
+    {
+      name: "Evangelist Kisakye Halima",
+      role: "Mission Director",
+      img: evangelistHalimaImg,
+      bio: "Passionate evangelist committed to spreading the gospel and leading mission initiatives. Coordinates outreach programs and community evangelism.",
+    },
+    {
+      name: "Pastor Damali Namwima",
+      role: "Altars Director",
+      img: pastorDamaliImg,
+      bio: "Spiritual leader overseeing altar ministries and prayer services with deep biblical knowledge. Guides worship and spiritual formation.",
+    },
+    {
+      name: "Pastor Jotham Bright Mulinde",
+      role: "Church Elder",
+      img: pastorJothamImg,
+      bio: "Respected church elder providing wisdom and guidance to the congregation. Offers spiritual counsel and leadership support.",
+    },
+    {
+      name: "Pastor Jonathan Ngobi",
+      role: "Bulanga Branch Pastor",
+      img: pastorJonathanImg,
+      bio: "Dedicated branch pastor serving the Bulanga community with spiritual leadership. Provides pastoral care and community outreach.",
+    },
+    {
+      name: "Pastor Miriam Gerald",
+      role: "Senior Pastor",
+      img: pastorMiriamImg,
+      bio: "Senior spiritual leader with over 15 years of ministry experience and biblical teaching. Provides overall vision and spiritual direction.",
     },
   ];
 
@@ -54,8 +67,8 @@ const Leadership = () => {
           <div className="bg-card rounded-lg p-8 md:p-12 border border-border shadow-sm">
             <div className="flex flex-col md:flex-row items-center gap-8">
               <img
-                src={pastorImg}
-                alt="Pastor Musasizi Faty Stu"
+                src={pastorMiriamImg}
+                alt="Pastor Miriam Gerald"
                 className="w-40 h-40 rounded-full object-cover shrink-0"
               />
 
@@ -65,11 +78,11 @@ const Leadership = () => {
                 </span>
 
                 <h2 className="font-heading text-3xl font-bold text-foreground mt-1 mb-4">
-                  Pastor Musasizi Faty Stu
+                  Pastor Miriam Gerald
                 </h2>
 
                 <p className="text-muted-foreground leading-relaxed">
-                  Pastor Musasizi Faty Stu is a visionary spiritual leader dedicated to teaching God’s Word with clarity, compassion, and practical impact. With years of ministry experience, he focuses on raising mature believers, empowering leaders, and building a Christ-centered community that transforms lives spiritually, socially, and economically while advancing the mission of the Kingdom.
+                  Pastor Miriam Gerald is a visionary spiritual leader with over 15 years of ministry experience and biblical teaching. Provides overall vision and spiritual direction for Salem Dominion Ministries, guiding the congregation with wisdom, compassion, and dedication to God's work.
                 </p>
               </div>
             </div>
@@ -81,7 +94,7 @@ const Leadership = () => {
       <section className="py-20 bg-muted">
         <div className="container mx-auto px-4 max-w-6xl">
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {leaders.map((leader, i) => (
+            {leaders.slice(0, 6).map((leader, i) => (
               <div key={i} className="bg-card rounded-lg p-8 border border-border shadow-sm text-center">
                 <img
                   src={leader.img}
