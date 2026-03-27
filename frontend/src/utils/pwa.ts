@@ -1,13 +1,40 @@
 // Progressive Web App (PWA) utilities
+
+// Interface for service worker messages
+interface ServiceWorkerMessage {
+  type: string;
+  [key: string]: unknown;
+}
+
+// Interface for install prompt event
+interface BeforeInstallPromptEvent extends Event {
+  readonly platforms: string[];
+  readonly userChoice: Promise<{
+    outcome: 'accepted' | 'dismissed';
+    platform: string;
+  }>;
+  prompt(): Promise<void>;
+}
+
+// Interface for offline data
+interface OfflineDataItem {
+  id: string;
+  data: unknown;
+  timestamp: number;
+}
+
 export class PWAManager {
   private swRegistration: ServiceWorkerRegistration | null = null;
   private isOnline: boolean = navigator.onLine;
+  private deferredPrompt: BeforeInstallPromptEvent | null = null;
 
   constructor() {
     this.setupEventListeners();
   }
 
-  // Register service worker
+  /** ---------------------------
+   * Service Worker Registration
+   * --------------------------- */
   async registerServiceWorker(): Promise<boolean> {
     if (!('serviceWorker' in navigator)) {
       console.warn('Service Worker not supported');
@@ -15,14 +42,11 @@ export class PWAManager {
     }
 
     try {
-      const registration = await navigator.serviceWorker.register('/sw.js', {
-        scope: '/'
-      });
-
+      const registration = await navigator.serviceWorker.register('/sw.js', { scope: '/' });
       this.swRegistration = registration;
       console.log('✅ Service Worker registered successfully');
 
-      // Check for updates
+      // Handle updates
       registration.addEventListener('updatefound', () => {
         const newWorker = registration.installing;
         if (newWorker) {
@@ -41,7 +65,9 @@ export class PWAManager {
     }
   }
 
-  // Setup event listeners for online/offline status
+  /** ---------------------------
+   * Event Listeners
+   * --------------------------- */
   private setupEventListeners(): void {
     window.addEventListener('online', () => {
       this.isOnline = true;
@@ -54,14 +80,21 @@ export class PWAManager {
       this.showConnectionStatus(false);
     });
 
-    // Listen for messages from service worker
-    navigator.serviceWorker.addEventListener('message', (event) => {
-      this.handleServiceWorkerMessage(event.data);
-    });
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.addEventListener('message', (event) => {
+        this.handleServiceWorkerMessage(event.data);
+      });
+    }
+
+    this.setupInstallPrompt();
   }
 
-  // Handle messages from service worker
-  private handleServiceWorkerMessage(data: any): void {
+  /** ---------------------------
+   * Service Worker Messages
+   * --------------------------- */
+  private handleServiceWorkerMessage(data: ServiceWorkerMessage): void {
+    if (!data || !data.type) return;
+    
     switch (data.type) {
       case 'CACHE_UPDATED':
         this.showNotification('Content updated', 'New content is available');
@@ -74,14 +107,15 @@ export class PWAManager {
     }
   }
 
-  // Show update available notification
+  /** ---------------------------
+   * Update Management
+   * --------------------------- */
   private showUpdateAvailable(): void {
     if (confirm('New version available! Would you like to update?')) {
       this.updateApp();
     }
   }
 
-  // Update the application
   private updateApp(): void {
     if (this.swRegistration) {
       this.swRegistration.waiting?.postMessage({ type: 'SKIP_WAITING' });
@@ -89,7 +123,9 @@ export class PWAManager {
     }
   }
 
-  // Show connection status
+  /** ---------------------------
+   * Connection Status
+   * --------------------------- */
   private showConnectionStatus(online: boolean): void {
     const statusElement = document.getElementById('connection-status');
     if (statusElement) {
@@ -104,87 +140,89 @@ export class PWAManager {
     }
   }
 
-  // Show notification
+  /** ---------------------------
+   * Notifications
+   * --------------------------- */
   private showNotification(title: string, body: string): void {
     if ('Notification' in window && Notification.permission === 'granted') {
       new Notification(title, {
         body,
-        icon: '/icons/icon-192x192.png',
-        badge: '/icons/badge-72x72.png'
+        icon: '/icons/icon-192x192.svg',
+        badge: '/icons/badge-72x72.png',
       });
     } else {
-      // Fallback to custom notification
       console.log(`${title}: ${body}`);
     }
   }
 
-  // Request notification permission
   async requestNotificationPermission(): Promise<boolean> {
-    if (!('Notification' in window)) {
-      console.warn('Notifications not supported');
-      return false;
-    }
-
-    if (Notification.permission === 'granted') {
-      return true;
-    }
-
+    if (!('Notification' in window)) return false;
+    if (Notification.permission === 'granted') return true;
     if (Notification.permission !== 'denied') {
       const permission = await Notification.requestPermission();
       return permission === 'granted';
     }
-
     return false;
   }
 
-  // Sync offline data when back online
+  /** ---------------------------
+   * Offline Data & Sync
+   * --------------------------- */
   private async syncOfflineData(): Promise<void> {
-    if ('serviceWorker' in navigator && this.swRegistration) {
-      // Trigger background sync
+    if ('serviceWorker' in navigator && this.swRegistration?.sync) {
       try {
         await this.swRegistration.sync.register('sync-prayer-requests');
         await this.swRegistration.sync.register('sync-donations');
         console.log('🔄 Background sync triggered');
-      } catch (error) {
-        console.log('Background sync not supported:', error);
+      } catch {
+        console.log('Background sync not supported');
       }
     }
   }
 
-  // Store data for offline use
-  async storeOfflineData(key: string, data: any): Promise<void> {
+  async storeOfflineData(key: string, data: OfflineDataItem['data']): Promise<void> {
     try {
       const db = await this.openDB();
-      const transaction = db.transaction(['offline'], 'readwrite');
-      const store = transaction.objectStore('offline');
-      await store.put({ id: key, data, timestamp: Date.now() });
-    } catch (error) {
-      console.error('Error storing offline data:', error);
+      const tx = db.transaction(['offline'], 'readwrite');
+      const store = tx.objectStore('offline');
+      const item: OfflineDataItem = { id: key, data, timestamp: Date.now() };
+      store.put(item);
+      await new Promise<void>((resolve, reject) => {
+        tx.oncomplete = () => resolve();
+        tx.onerror = () => reject(tx.error);
+      });
+    } catch {
+      console.error('Error storing offline data');
     }
   }
 
-  // Get offline data
-  async getOfflineData(key: string): Promise<any> {
+  async getOfflineData(key: string): Promise<unknown> {
     try {
       const db = await this.openDB();
-      const transaction = db.transaction(['offline'], 'readonly');
-      const store = transaction.objectStore('offline');
-      const result = await store.get(key);
-      return result?.data || null;
-    } catch (error) {
-      console.error('Error getting offline data:', error);
+      const tx = db.transaction(['offline'], 'readonly');
+      const store = tx.objectStore('offline');
+      const request = store.get(key);
+      return new Promise((resolve) => {
+        request.onsuccess = () => {
+          const result = request.result as OfflineDataItem | undefined;
+          resolve(result?.data || null);
+        };
+        request.onerror = () => {
+          console.error('Error getting offline data');
+          resolve(null);
+        };
+      });
+    } catch {
+      console.error('Error getting offline data');
       return null;
     }
   }
 
-  // Open IndexedDB
   private openDB(): Promise<IDBDatabase> {
     return new Promise((resolve, reject) => {
       const request = indexedDB.open('salem-pwa-db', 1);
-      
       request.onerror = () => reject(request.error);
       request.onsuccess = () => resolve(request.result);
-      
       request.onupgradeneeded = () => {
         const db = request.result;
         if (!db.objectStoreNames.contains('offline')) {
@@ -194,82 +232,117 @@ export class PWAManager {
     });
   }
 
-  // Check if app is installed (PWA)
+  /** ---------------------------
+   * PWA Installation
+   * --------------------------- */
   isAppInstalled(): boolean {
-    return window.matchMedia('(display-mode: standalone)').matches ||
-           (window.navigator as any).standalone === true;
+    return window.matchMedia('(display-mode: standalone)').matches || 
+           (window.navigator as any).standalone === true ||
+           document.referrer.includes('android-app://');
   }
 
-  // Install prompt handler
-  private deferredPrompt: any = null;
-
   setupInstallPrompt(): void {
-    window.addEventListener('beforeinstallprompt', (e) => {
+    window.addEventListener('beforeinstallprompt', (e: Event) => {
       e.preventDefault();
-      this.deferredPrompt = e;
+      this.deferredPrompt = (e as BeforeInstallPromptEvent);
       this.showInstallButton();
     });
   }
 
-  // Show install button
   private showInstallButton(): void {
-    const installButton = document.getElementById('install-app-btn');
-    if (installButton) {
-      installButton.style.display = 'block';
-      installButton.addEventListener('click', () => this.installApp());
-    }
+    const btn = document.getElementById('install-app-btn');
+    if (!btn) return;
+    btn.style.display = 'block';
+    btn.addEventListener('click', () => this.installApp());
   }
 
-  // Install the app
   async installApp(): Promise<boolean> {
-    if (!this.deferredPrompt) {
-      return false;
-    }
-
+    if (!this.deferredPrompt) return false;
     try {
       this.deferredPrompt.prompt();
       const { outcome } = await this.deferredPrompt.userChoice;
-      
-      if (outcome === 'accepted') {
-        console.log('✅ App installed successfully');
-        return true;
-      } else {
-        console.log('❌ App installation declined');
-        return false;
-      }
-    } catch (error) {
-      console.error('Error installing app:', error);
+      return outcome === 'accepted';
+    } catch {
       return false;
     } finally {
       this.deferredPrompt = null;
     }
   }
 
-  // Get connection status
+  /** ---------------------------
+   * Connection & Sharing
+   * --------------------------- */
   getConnectionStatus(): boolean {
     return this.isOnline;
   }
 
-  // Share content
   async shareContent(title: string, text: string, url: string): Promise<boolean> {
     if (navigator.share) {
       try {
         await navigator.share({ title, text, url });
         return true;
-      } catch (error) {
-        console.log('Share cancelled or failed:', error);
+      } catch {
         return false;
       }
     } else {
-      // Fallback - copy to clipboard
       try {
         await navigator.clipboard.writeText(`${title}: ${text} ${url}`);
         this.showNotification('Link Copied', 'Content link copied to clipboard');
         return true;
-      } catch (error) {
-        console.error('Failed to copy to clipboard:', error);
+      } catch {
         return false;
       }
+    }
+  }
+
+  /** ---------------------------
+   * PWA Features
+   * --------------------------- */
+  async checkPWAFeatures(): Promise<{
+    installable: boolean;
+    installed: boolean;
+    notifications: boolean;
+    offline: boolean;
+  }> {
+    const features = {
+      installable: 'beforeinstallprompt' in window,
+      installed: this.isAppInstalled(),
+      notifications: 'Notification' in window,
+      offline: 'serviceWorker' in navigator
+    };
+
+    console.log('PWA Features:', features);
+    return features;
+  }
+
+  /** ---------------------------
+   * Cache Management
+   * --------------------------- */
+  async clearCache(): Promise<void> {
+    if ('caches' in window) {
+      try {
+        const cacheNames = await caches.keys();
+        await Promise.all(
+          cacheNames.map(cacheName => caches.delete(cacheName))
+        );
+        console.log('✅ All caches cleared');
+      } catch (error) {
+        console.error('❌ Error clearing caches:', error);
+      }
+    }
+  }
+
+  /** ---------------------------
+   * Update Check
+   * --------------------------- */
+  async checkForUpdates(): Promise<boolean> {
+    if (!this.swRegistration) return false;
+    
+    try {
+      await this.swRegistration.update();
+      return true;
+    } catch {
+      return false;
     }
   }
 }

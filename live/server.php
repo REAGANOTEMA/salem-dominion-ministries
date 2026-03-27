@@ -1,27 +1,67 @@
 <?php
-// Simple PHP server for live deployment
+// Production-ready PHP server with proper MIME types
 $host = '0.0.0.0';
 $port = 8080;
 $docRoot = __DIR__;
 
-// Set headers
+// MIME type mapping
+$mimeTypes = [
+    'html' => 'text/html; charset=utf-8',
+    'css' => 'text/css; charset=utf-8',
+    'js' => 'application/javascript; charset=utf-8',
+    'json' => 'application/json; charset=utf-8',
+    'png' => 'image/png',
+    'jpg' => 'image/jpeg',
+    'jpeg' => 'image/jpeg',
+    'svg' => 'image/svg+xml',
+    'ico' => 'image/x-icon',
+    'woff' => 'font/woff',
+    'woff2' => 'font/woff2',
+    'ttf' => 'font/ttf'
+];
+
+// Set CORS headers
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
-header('Access-Control-Allow-Headers: Content-Type, Authorization');
-header('Content-Type: text/html; charset=utf-8');
+header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With');
+header('Access-Control-Allow-Credentials: true');
+header('Cross-Origin-Resource-Policy: cross-origin');
 
 // Handle requests
 $requestUri = $_SERVER['REQUEST_URI'];
 $method = $_SERVER['REQUEST_METHOD'];
 
-// API requests to backend
-if (strpos($requestUri, '/api/') === 0) {
-    // Forward API requests to the actual API
-    $apiPath = str_replace('/api/', '/salem-dominion-ministries/api/', $requestUri);
+// Remove query string for file serving
+$cleanUri = parse_url($requestUri, PHP_URL_PATH);
+$filePath = $docRoot . $cleanUri;
+
+// Normalize path
+$filePath = realpath($filePath);
+
+// Security check - ensure file is within document root
+if ($filePath === false || !str_starts_with($filePath, $docRoot)) {
+    http_response_code(403);
+    echo 'Forbidden';
+    exit;
+}
+
+// Handle OPTIONS preflight requests
+if ($method === 'OPTIONS') {
+    header('Access-Control-Allow-Origin: *');
+    header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
+    header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With');
+    header('Content-Length: 0');
+    http_response_code(200);
+    exit;
+}
+
+// API requests - proxy to backend
+if (str_starts_with($cleanUri, '/api/')) {
+    $apiPath = str_replace('/api/', '/salem-dominion-ministries/api/', $cleanUri);
     $apiUrl = 'http://localhost/salem-dominion-ministries/api';
     
     $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, $apiUrl . str_replace('/api/', '', $requestUri));
+    curl_setopt($ch, CURLOPT_URL, $apiUrl . substr($cleanUri, 4));
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
     curl_setopt($ch, CURLOPT_POSTFIELDS, file_get_contents('php://input'));
@@ -29,6 +69,7 @@ if (strpos($requestUri, '/api/') === 0) {
         'Content-Type: application/json',
         'Access-Control-Allow-Origin: *'
     ]);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 30);
     
     $response = curl_exec($ch);
     $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
@@ -40,31 +81,26 @@ if (strpos($requestUri, '/api/') === 0) {
     exit;
 }
 
-// Static file serving or SPA fallback
-$requestedFile = $docRoot . parse_url($requestUri, PHP_URL_PATH);
-$requestedFile = realpath($requestedFile);
-
-if ($requestedFile && is_file($requestedFile) && !in_array($requestedFile, ['server.php'])) {
-    $extension = strtolower(pathinfo($requestedFile, PATHINFO_EXTENSION));
-    $mimeTypes = [
-        'html' => 'text/html',
-        'css' => 'text/css',
-        'js' => 'application/javascript',
-        'json' => 'application/json',
-        'png' => 'image/png',
-        'jpg' => 'image/jpeg',
-        'jpeg' => 'image/jpeg',
-        'svg' => 'image/svg+xml',
-        'ico' => 'image/x-icon'
-    ];
+// Static file serving
+if (is_file($filePath)) {
+    $extension = strtolower(pathinfo($filePath, PATHINFO_EXTENSION));
     
     if (isset($mimeTypes[$extension])) {
         header('Content-Type: ' . $mimeTypes[$extension]);
-        readfile($requestedFile);
+        
+        // Add caching for static assets
+        if (in_array($extension, ['css', 'js', 'png', 'jpg', 'jpeg', 'svg', 'ico', 'woff', 'woff2'])) {
+            $maxAge = 31536000; // 1 year
+            header('Cache-Control: public, max-age=' . $maxAge);
+            header('Expires: ' . gmdate('D, d M Y H:i:s', time() + $maxAge) . ' GMT');
+        }
+        
+        readfile($filePath);
         exit;
     }
 }
 
 // SPA fallback - serve index.html for all other routes
+header('Content-Type: text/html; charset=utf-8');
 readfile($docRoot . '/index.html');
 ?>
