@@ -17,7 +17,15 @@ $react_build_dir = __DIR__ . '/frontend/dist';
 
 // Check if the requested file exists in the build directory
 $request_uri = $_SERVER['REQUEST_URI'];
-$requested_file = $react_build_dir . parse_url($request_uri, PHP_URL_PATH);
+$path = parse_url($request_uri, PHP_URL_PATH);
+
+// Remove subdirectory from path if present
+$base_path = '/salem-dominion-ministries';
+if (strpos($path, $base_path) === 0) {
+    $path = substr($path, strlen($base_path));
+}
+
+$requested_file = $react_build_dir . $path;
 
 if (file_exists($requested_file) && is_file($requested_file)) {
     // Serve static files with correct MIME types
@@ -70,13 +78,8 @@ if (file_exists($requested_file) && is_file($requested_file)) {
     $index_file = $react_build_dir . '/index.html';
     
     if (file_exists($index_file)) {
-        // Read and modify the index.html to work with subdirectory
+        // Read the index.html
         $html_content = file_get_contents($index_file);
-        
-        // Update asset paths to include the subdirectory
-        $html_content = str_replace('href="/', 'href="/salem-dominion-ministries/', $html_content);
-        $html_content = str_replace('src="/', 'src="/salem-dominion-ministries/', $html_content);
-        $html_content = str_replace('from "/', 'from "/salem-dominion-ministries/', $html_content);
         
         echo $html_content;
     } else {
