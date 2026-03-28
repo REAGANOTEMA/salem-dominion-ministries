@@ -2,18 +2,13 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import path from "path";
 
-// https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
-  // Set the base path for production to match your subfolder
   base: mode === "production" ? "/salem-dominion-ministries/" : "/",
-
+  
   server: {
-    host: "0.0.0.0", // Allow access from other devices
+    host: "0.0.0.0",
     port: 5173,
-    hmr: {
-      overlay: false,
-    },
-    // Proxy API calls if needed
+    hmr: { overlay: false },
     proxy: {
       "/api": {
         target: "http://localhost/salem-dominion-ministries/api",
@@ -26,9 +21,7 @@ export default defineConfig(({ mode }) => ({
   plugins: [react()],
 
   resolve: {
-    alias: {
-      "@": path.resolve(__dirname, "./src"),
-    },
+    alias: { "@": path.resolve(__dirname, "./src") },
   },
 
   build: {
