@@ -1,0 +1,46 @@
+🔧 ADMIN SETUP REQUIRED FOR LIVE EXTERNAL ACCESS
+
+To make your website accessible from outside your local network, 
+you need to run these commands as Administrator:
+
+⚡ STEP 1: Configure Firewall (Run as Administrator)
+----------------------------------------------------
+Open Command Prompt as Administrator and run:
+
+netsh advfirewall firewall add rule name="Apache HTTP Server" dir=in action=allow protocol=TCP localport=80
+netsh advfirewall firewall add rule name="Apache HTTPS Server" dir=in action=allow protocol=TCP localport=443
+
+⚡ STEP 2: Restart Apache Services
+----------------------------------
+Open XAMPP Control Panel and restart Apache.
+
+⚡ STEP 3: Test Local Network Access
+------------------------------------
+Access your website from another device on your network:
+http://192.168.1.10/salem-dominion-ministries
+
+🌐 STEP 4: For Internet Access (Optional)
+---------------------------------------
+1. Configure port forwarding on your router:
+   - Forward port 80 to your computer (192.168.1.10)
+   - Forward port 443 to your computer for HTTPS
+
+2. Get a domain name from providers like:
+   - GoDaddy, Namecheap, Freenom
+
+3. Point your domain to your public IP address
+
+4. Set up SSL certificate (Let's Encrypt recommended)
+
+🎯 CURRENT STATUS:
+- ✅ Website built and configured
+- ✅ Local access working
+- ⏳ External access needs admin setup
+- ⏳ Internet access needs router configuration
+
+📱 Your Local Network URL:
+http://192.168.1.10/salem-dominion-ministries
+
+🔍 Find your public IP: https://whatismyipaddress.com/
+
+Once configured, your website will be accessible from anywhere in the world!
