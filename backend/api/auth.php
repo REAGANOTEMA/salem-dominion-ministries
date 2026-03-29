@@ -2,6 +2,19 @@
 require_once __DIR__ . '/../config/database.php';
 $db = new Database();
 
+function getPasswordField($db) {
+    $result = $db->query("SHOW COLUMNS FROM users LIKE 'password_hash'");
+
+    if ($result['success'] && count($result['data']) > 0) {
+        return 'password_hash';
+    }
+
+    return 'password';
+}
+
+$passwordField = getPasswordField($db);
+$passwordFieldEscaped = "`$passwordField`";
+
 $method = $_SERVER['REQUEST_METHOD'];
 $input = json_decode(file_get_contents('php://input'), true);
 
@@ -19,8 +32,8 @@ switch ($method) {
                 if ($result['success'] && count($result['data']) > 0) {
                     $user = $result['data'][0];
                     
-                    if (password_verify($password, $user['password_hash'])) {
-                        unset($user['password_hash']);
+                    if (password_verify($password, $user[$passwordField] ?? '')) {
+                        unset($user[$passwordField]);
                         $token = generateJWT($user);
                         
                         echo json_encode([
@@ -67,7 +80,7 @@ switch ($method) {
                 
                 $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
                 $result = $db->insert(
-                    "INSERT INTO users (first_name, last_name, email, phone, password_hash, role, created_at) VALUES (?, ?, ?, ?, ?, ?, NOW())",
+                    "INSERT INTO users (first_name, last_name, email, phone, $passwordFieldEscaped, role, created_at) VALUES (?, ?, ?, ?, ?, ?, NOW())",
                     [$first_name, $last_name, $email, $phone, $hashedPassword, $role]
                 );
                 

@@ -1,20 +1,70 @@
 <?php
 class Database {
-    private $host = "localhost";
-    private $username = "root";
-    private $password = "ReagaN23#";
-    private $database = "salem-dominion-ministries";
+    private $host;
+    private $username;
+    private $password;
+    private $database;
+    private $charset;
+    private $port;
     private $conn;
     
     public function __construct() {
-        $this->conn = new mysqli($this->host, $this->username, $this->password, $this->database);
+        $this->loadEnv(__DIR__ . '/../.env');
+
+        $this->host = getenv('DB_HOST') ?: 'localhost';
+        $this->username = getenv('DB_USER') ?: 'root';
+        $this->password = getenv('DB_PASSWORD') !== false ? getenv('DB_PASSWORD') : '';
+        $this->database = getenv('DB_NAME') ?: 'salem_dominion_ministries';
+        $this->charset = getenv('DB_CHARSET') ?: 'utf8mb4';
+        $this->port = getenv('DB_PORT') ?: 3306;
+
+        $this->conn = new mysqli(
+            $this->host,
+            $this->username,
+            $this->password,
+            $this->database,
+            $this->port
+        );
         
         if ($this->conn->connect_error) {
             die("Connection failed: " . $this->conn->connect_error);
         }
         
         // Set charset to utf8mb4
-        $this->conn->set_charset("utf8mb4");
+        $this->conn->set_charset($this->charset);
+    }
+
+    private function loadEnv($envPath) {
+        if (!file_exists($envPath)) {
+            return;
+        }
+
+        $lines = file($envPath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+
+        foreach ($lines as $line) {
+            $line = trim($line);
+            if ($line === '' || str_starts_with($line, '#')) {
+                continue;
+            }
+
+            if (strpos($line, '=') === false) {
+                continue;
+            }
+
+            [$name, $value] = explode('=', $line, 2);
+            $name = trim($name);
+            $value = trim($value);
+
+            if (strlen($value) > 1 && (($value[0] === '"' && substr($value, -1) === '"') || ($value[0] === "'" && substr($value, -1) === "'"))) {
+                $value = substr($value, 1, -1);
+            }
+
+            if (getenv($name) === false) {
+                putenv("$name=$value");
+                $_ENV[$name] = $value;
+                $_SERVER[$name] = $value;
+            }
+        }
     }
     
     public function getConnection() {
