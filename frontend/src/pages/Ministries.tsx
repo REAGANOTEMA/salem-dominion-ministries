@@ -1,6 +1,7 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import PageHero from "@/components/PageHero";
+import { Link } from "react-router-dom";
 import { Baby, GraduationCap, Heart, Shield, Music, HandHeart } from "lucide-react";
 
 const ministries = [
@@ -8,31 +9,37 @@ const ministries = [
     icon: Baby,
     title: "Children's Ministry",
     desc: "A safe and joyful environment where children learn biblical principles through storytelling, music, and interactive lessons.",
+    link: "/children-ministry"
   },
   {
     icon: GraduationCap,
     title: "Youth Ministry",
     desc: "Empowering young people to live boldly for Christ through mentorship, fellowship, and leadership training.",
+    link: "/youth-ministry"
   },
   {
     icon: Heart,
     title: "Women's Ministry",
     desc: "Encouraging women to grow spiritually, emotionally, and socially through prayer meetings, conferences, and community service.",
+    link: "/women-ministry"
   },
   {
     icon: Shield,
     title: "Men's Ministry",
     desc: "Equipping men to lead with integrity at home, church, and workplace through fellowship and mentorship programs.",
+    link: "/men-ministry"
   },
   {
     icon: Music,
     title: "Worship Team",
     desc: "A dedicated team committed to leading the congregation into God's presence through music and praise.",
+    link: "/worship-ministry"
   },
   {
     icon: HandHeart,
     title: "Outreach / Evangelism",
     desc: "We actively engage in community evangelism, charity work, and missions to share God's love beyond church walls.",
+    link: "/contact"
   },
 ];
 
@@ -61,9 +68,12 @@ const Ministries = () => {
                 <p className="font-gabriola text-muted-foreground leading-relaxed">{m.desc}</p>
                 
                 {/* Interactive button */}
-                <button className="mt-6 w-full py-3 bg-gradient-gold text-navy font-bold rounded-full hover:scale-105 transition-all duration-300 shadow-gold-enhanced hover:shadow-gold-intense button-glow">
+                <Link 
+                  to={m.link}
+                  className="mt-6 w-full py-3 bg-gradient-gold text-navy font-bold rounded-full hover:scale-105 transition-all duration-300 shadow-gold-enhanced hover:shadow-gold-intense button-glow inline-block text-center"
+                >
                   Learn More
-                </button>
+                </Link>
               </div>
             ))}
           </div>

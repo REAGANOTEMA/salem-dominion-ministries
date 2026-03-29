@@ -9,28 +9,14 @@ class Database {
     private $conn;
     
     public function __construct() {
-        // Try to load from environment first (for hosting platform)
-        $this->loadEnv(__DIR__ . '/../.env');
-
-        // Check if we're on hosting platform or localhost
-        $isHosting = isset($_SERVER['HTTP_HOST']) && !in_array($_SERVER['HTTP_HOST'], ['localhost', '127.0.0.1']);
-        
-        if ($isHosting) {
-            // Hosting platform configuration
-            $this->host = getenv('DB_HOST') ?: $_SERVER['HTTP_HOST'] ?? 'localhost';
-            $this->username = getenv('DB_USER') ?: $_SERVER['DB_USER'] ?? 'root';
-            $this->password = getenv('DB_PASSWORD') !== false ? getenv('DB_PASSWORD') : ($_SERVER['DB_PASSWORD'] ?? '');
-            $this->database = getenv('DB_NAME') ?: $_SERVER['DB_NAME'] ?? 'salem_dominion_ministries';
-        } else {
-            // Localhost configuration
-            $this->host = getenv('DB_HOST') ?: 'localhost';
-            $this->username = getenv('DB_USER') ?: 'root';
-            $this->password = getenv('DB_PASSWORD') !== false ? getenv('DB_PASSWORD') : '';
-            $this->database = getenv('DB_NAME') ?: 'salem_dominion_ministries';
-        }
-        
-        $this->charset = getenv('DB_CHARSET') ?: 'utf8mb4';
-        $this->port = getenv('DB_PORT') ?: 3306;
+        // Production Database Configuration
+        // Update these values with your hosting platform details
+        $this->host = 'localhost'; // or your hosting database host
+        $this->username = 'root'; // your hosting database username
+        $this->password = ''; // your hosting database password
+        $this->database = 'salem_dominion_ministries'; // your database name
+        $this->charset = 'utf8mb4';
+        $this->port = 3306;
 
         $this->conn = new mysqli(
             $this->host,
@@ -46,39 +32,6 @@ class Database {
         
         // Set charset to utf8mb4
         $this->conn->set_charset($this->charset);
-    }
-
-    private function loadEnv($envPath) {
-        if (!file_exists($envPath)) {
-            return;
-        }
-
-        $lines = file($envPath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-
-        foreach ($lines as $line) {
-            $line = trim($line);
-            if ($line === '' || str_starts_with($line, '#')) {
-                continue;
-            }
-
-            if (strpos($line, '=') === false) {
-                continue;
-            }
-
-            [$name, $value] = explode('=', $line, 2);
-            $name = trim($name);
-            $value = trim($value);
-
-            if (strlen($value) > 1 && (($value[0] === '"' && substr($value, -1) === '"') || ($value[0] === "'" && substr($value, -1) === "'"))) {
-                $value = substr($value, 1, -1);
-            }
-
-            if (getenv($name) === false) {
-                putenv("$name=$value");
-                $_ENV[$name] = $value;
-                $_SERVER[$name] = $value;
-            }
-        }
     }
     
     public function getConnection() {

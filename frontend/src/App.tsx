@@ -9,6 +9,11 @@ import Index from "./pages/Index";
 import About from "./pages/About";
 import Leadership from "./pages/Leadership";
 import Ministries from "./pages/Ministries";
+import ChildrenMinistry from "./pages/ChildrenMinistry";
+import YouthMinistry from "./pages/YouthMinistry";
+import WomenMinistry from "./pages/WomenMinistry";
+import MenMinistry from "./pages/MenMinistry";
+import WorshipMinistry from "./pages/WorshipMinistry";
 import Sermons from "./pages/Sermons";
 import Events from "./pages/Events";
 import Donate from "./pages/Donate";
@@ -80,6 +85,11 @@ const App = () => {
               <Route path="/about" element={<About />} />
               <Route path="/leadership" element={<Leadership />} />
               <Route path="/ministries" element={<Ministries />} />
+              <Route path="/children-ministry" element={<ChildrenMinistry />} />
+              <Route path="/youth-ministry" element={<YouthMinistry />} />
+              <Route path="/women-ministry" element={<WomenMinistry />} />
+              <Route path="/men-ministry" element={<MenMinistry />} />
+              <Route path="/worship-ministry" element={<WorshipMinistry />} />
               <Route path="/sermons" element={<Sermons />} />
               <Route path="/events" element={<Events />} />
               <Route path="/donate" element={<Donate />} />

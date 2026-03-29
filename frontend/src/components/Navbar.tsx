@@ -8,6 +8,7 @@ const navLinks = [
   { name: "About", path: "/about" },
   { name: "Leadership", path: "/leadership" },
   { name: "Ministries", path: "/ministries" },
+  { name: "Children's Ministry", path: "/children-ministry" },
   { name: "Sermons", path: "/sermons" },
   { name: "Events", path: "/events" },
   { name: "Donate", path: "/donate" },
