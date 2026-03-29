@@ -92,6 +92,9 @@ switch ($endpoint) {
     case 'notifications':
         require_once 'notifications.php';
         break;
+    case 'children_ministry':
+        require_once 'children_ministry.php';
+        break;
     default:
         http_response_code(404);
         echo json_encode([

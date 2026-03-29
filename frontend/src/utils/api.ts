@@ -46,6 +46,9 @@ export const API_ENDPOINTS = {
   // Notifications
   NOTIFICATIONS: `${API_BASE_URL}/notifications`,
   
+  // Children's Ministry
+  CHILDREN_MINISTRY: `${API_BASE_URL}/children_ministry`,
+  
   // Health Check
   HEALTH: `${API_BASE_URL}/health`,
 } as const;
