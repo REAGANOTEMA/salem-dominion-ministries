@@ -3,13 +3,17 @@
     RewriteEngine On
     RewriteBase /salem-dominion-ministries/
 
+    # Route API requests to index.php
+    RewriteCond %{REQUEST_URI} ^/salem-dominion-ministries/api/.*$ [NC]
+    RewriteRule ^api/(.*)$ index.php [L,QSA]
+
     # Serve existing files normally (JS, CSS, images, etc.)
     RewriteCond %{REQUEST_FILENAME} -f [OR]
     RewriteCond %{REQUEST_FILENAME} -d
     RewriteRule ^ - [L]
 
-    # Redirect everything else to index.html (SPA fallback)
-    RewriteRule . index.html [L]
+    # Redirect everything else to index.php (SPA fallback)
+    RewriteRule . index.php [L]
 </IfModule>
 
 # --- Prevent access to sensitive files ---
@@ -26,7 +30,9 @@ AddType font/woff2 .woff2
 AddType font/woff .woff
 
 # --- Optional: Cache static assets for faster loading ---
-<FilesMatch "\.(js|css|svg|woff|woff2|png|jpg|jpeg|gif)$">
-    ExpiresActive On
-    ExpiresDefault "access plus 1 year"
-</FilesMatch>
+<IfModule mod_expires.c>
+    <FilesMatch "\.(js|css|svg|woff|woff2|png|jpg|jpeg|gif)$">
+        ExpiresActive On
+        ExpiresDefault "access plus 1 year"
+    </FilesMatch>
+</IfModule>

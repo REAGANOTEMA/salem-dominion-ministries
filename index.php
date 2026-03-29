@@ -7,6 +7,8 @@ header('Content-Type: text/html; charset=utf-8');
 
 // Check if this is an API request
 if (strpos($_SERVER['REQUEST_URI'], '/api/') !== false) {
+    // Log for debugging
+    error_log("API request detected: " . $_SERVER['REQUEST_URI']);
     // Route to backend API
     require_once 'backend/api/index.php';
     exit;
@@ -17,7 +19,15 @@ $react_build_dir = __DIR__ . '/frontend/dist';
 
 // Check if the requested file exists in the build directory
 $request_uri = $_SERVER['REQUEST_URI'];
-$requested_file = $react_build_dir . parse_url($request_uri, PHP_URL_PATH);
+$path = parse_url($request_uri, PHP_URL_PATH);
+
+// Remove the subdirectory prefix if present
+$subdirectory = '/salem-dominion-ministries';
+if (strpos($path, $subdirectory) === 0) {
+    $path = substr($path, strlen($subdirectory));
+}
+
+$requested_file = $react_build_dir . $path;
 
 if (file_exists($requested_file) && is_file($requested_file)) {
     // Serve static files with correct MIME types
@@ -73,10 +83,25 @@ if (file_exists($requested_file) && is_file($requested_file)) {
         // Read and modify the index.html to work with subdirectory
         $html_content = file_get_contents($index_file);
         
-        // Update asset paths to include the subdirectory
-        $html_content = str_replace('href="/', 'href="/salem-dominion-ministries/', $html_content);
-        $html_content = str_replace('src="/', 'src="/salem-dominion-ministries/', $html_content);
-        $html_content = str_replace('from "/', 'from "/salem-dominion-ministries/', $html_content);
+        // Update asset paths to include the subdirectory only if not already present
+        $subdirectory = '/salem-dominion-ministries';
+        
+        // Only add prefix if it's not already there
+        if (strpos($html_content, 'href="' . $subdirectory . '/assets/') === false) {
+            $html_content = str_replace('href="/assets/', 'href="' . $subdirectory . '/assets/', $html_content);
+        }
+        if (strpos($html_content, 'src="' . $subdirectory . '/assets/') === false) {
+            $html_content = str_replace('src="/assets/', 'src="' . $subdirectory . '/assets/', $html_content);
+        }
+        if (strpos($html_content, 'href="' . $subdirectory . '/icons/') === false) {
+            $html_content = str_replace('href="/icons/', 'href="' . $subdirectory . '/icons/', $html_content);
+        }
+        if (strpos($html_content, 'href="' . $subdirectory . '/manifest.json') === false) {
+            $html_content = str_replace('href="/manifest.json', 'href="' . $subdirectory . '/manifest.json', $html_content);
+        }
+        if (strpos($html_content, 'from "' . $subdirectory . '/') === false) {
+            $html_content = str_replace('from "/', 'from "' . $subdirectory . '/', $html_content);
+        }
         
         echo $html_content;
     } else {

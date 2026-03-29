@@ -42,7 +42,7 @@ export class PWAManager {
     }
 
     try {
-      const registration = await navigator.serviceWorker.register('/sw.js', { scope: '/' });
+      const registration = await navigator.serviceWorker.register('/salem-dominion-ministries/sw.js', { scope: '/salem-dominion-ministries/' });
       this.swRegistration = registration;
       console.log('✅ Service Worker registered successfully');
 
