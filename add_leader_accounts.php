@@ -78,7 +78,7 @@ foreach ($leaders as $leader) {
     
     // Insert user
     $result = $db->insert(
-        "INSERT INTO users (first_name, last_name, email, phone, password_hash, role, is_active, email_verified, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW())",
+        "INSERT INTO users (first_name, last_name, email, phone, password, role, is_active, email_verified, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW())",
         [$leader['first_name'], $leader['last_name'], $leader['email'], $leader['phone'], $hashedPassword, $leader['role'], true, true]
     );
     
