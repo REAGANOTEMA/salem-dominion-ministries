@@ -10,7 +10,7 @@ return [
     ],
     'database' => [
         'host' => 'localhost',
-        'name' => 'salem-dominion-ministries',
+        'name' => 'salem_dominion_ministries',
         'user' => 'root',
         'password' => 'ReagaN23#',
         'charset' => 'utf8mb4',
