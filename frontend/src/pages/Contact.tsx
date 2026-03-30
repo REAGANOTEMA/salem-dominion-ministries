@@ -41,7 +41,7 @@ const Contact = () => {
     const body = encodeURIComponent(
       `Name: ${form.name}\nEmail: ${form.email}\n\nMessage:\n${form.message}`,
     );
-    window.open(`mailto:info@salemdominionministries.org?subject=${subject}&body=${body}`, "_blank");
+    window.open(`mailto:visit@salemdominionministries.com?subject=${subject}&body=${body}`, "_blank");
   };
 
   const handleSubmit = async (e: FormEvent) => {
@@ -122,15 +122,15 @@ const Contact = () => {
                   </a>
                   <p className="text-sm">
                     <a href="https://wa.me/256753244480" target="_blank" rel="noopener noreferrer" className="text-gold hover:text-gold/80 transition-colors">
-                      WhatsApp Chat
+                      Chat with Pastor
                     </a>
                   </p>
                 </Info>
 
                 {/* Email */}
                 <Info icon={<Mail size={20} />} title="Email">
-                  <a href="mailto:info@salemdominionministries.org" className="hover:underline text-gold hover:text-gold/80 transition-colors">
-                    info@salemdominionministries.org
+                  <a href="mailto:visit@salemdominionministries.com" className="hover:underline text-gold hover:text-gold/80 transition-colors">
+                    visit@salemdominionministries.com
                   </a>
                 </Info>
 
@@ -187,8 +187,8 @@ const Contact = () => {
 
                 <p className="text-xs text-muted-foreground font-gabriola">
                   If the form does not submit, you can email us directly at{" "}
-                  <a href="mailto:info@salemdominionministries.org" className="underline text-gold hover:text-gold/80 transition-colors">
-                    info@salemdominionministries.org
+                  <a href="mailto:visit@salemdominionministries.com" className="underline text-gold hover:text-gold/80 transition-colors">
+                    visit@salemdominionministries.com
                   </a>
                   .
                 </p>
