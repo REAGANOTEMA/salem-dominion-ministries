@@ -25,6 +25,9 @@ export const API_ENDPOINTS = {
   // Prayers
   PRAYERS: `${API_BASE_URL}/prayers`,
   
+  // Prayer Booking
+  PRAYER_BOOKING: `${API_BASE_URL}/prayer-booking`,
+  
   // Donations
   DONATIONS: `${API_BASE_URL}/donations`,
   
@@ -67,7 +70,7 @@ export const EXTERNAL_LINKS = {
   INSTAGRAM: 'https://www.instagram.com/salemdominionministries',
   WHATSAPP: 'https://wa.me/256753244480',
   PHONE: 'tel:+256753244480',
-  EMAIL: 'mailto:info@salemdominionministries.org',
+  EMAIL: 'mailto:visit@salemdominionministries.com',
   DESIGNER: 'https://www.ctiauganda.com',
   DEVELOPER_WHATSAPP: 'https://wa.me/256772514889',
 } as const;

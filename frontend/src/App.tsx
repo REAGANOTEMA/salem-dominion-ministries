@@ -20,6 +20,8 @@ import Donate from "./pages/Donate";
 import Gallery from "./pages/Gallery";
 import Blog from "./pages/Blog";
 import Contact from "./pages/Contact";
+import PrayerRequest from "./pages/PrayerRequest";
+import BookPrayerMeeting from "./pages/BookPrayerMeeting";
 import NotFound from "./pages/NotFound";
 import ScrollToTop from "./components/ScrollToTop";
 import SeoManager from "./components/SeoManager";
@@ -96,6 +98,8 @@ const App = () => {
               <Route path="/gallery" element={<Gallery />} />
               <Route path="/blog" element={<Blog />} />
               <Route path="/contact" element={<Contact />} />
+              <Route path="/prayer-request" element={<PrayerRequest />} />
+              <Route path="/book-prayer-meeting" element={<BookPrayerMeeting />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </main>

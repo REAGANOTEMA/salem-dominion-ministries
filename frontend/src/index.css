@@ -40,10 +40,16 @@
     --gold: 41 88% 50%;
     --gold-light: 41 82% 66%;
     --gold-dark: 41 92% 36%;
+    --gold-shimmer: 41 85% 55%;
+    --gold-gloss: 41 90% 45%;
     --navy: 221 63% 20%;
     --navy-light: 221 48% 31%;
+    --navy-deep: 221 70% 15%;
     --cream: 40 30% 97%;
     --cream-dark: 40 25% 90%;
+    --divine-blue: 210 95% 65%;
+    --heavenly-white: 0 0% 98%;
+    --sacred-red: 0 75% 55%;
 
     --sidebar-background: 220 50% 14%;
     --sidebar-foreground: 40 30% 97%;
@@ -103,7 +109,23 @@
 @layer utilities {
   .text-gradient-gold {
     @apply bg-clip-text text-transparent;
-    background-image: linear-gradient(135deg, hsl(38 85% 52%), hsl(38 80% 70%));
+    background-image: linear-gradient(135deg, hsl(41 88% 50%), hsl(41 92% 36%), hsl(38 85% 52%));
+    background-size: 200% 200%;
+    animation: goldShimmer 3s ease-in-out infinite;
+  }
+
+  .text-gradient-divine {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(135deg, hsl(210 95% 65%), hsl(41 88% 50%), hsl(0 75% 55%));
+    background-size: 300% 300%;
+    animation: divineFlow 4s ease-in-out infinite;
+  }
+
+  .text-gradient-heavenly {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(45deg, hsl(0 0% 98%), hsl(41 85% 55%), hsl(210 95% 65%));
+    background-size: 250% 250%;
+    animation: heavenlyGlow 5s ease-in-out infinite;
   }
 
   .bg-gradient-navy {
@@ -111,7 +133,38 @@
   }
 
   .bg-gradient-gold {
-    background: linear-gradient(135deg, hsl(41 88% 50%), hsl(41 92% 36%));
+    background: linear-gradient(135deg, hsl(41 88% 50%), hsl(41 92% 36%), hsl(38 85% 52%));
+    background-size: 200% 200%;
+    animation: goldFlow 6s ease-in-out infinite;
+  }
+
+  .bg-gradient-divine {
+    background: linear-gradient(135deg, hsl(210 95% 65%), hsl(41 88% 50%), hsl(221 63% 20%));
+    background-size: 300% 300%;
+    animation: divineShift 8s ease-in-out infinite;
+  }
+
+  .bg-gradient-heavenly {
+    background: radial-gradient(circle at 30% 20%, hsl(41 85% 55%), hsl(221 63% 20%), hsl(210 95% 65%));
+    background-size: 400% 400%;
+    animation: heavenlyBreath 10s ease-in-out infinite;
+  }
+
+  .bg-gradient-premium {
+    background: linear-gradient(145deg, hsl(41 90% 45%), hsl(41 85% 55%), hsl(38 85% 52%));
+    position: relative;
+    overflow: hidden;
+  }
+
+  .bg-gradient-premium::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, transparent, hsla(41 85% 55%, 0.3), transparent);
+    animation: premiumShine 4s linear infinite;
   }
 
   .bg-brand-ribbon {
@@ -141,11 +194,23 @@
   }
 
   .shadow-gold-enhanced {
-    box-shadow: 0 4px 6px -1px hsla(38, 85%, 52%, 0.1), 0 2px 4px -1px hsla(38, 85%, 52%, 0.05);
+    box-shadow: 0 4px 6px -1px hsla(38, 85%, 52%, 0.1), 0 2px 4px -1px hsla(38, 85%, 52%, 0.05), 0 0 20px hsla(41, 85%, 55%, 0.15);
   }
 
   .shadow-gold-intense {
-    box-shadow: 0 10px 15px -3px hsla(38, 85%, 52%, 0.1), 0 4px 6px -2px hsla(38, 85%, 52%, 0.08);
+    box-shadow: 0 10px 15px -3px hsla(38, 85%, 52%, 0.1), 0 4px 6px -2px hsla(38, 85%, 52%, 0.08), 0 0 30px hsla(41, 85%, 55%, 0.2);
+  }
+
+  .shadow-divine {
+    box-shadow: 0 0 20px hsla(210, 95%, 65%, 0.3), 0 0 40px hsla(210, 95%, 65%, 0.15), inset 0 0 20px hsla(210, 95%, 65%, 0.1);
+  }
+
+  .shadow-heavenly {
+    box-shadow: 0 0 30px hsla(41, 85%, 55%, 0.4), 0 0 60px hsla(210, 95%, 65%, 0.2), inset 0 0 30px hsla(0, 0%, 98%, 0.3);
+  }
+
+  .shadow-premium {
+    box-shadow: 0 20px 25px -5px hsla(0, 0%, 0%, 0.1), 0 10px 10px -5px hsla(0, 0%, 0%, 0.04), 0 0 0 1px hsla(41, 85%, 55%, 0.2);
   }
 
   .text-shadow-gold {
@@ -544,6 +609,47 @@
   .animate-float-medium {
     animation: floatY 4.5s ease-in-out infinite;
   }
+}
+
+@keyframes goldShimmer {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+@keyframes divineFlow {
+  0%, 100% { background-position: 0% 50%; }
+  33% { background-position: 100% 50%; }
+  66% { background-position: 50% 100%; }
+}
+
+@keyframes heavenlyGlow {
+  0%, 100% { background-position: 0% 50%; }
+  25% { background-position: 100% 0%; }
+  50% { background-position: 100% 100%; }
+  75% { background-position: 0% 100%; }
+}
+
+@keyframes goldFlow {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+@keyframes divineShift {
+  0%, 100% { background-position: 0% 50%; }
+  33% { background-position: 100% 50%; }
+  66% { background-position: 50% 100%; }
+}
+
+@keyframes heavenlyBreath {
+  0%, 100% { background-position: 0% 0%; }
+  25% { background-position: 100% 0%; }
+  50% { background-position: 100% 100%; }
+  75% { background-position: 0% 100%; }
+}
+
+@keyframes premiumShine {
+  0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+  100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
 }
 
 @keyframes fadeIn {

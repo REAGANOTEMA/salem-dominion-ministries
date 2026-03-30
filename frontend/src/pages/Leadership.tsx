@@ -69,26 +69,30 @@ const Leadership = () => {
       <PageHero title="Leadership" subtitle="Meet the team leading Salem Dominion Ministries" />
 
       {/* Senior Pastor */}
-      <section className="py-20 bg-background">
-        <div className="container mx-auto px-4 max-w-4xl">
-          <div className="bg-card rounded-lg p-8 md:p-12 border border-border shadow-sm">
+      <section className="py-20 bg-gradient-heavenly relative overflow-hidden">
+        <div className="absolute inset-0 faith-pattern opacity-30"></div>
+        <div className="container mx-auto px-4 max-w-4xl relative z-10">
+          <div className="bg-gradient-premium rounded-2xl p-8 md:p-12 border border-border shadow-premium card-hover-3d">
             <div className="flex flex-col md:flex-row items-center gap-8">
-              <img
-                src={pastorImg}
-                alt="Senior Pastor"
-                className="w-40 h-40 rounded-full object-cover shrink-0"
-              />
+              <div className="relative group">
+                <div className="absolute -inset-1 bg-gradient-divine rounded-full opacity-75 group-hover:opacity-100 transition-opacity duration-300 animate-pulse-slow"></div>
+                <img
+                  src={pastorImg}
+                  alt="Senior Pastor"
+                  className="relative w-40 h-40 rounded-full object-contain shrink-0 bg-muted border-4 border-white/20 shadow-divine"
+                />
+              </div>
 
-              <div>
-                <span className="text-secondary font-medium text-sm uppercase tracking-wider">
+              <div className="text-center md:text-left">
+                <span className="text-gradient-divine font-semibold text-sm uppercase tracking-widest animate-fade-in">
                   Senior Pastor & Founder
                 </span>
 
-                <h2 className="font-heading text-3xl font-bold text-foreground mt-1 mb-4">
+                <h2 className="font-heading text-3xl md:text-4xl font-bold text-gradient-gold mt-2 mb-4 animate-slide-up">
                   Pastor [Main Pastor Name]
                 </h2>
 
-                <p className="text-muted-foreground leading-relaxed">
+                <p className="text-muted-foreground leading-relaxed animate-fade-in" style={{animationDelay: '0.2s'}}>
                   Visionary leader and founder of Salem Dominion Ministries, dedicated to spreading God's word and building a Christ-centered community. Provides overall spiritual direction and guidance for the church and its leadership team.
                 </p>
               </div>
@@ -98,22 +102,35 @@ const Leadership = () => {
       </section>
 
       {/* Other Leaders */}
-      <section className="py-20 bg-muted">
-        <div className="container mx-auto px-4 max-w-6xl">
+      <section className="py-20 bg-gradient-divine relative overflow-hidden">
+        <div className="absolute inset-0 cross-sun-pattern opacity-20"></div>
+        <div className="container mx-auto px-4 max-w-6xl relative z-10">
+          <div className="text-center mb-12">
+            <h2 className="font-heading text-3xl md:text-4xl font-bold text-gradient-heavenly mb-4 animate-fade-in">
+              Our Leadership Team
+            </h2>
+            <div className="w-24 h-1 bg-gradient-gold mx-auto rounded-full animate-slide-up"></div>
+          </div>
+          
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {leaders.slice(1).map((leader, i) => (
-              <div key={i} className="bg-card rounded-lg p-8 border border-border shadow-sm text-center">
-                <img
-                  src={leader.img}
-                  alt={leader.name}
-                  className="w-28 h-28 rounded-full object-cover mx-auto mb-4"
-                />
+              <div key={i} className="bg-gradient-premium rounded-2xl p-8 border border-border shadow-premium card-hover-3d text-center group animate-fade-in" style={{animationDelay: `${i * 0.1}s`}}>
+                <div className="relative mb-6">
+                  <div className="absolute -inset-1 bg-gradient-gold rounded-full opacity-0 group-hover:opacity-75 transition-opacity duration-300 animate-pulse-slow"></div>
+                  <img
+                    src={leader.img}
+                    alt={leader.name}
+                    className="relative w-28 h-28 rounded-full object-contain mx-auto bg-muted border-4 border-white/20 shadow-gold-enhanced group-hover:shadow-divine transition-all duration-300"
+                  />
+                </div>
 
-                <h3 className="font-heading text-xl font-bold text-foreground">
+                <h3 className="font-heading text-xl font-bold text-gradient-gold mb-2 group-hover:scale-105 transition-transform duration-300">
                   {leader.name}
                 </h3>
 
-                <p className="text-secondary text-sm mb-3">{leader.role}</p>
+                <p className="text-gradient-divine text-sm font-medium mb-3">{leader.role}</p>
+
+                <div className="w-16 h-0.5 bg-gradient-gold mx-auto mb-4 opacity-50"></div>
 
                 <p className="text-muted-foreground text-sm leading-relaxed">
                   {leader.bio}
