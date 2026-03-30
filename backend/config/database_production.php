@@ -12,9 +12,9 @@ class Database {
         // Production Database Configuration
         // Update these values with your hosting platform details
         $this->host = 'localhost'; // or your hosting database host
-        $this->username = 'root'; // your hosting database username
-        $this->password = ''; // your hosting database password
-        $this->database = 'salem_dominion_ministries'; // your database name
+        $this->username = 'salemdominionmin_db'; // your hosting database username
+        $this->password = 'BAqC3nfhKmsFmkhMqCb8'; // your hosting database password
+        $this->database = 'salem-dominion-ministries'; // your database name
         $this->charset = 'utf8mb4';
         $this->port = 3306;
 
