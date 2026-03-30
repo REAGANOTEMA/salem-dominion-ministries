@@ -14,7 +14,7 @@ import pastorJonathanImg from "@/assets/pastor-jonathan-Ngobi.jpeg";
 const Leadership = () => {
   const leaders = [
     {
-      name: "Pastor [Main Pastor Name]",
+      name: "Pastor Faty Musasizi",
       role: "Senior Pastor & Founder",
       img: pastorImg,
       bio: "Visionary leader and founder of Salem Dominion Ministries, dedicated to spreading God's word and building a Christ-centered community. Provides overall spiritual direction and guidance.",
