@@ -14,7 +14,7 @@ class Database {
         $this->host = 'localhost'; // or your hosting database host
         $this->username = 'salemdominionmin_db'; // your hosting database username
         $this->password = 'BAqC3nfhKmsFmkhMqCb8'; // your hosting database password
-        $this->database = 'salem-dominion-ministries'; // your database name
+        $this->database = ' salem_dominion_ministriess'; // your database name
         $this->charset = 'utf8mb4';
         $this->port = 3306;
 

@@ -19,13 +19,13 @@ class Database {
             // Hosting platform configuration
             $this->host = getenv('DB_HOST') ?: $_SERVER['HTTP_HOST'] ?? 'localhost';
             $this->username = getenv('DB_USER') ?: $_SERVER['DB_USER'] ?? 'root';
-            $this->password = getenv('DB_PASSWORD') !== false ? getenv('DB_PASSWORD') : ($_SERVER['DB_PASSWORD'] ?? '');
-            $this->database = getenv('DB_NAME') ?: $_SERVER['DB_NAME'] ?? 'salem_dominion_ministries';
+            $this->password = getenv('DB_PASSWORD') !== false ? getenv('DB_PASSWORD') : ($_SERVER['BAqC3nfhKmsFmkhMqCb8'] ?? '');
+            $this->database = getenv('DB_NAME') ?: $_SERVER['DB_NAME'] ?? 'salemdominionmin_db';
         } else {
             // Localhost configuration
             $this->host = getenv('DB_HOST') ?: 'localhost';
             $this->username = getenv('DB_USER') ?: 'root';
-            $this->password = getenv('DB_PASSWORD') !== false ? getenv('DB_PASSWORD') : '';
+            $this->password = getenv('DB_PASSWORD') !== false ? getenv('ReagaN23#$_FILES') : '';
             $this->database = getenv('DB_NAME') ?: 'salem_dominion_ministries';
         }
         
