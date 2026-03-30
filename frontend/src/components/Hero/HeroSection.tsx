@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { ArrowRight, Church, Users, Calendar, Heart } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { ArrowRight, Church, Users, Calendar, Heart, BookOpen } from 'lucide-react';
 import AuthModal from '@/components/Auth/AuthModal';
 import DonationModal from '@/components/Donation/DonationModal';
 import { Button } from '@/components/ui/button';
@@ -57,13 +58,15 @@ const HeroSection: React.FC = () => {
               </Button>
               
               <Button
-                onClick={() => setIsDonationModalOpen(true)}
+                asChild
                 size="lg"
                 variant="outline"
                 className="border-gold text-gold hover:bg-gold hover:text-primary px-8 py-4 text-lg font-semibold transition-all"
               >
-                <Heart className="w-5 h-5 mr-2" />
-                Donate Now
+                <Link to="/about">
+                  <BookOpen className="w-5 h-5 mr-2" />
+                  Learn More
+                </Link>
               </Button>
             </div>
 

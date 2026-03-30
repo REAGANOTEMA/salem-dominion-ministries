@@ -237,7 +237,7 @@ export class PWAManager {
    * --------------------------- */
   isAppInstalled(): boolean {
     return window.matchMedia('(display-mode: standalone)').matches || 
-           (window.navigator as any).standalone === true ||
+           ((window.navigator as { standalone?: boolean }).standalone === true) ||
            document.referrer.includes('android-app://');
   }
 

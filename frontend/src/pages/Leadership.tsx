@@ -2,6 +2,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import PageHero from "@/components/PageHero";
 
+import pastorImg from "@/assets/pastor.jpeg";
 import pastorJoyceImg from "@/assets/PASTOR-NABULYA-JOYCE.jpeg";
 import apostleIreneImg from "@/assets/APOSTLE-IRENE-MIREMBE.jpeg";
 import evangelistHalimaImg from "@/assets/Evangelist-kisakye-Halima.jpeg";
@@ -12,6 +13,18 @@ import pastorJonathanImg from "@/assets/pastor-jonathan-Ngobi.jpeg";
 
 const Leadership = () => {
   const leaders = [
+    {
+      name: "Pastor [Main Pastor Name]",
+      role: "Senior Pastor & Founder",
+      img: pastorImg,
+      bio: "Visionary leader and founder of Salem Dominion Ministries, dedicated to spreading God's word and building a Christ-centered community. Provides overall spiritual direction and guidance.",
+    },
+    {
+      name: "Pastor Miriam Gerald",
+      role: "Associate Senior Pastor",
+      img: pastorMiriamImg,
+      bio: "Senior spiritual leader with over 15 years of ministry experience and biblical teaching. Provides overall vision and spiritual direction.",
+    },
     {
       name: "Pastor Nabulya Joyce",
       role: "Church Treasurer",
@@ -48,12 +61,6 @@ const Leadership = () => {
       img: pastorJonathanImg,
       bio: "Dedicated branch pastor serving the Bulanga community with spiritual leadership. Provides pastoral care and community outreach.",
     },
-    {
-      name: "Pastor Miriam Gerald",
-      role: "Senior Pastor",
-      img: pastorMiriamImg,
-      bio: "Senior spiritual leader with over 15 years of ministry experience and biblical teaching. Provides overall vision and spiritual direction.",
-    },
   ];
 
   return (
@@ -67,22 +74,22 @@ const Leadership = () => {
           <div className="bg-card rounded-lg p-8 md:p-12 border border-border shadow-sm">
             <div className="flex flex-col md:flex-row items-center gap-8">
               <img
-                src={pastorMiriamImg}
-                alt="Pastor Miriam Gerald"
+                src={pastorImg}
+                alt="Senior Pastor"
                 className="w-40 h-40 rounded-full object-cover shrink-0"
               />
 
               <div>
                 <span className="text-secondary font-medium text-sm uppercase tracking-wider">
-                  Senior Pastor
+                  Senior Pastor & Founder
                 </span>
 
                 <h2 className="font-heading text-3xl font-bold text-foreground mt-1 mb-4">
-                  Pastor Miriam Gerald
+                  Pastor [Main Pastor Name]
                 </h2>
 
                 <p className="text-muted-foreground leading-relaxed">
-                  Pastor Miriam Gerald is a visionary spiritual leader with over 15 years of ministry experience and biblical teaching. Provides overall vision and spiritual direction for Salem Dominion Ministries, guiding the congregation with wisdom, compassion, and dedication to God's work.
+                  Visionary leader and founder of Salem Dominion Ministries, dedicated to spreading God's word and building a Christ-centered community. Provides overall spiritual direction and guidance for the church and its leadership team.
                 </p>
               </div>
             </div>
@@ -94,7 +101,7 @@ const Leadership = () => {
       <section className="py-20 bg-muted">
         <div className="container mx-auto px-4 max-w-6xl">
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {leaders.slice(0, 6).map((leader, i) => (
+            {leaders.slice(1).map((leader, i) => (
               <div key={i} className="bg-card rounded-lg p-8 border border-border shadow-sm text-center">
                 <img
                   src={leader.img}

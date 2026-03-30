@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Heart, BookOpen, Users, Calendar, Clock, MapPin, Phone, Mail, Star, Award, Music, Palette, Gamepad2, Church, Baby, Child, GraduationCap } from 'lucide-react';
+import { Heart, BookOpen, Users, Calendar, Clock, MapPin, Phone, Mail, Star, Award, Music, Palette, Gamepad2, Church, Baby, User, GraduationCap } from 'lucide-react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import SectionHeading from '../components/SectionHeading';
@@ -27,7 +27,7 @@ const ChildrenMinistry = () => {
       name: "Beginner Class",
       age: "3-5 years",
       description: "Preschoolers learn about Jesus through interactive Bible stories, songs, games, and hands-on activities.",
-      icon: Child,
+      icon: User,
       color: "from-purple-400 to-indigo-400",
       features: ["Interactive Stories", "Fun Games", "Creative Activities", "Memory Verses"]
     },
@@ -228,7 +228,7 @@ const ChildrenMinistry = () => {
                       <Users className="text-primary" size={24} />
                     </div>
                     <div>
-                      <p className="font-bold text-gray-900">500+</span> Children</p>
+                      <p className="font-bold text-gray-900">500+ Children</p>
                       <p className="text-sm text-gray-600">Growing in faith weekly</p>
                     </div>
                   </div>
