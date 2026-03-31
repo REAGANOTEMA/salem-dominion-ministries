@@ -451,7 +451,9 @@ const ChildrenMinistry = () => {
                 <Mail className="text-primary" size={24} />
               </div>
               <h3 className="font-bold text-gray-900 mb-2">Email Us</h3>
-              <p className="text-gray-600">children@salemdominionministries.org</p>
+              <a href="mailto:childrenministry@salemdominionministries.com" className="text-gold hover:underline">
+                childrenministry@salemdominionministries.com
+              </a>
             </div>
             <div className="text-center">
               <div className="w-16 h-16 bg-gradient-gold rounded-full flex items-center justify-center mx-auto mb-4">

@@ -11,6 +11,8 @@ const navLinks = [
   { name: "Children's Ministry", path: "/children-ministry" },
   { name: "Sermons", path: "/sermons" },
   { name: "Events", path: "/events" },
+  { name: "Prayer Request", path: "/prayer-request" },
+  { name: "Book Pastor Call", path: "/book-pastor-call" },
   { name: "Donate", path: "/donate" },
   { name: "Gallery", path: "/gallery" },
   { name: "Blog", path: "/blog" },

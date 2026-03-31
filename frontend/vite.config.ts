@@ -3,7 +3,7 @@ import react from "@vitejs/plugin-react";
 import path from "path";
 
 export default defineConfig(({ mode }) => ({
-  base: mode === "production" ? "/salem-dominion-ministries/" : "/",
+  base: "/",
   
   server: {
     host: "0.0.0.0",
@@ -11,7 +11,7 @@ export default defineConfig(({ mode }) => ({
     hmr: { overlay: false },
     proxy: {
       "/api": {
-        target: "http://localhost/salem-dominion-ministries/api",
+        target: "http://localhost/api",
         changeOrigin: true,
         secure: false,
       },

@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
 
 interface PageHeroProps {
   title: string;
@@ -157,12 +158,12 @@ const PageHero = ({ title, subtitle, heroImage }: PageHeroProps) => {
           
           {/* Call-to-action buttons */}
           <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center animate-fade-in-up" style={{ animationDelay: '0.6s' }}>
-            <button className="px-8 py-4 bg-gradient-gold text-navy font-bold rounded-full hover:scale-105 transition-all duration-300 shadow-gold-enhanced hover:shadow-gold-intense button-glow font-algerian">
+            <Link to="/book-pastor-call" className="px-8 py-4 bg-gradient-gold text-navy font-bold rounded-full hover:scale-105 transition-all duration-300 shadow-gold-enhanced hover:shadow-gold-intense button-glow font-algerian text-center">
               Get Started
-            </button>
-            <button className="px-8 py-4 border-2 border-gold text-gold font-bold rounded-full hover:bg-gold hover:text-navy transition-all duration-300 hover:scale-105 font-algerian">
+            </Link>
+            <Link to="/about" className="px-8 py-4 border-2 border-gold text-gold font-bold rounded-full hover:bg-gold hover:text-navy transition-all duration-300 hover:scale-105 font-algerian text-center">
               Learn More
-            </button>
+            </Link>
           </div>
         </div>
       </div>

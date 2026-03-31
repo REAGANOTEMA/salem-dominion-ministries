@@ -44,6 +44,7 @@ const Footer = () => {
                 { name: "Sermons", path: "/sermons" },
                 { name: "Events", path: "/events" },
                 { name: "Prayer Request", path: "/prayer-request" },
+                { name: "Book Pastor Call", path: "/book-pastor-call" },
                 { name: "Book Prayer Meeting", path: "/book-prayer-meeting" },
                 { name: "Donate", path: "/donate" },
                 { name: "Contact", path: "/contact" },
@@ -143,7 +144,7 @@ const Footer = () => {
         {/* Bottom Bar */}
         <div className="border-t border-navy-light/30 mt-12 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-primary-foreground/50 text-sm">
-            2025 Salem Dominion Ministries. All rights reserved.
+            © 2026 Salem Dominion Ministries. All rights reserved.
           </p>
         </div>
       </div>

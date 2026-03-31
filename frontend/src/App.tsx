@@ -22,6 +22,7 @@ import Blog from "./pages/Blog";
 import Contact from "./pages/Contact";
 import PrayerRequest from "./pages/PrayerRequest";
 import BookPrayerMeeting from "./pages/BookPrayerMeeting";
+import BookPastorCall from "./pages/BookPastorCall";
 import NotFound from "./pages/NotFound";
 import ScrollToTop from "./components/ScrollToTop";
 import SeoManager from "./components/SeoManager";
@@ -53,7 +54,7 @@ const App = () => {
         <TooltipProvider>
           <Toaster />
           <Sonner />
-          <BrowserRouter basename="/salem-dominion-ministries">
+          <BrowserRouter>
           <a
             href="#main-content"
             className="sr-only focus:not-sr-only focus:absolute focus:left-3 focus:top-3 focus:z-[100] focus:rounded-md focus:bg-primary focus:px-4 focus:py-2 focus:text-primary-foreground"
@@ -100,6 +101,7 @@ const App = () => {
               <Route path="/contact" element={<Contact />} />
               <Route path="/prayer-request" element={<PrayerRequest />} />
               <Route path="/book-prayer-meeting" element={<BookPrayerMeeting />} />
+              <Route path="/book-pastor-call" element={<BookPastorCall />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </main>

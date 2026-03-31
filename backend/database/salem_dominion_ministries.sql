@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 30, 2026 at 06:53 AM
+-- Generation Time: Mar 31, 2026 at 09:30 AM
 -- Server version: 8.0.45
 -- PHP Version: 8.2.12
 
@@ -72,8 +72,8 @@ CREATE TABLE `blog_posts` (
 --
 
 INSERT INTO `blog_posts` (`id`, `title`, `slug`, `excerpt`, `content`, `featured_image_url`, `author_id`, `category`, `tags`, `meta_title`, `meta_description`, `views_count`, `likes_count`, `status`, `is_featured`, `published_at`, `created_at`, `updated_at`) VALUES
-(1, '5 Ways to Strengthen Your Prayer Life', '5-ways-strengthen-prayer-life', 'Discover practical methods to deepen your prayer connection with God', 'Prayer is the foundation of our relationship with God...', NULL, 1, 'Spiritual Growth', NULL, NULL, NULL, 0, 0, 'published', 0, '2026-03-29 16:31:28', '2026-03-29 16:31:28', '2026-03-29 16:31:28'),
-(2, 'Understanding God\'s Purpose for Your Life', 'understanding-gods-purpose', 'Find clarity and direction in your divine calling', 'God has a unique plan and purpose for each of us...', NULL, 1, 'Purpose', NULL, NULL, NULL, 0, 0, 'published', 0, '2026-03-29 16:31:28', '2026-03-29 16:31:28', '2026-03-29 16:31:28');
+(1, '5 Ways to Strengthen Your Prayer Life', '5-ways-strengthen-prayer-life', 'Discover practical methods to deepen your prayer connection with God', 'Prayer is the foundation of our relationship with God...', NULL, 1, 'Spiritual Growth', NULL, NULL, NULL, 0, 0, 'published', 0, '2026-03-31 07:30:21', '2026-03-31 07:30:21', '2026-03-31 07:30:21'),
+(2, 'Understanding God\'s Purpose for Your Life', 'understanding-gods-purpose', 'Find clarity and direction in your divine calling', 'God has a unique plan and purpose for each of us...', NULL, 1, 'Purpose', NULL, NULL, NULL, 0, 0, 'published', 0, '2026-03-31 07:30:21', '2026-03-31 07:30:21', '2026-03-31 07:30:21');
 
 -- --------------------------------------------------------
 
@@ -121,11 +121,11 @@ CREATE TABLE `children_classes` (
 --
 
 INSERT INTO `children_classes` (`id`, `class_name`, `age_group`, `description`, `capacity`, `current_enrollment`, `teacher_id`, `meeting_time`, `meeting_room`, `status`, `created_at`, `updated_at`) VALUES
-(1, 'Nursery Class', '0-2 years', 'A safe and nurturing environment for infants and toddlers where they experience God\'s love through gentle care and simple songs.', 15, 0, NULL, 'Sunday 8:00 AM & 10:30 AM', 'Nursery Room', 'active', '2026-03-29 16:31:28', '2026-03-29 16:31:28'),
-(2, 'Beginner Class', '3-5 years', 'Preschoolers learn about Jesus through interactive Bible stories, songs, games, and hands-on activities designed for their age.', 25, 0, NULL, 'Sunday 8:00 AM & 10:30 AM', 'Classroom 1', 'active', '2026-03-29 16:31:28', '2026-03-29 16:31:28'),
-(3, 'Primary Class', '6-8 years', 'Early elementary children explore foundational Bible truths through engaging lessons, memory verses, and creative activities.', 30, 0, NULL, 'Sunday 8:00 AM & 10:30 AM', 'Classroom 2', 'active', '2026-03-29 16:31:28', '2026-03-29 16:31:28'),
-(4, 'Junior Class', '9-11 years', 'Upper elementary children dive deeper into God\'s Word with practical applications, discussions, and service projects.', 30, 0, NULL, 'Sunday 8:00 AM & 10:30 AM', 'Classroom 3', 'active', '2026-03-29 16:31:28', '2026-03-29 16:31:28'),
-(5, 'Pre-Teen Class', '12-13 years', 'Tweens navigate faith and life challenges through relevant Bible studies, mentorship, and meaningful discussions.', 25, 0, NULL, 'Sunday 8:00 AM & 10:30 AM', 'Youth Room', 'active', '2026-03-29 16:31:28', '2026-03-29 16:31:28');
+(1, 'Nursery Class', '0-2 years', 'A safe and nurturing environment for infants and toddlers where they experience God\'s love through gentle care and simple songs.', 15, 0, NULL, 'Sunday 8:00 AM & 10:30 AM', 'Nursery Room', 'active', '2026-03-31 07:30:21', '2026-03-31 07:30:21'),
+(2, 'Beginner Class', '3-5 years', 'Preschoolers learn about Jesus through interactive Bible stories, songs, games, and hands-on activities designed for their age.', 25, 0, NULL, 'Sunday 8:00 AM & 10:30 AM', 'Classroom 1', 'active', '2026-03-31 07:30:21', '2026-03-31 07:30:21'),
+(3, 'Primary Class', '6-8 years', 'Early elementary children explore foundational Bible truths through engaging lessons, memory verses, and creative activities.', 30, 0, NULL, 'Sunday 8:00 AM & 10:30 AM', 'Classroom 2', 'active', '2026-03-31 07:30:21', '2026-03-31 07:30:21'),
+(4, 'Junior Class', '9-11 years', 'Upper elementary children dive deeper into God\'s Word with practical applications, discussions, and service projects.', 30, 0, NULL, 'Sunday 8:00 AM & 10:30 AM', 'Classroom 3', 'active', '2026-03-31 07:30:21', '2026-03-31 07:30:21'),
+(5, 'Pre-Teen Class', '12-13 years', 'Tweens navigate faith and life challenges through relevant Bible studies, mentorship, and meaningful discussions.', 25, 0, NULL, 'Sunday 8:00 AM & 10:30 AM', 'Youth Room', 'active', '2026-03-31 07:30:21', '2026-03-31 07:30:21');
 
 -- --------------------------------------------------------
 
@@ -156,10 +156,10 @@ CREATE TABLE `children_events` (
 --
 
 INSERT INTO `children_events` (`id`, `title`, `description`, `event_date`, `end_date`, `location`, `age_group`, `max_participants`, `registration_fee`, `image_url`, `status`, `event_type`, `created_by`, `created_at`, `updated_at`) VALUES
-(1, 'Children\'s Christmas Celebration', 'Join us for a special Christmas celebration with carols, nativity play, and festive activities for all ages.', '2024-12-15 10:00:00', NULL, 'Main Church Hall', 'All Ages', NULL, 0.00, NULL, 'published', 'special_event', NULL, '2026-03-29 16:31:28', '2026-03-29 16:31:28'),
-(2, 'Vacation Bible School', 'A week-long adventure filled with Bible stories, games, crafts, and friendship-building activities.', '2024-08-05 09:00:00', NULL, 'Church Grounds', '6-12 years', NULL, 0.00, NULL, 'published', 'camp', NULL, '2026-03-29 16:31:28', '2026-03-29 16:31:28'),
-(3, 'Children\'s Sports Day', 'Fun-filled day of sports, games, and team-building activities promoting Christian values and sportsmanship.', '2024-09-20 09:00:00', NULL, 'Church Field', '8-13 years', NULL, 0.00, NULL, 'published', 'outing', NULL, '2026-03-29 16:31:28', '2026-03-29 16:31:28'),
-(4, 'Bible Quiz Competition', 'Test your Bible knowledge in this exciting competition with prizes and recognition for all participants.', '2024-10-25 14:00:00', NULL, 'Main Hall', '9-13 years', NULL, 0.00, NULL, 'published', 'competition', NULL, '2026-03-29 16:31:28', '2026-03-29 16:31:28');
+(1, 'Children\'s Christmas Celebration', 'Join us for a special Christmas celebration with carols, nativity play, and festive activities for all ages.', '2024-12-15 10:00:00', NULL, 'Main Church Hall', 'All Ages', NULL, 0.00, NULL, 'published', 'special_event', NULL, '2026-03-31 07:30:21', '2026-03-31 07:30:21'),
+(2, 'Vacation Bible School', 'A week-long adventure filled with Bible stories, games, crafts, and friendship-building activities.', '2024-08-05 09:00:00', NULL, 'Church Grounds', '6-12 years', NULL, 0.00, NULL, 'published', 'camp', NULL, '2026-03-31 07:30:21', '2026-03-31 07:30:21'),
+(3, 'Children\'s Sports Day', 'Fun-filled day of sports, games, and team-building activities promoting Christian values and sportsmanship.', '2024-09-20 09:00:00', NULL, 'Church Field', '8-13 years', NULL, 0.00, NULL, 'published', 'outing', NULL, '2026-03-31 07:30:21', '2026-03-31 07:30:21'),
+(4, 'Bible Quiz Competition', 'Test your Bible knowledge in this exciting competition with prizes and recognition for all participants.', '2024-10-25 14:00:00', NULL, 'Main Hall', '9-13 years', NULL, 0.00, NULL, 'published', 'competition', NULL, '2026-03-31 07:30:21', '2026-03-31 07:30:21');
 
 -- --------------------------------------------------------
 
@@ -218,10 +218,10 @@ CREATE TABLE `children_lessons` (
 --
 
 INSERT INTO `children_lessons` (`id`, `title`, `bible_verse`, `lesson_content`, `lesson_objectives`, `age_group`, `class_id`, `lesson_date`, `teacher_id`, `materials_needed`, `activity_description`, `prayer_points`, `memory_verse`, `image_url`, `video_url`, `status`, `created_at`, `updated_at`) VALUES
-(1, 'God Created Everything', 'Genesis 1:1', 'In this lesson, children learn about the creation story and how God made everything good and beautiful.', NULL, '3-5 years', NULL, '2024-03-10', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'published', '2026-03-29 16:31:28', '2026-03-29 16:31:28'),
-(2, 'Jesus Loves Children', 'Mark 10:14', 'Children discover Jesus\' special love for them through the story of Jesus blessing the little children.', NULL, '6-8 years', NULL, '2024-03-10', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'published', '2026-03-29 16:31:28', '2026-03-29 16:31:28'),
-(3, 'The Good Samaritan', 'Luke 10:25-37', 'Children learn about loving and helping others through the parable of the Good Samaritan.', NULL, '9-11 years', NULL, '2024-03-10', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'published', '2026-03-29 16:31:28', '2026-03-29 16:31:28'),
-(4, 'Walking with Jesus', 'Micah 6:8', 'Pre-teens explore what it means to live out their faith through justice, mercy, and humility.', NULL, '12-13 years', NULL, '2024-03-10', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'published', '2026-03-29 16:31:28', '2026-03-29 16:31:28');
+(1, 'God Created Everything', 'Genesis 1:1', 'In this lesson, children learn about the creation story and how God made everything good and beautiful.', NULL, '3-5 years', NULL, '2024-03-10', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'published', '2026-03-31 07:30:21', '2026-03-31 07:30:21'),
+(2, 'Jesus Loves Children', 'Mark 10:14', 'Children discover Jesus\' special love for them through the story of Jesus blessing the little children.', NULL, '6-8 years', NULL, '2024-03-10', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'published', '2026-03-31 07:30:21', '2026-03-31 07:30:21'),
+(3, 'The Good Samaritan', 'Luke 10:25-37', 'Children learn about loving and helping others through the parable of the Good Samaritan.', NULL, '9-11 years', NULL, '2024-03-10', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'published', '2026-03-31 07:30:21', '2026-03-31 07:30:21'),
+(4, 'Walking with Jesus', 'Micah 6:8', 'Pre-teens explore what it means to live out their faith through justice, mercy, and humility.', NULL, '12-13 years', NULL, '2024-03-10', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'published', '2026-03-31 07:30:21', '2026-03-31 07:30:21');
 
 -- --------------------------------------------------------
 
@@ -363,7 +363,7 @@ CREATE TABLE `contact_messages` (
   `phone` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `subject` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `message` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `message_type` enum('general','prayer','testimony','feedback','complaint','children_ministry','other') COLLATE utf8mb4_unicode_ci DEFAULT 'general',
+  `message_type` enum('general','prayer','testimony','feedback','complaint','children_ministry','booking_inquiry','other') COLLATE utf8mb4_unicode_ci DEFAULT 'general',
   `status` enum('unread','read','responded','closed') COLLATE utf8mb4_unicode_ci DEFAULT 'unread',
   `priority` enum('low','medium','high','urgent') COLLATE utf8mb4_unicode_ci DEFAULT 'medium',
   `assigned_to` int DEFAULT NULL,
@@ -378,8 +378,8 @@ CREATE TABLE `contact_messages` (
 --
 
 INSERT INTO `contact_messages` (`id`, `name`, `email`, `phone`, `subject`, `message`, `message_type`, `status`, `priority`, `assigned_to`, `response`, `responded_at`, `created_at`, `updated_at`) VALUES
-(1, 'New Visitor', 'visitor@example.com', NULL, 'Information Request', 'I would like to know more about your church services', 'general', 'unread', 'medium', NULL, NULL, NULL, '2026-03-29 16:31:28', '2026-03-29 16:31:28'),
-(2, 'Mary Johnson', 'mary@example.com', NULL, 'Prayer Request', 'Please pray for my family', 'prayer', 'unread', 'high', NULL, NULL, NULL, '2026-03-29 16:31:28', '2026-03-29 16:31:28');
+(1, 'New Visitor', 'visitor@example.com', NULL, 'Information Request', 'I would like to know more about your church services', 'general', 'unread', 'medium', NULL, NULL, NULL, '2026-03-31 07:30:22', '2026-03-31 07:30:22'),
+(2, 'Mary Johnson', 'mary@example.com', NULL, 'Prayer Request', 'Please pray for my family', 'prayer', 'unread', 'high', NULL, NULL, NULL, '2026-03-31 07:30:22', '2026-03-31 07:30:22');
 
 -- --------------------------------------------------------
 
@@ -411,8 +411,8 @@ CREATE TABLE `donations` (
 --
 
 INSERT INTO `donations` (`id`, `donor_name`, `donor_email`, `donor_phone`, `amount`, `donation_type`, `payment_method`, `transaction_id`, `is_recurring`, `recurring_frequency`, `purpose`, `notes`, `status`, `processed_by`, `created_at`, `updated_at`) VALUES
-(1, 'Anonymous Member', 'anonymous@salemministries.com', NULL, 100.00, 'offering', 'online', NULL, 0, NULL, 'General offering', NULL, 'completed', NULL, '2026-03-29 16:31:28', '2026-03-29 16:31:28'),
-(2, 'John Smith', 'john@example.com', NULL, 50.00, 'tithe', 'online', NULL, 0, NULL, 'Monthly tithe', NULL, 'completed', NULL, '2026-03-29 16:31:28', '2026-03-29 16:31:28');
+(1, 'Anonymous Member', 'anonymous@salemministries.com', NULL, 100.00, 'offering', 'online', NULL, 0, NULL, 'General offering', NULL, 'completed', NULL, '2026-03-31 07:30:21', '2026-03-31 07:30:21'),
+(2, 'John Smith', 'john@example.com', NULL, 50.00, 'tithe', 'online', NULL, 0, NULL, 'Monthly tithe', NULL, 'completed', NULL, '2026-03-31 07:30:21', '2026-03-31 07:30:21');
 
 -- --------------------------------------------------------
 
@@ -443,9 +443,9 @@ CREATE TABLE `events` (
 --
 
 INSERT INTO `events` (`id`, `title`, `description`, `event_date`, `end_date`, `location`, `event_type`, `max_attendees`, `is_recurring`, `recurring_pattern`, `featured_image_url`, `status`, `created_by`, `created_at`, `updated_at`) VALUES
-(1, 'Sunday Service', 'Join us for powerful worship and life-changing message', '2024-03-31 10:30:00', NULL, 'Main Sanctuary', 'service', NULL, 0, NULL, NULL, 'upcoming', 1, '2026-03-29 16:31:28', '2026-03-29 16:31:28'),
-(2, 'Bible Study', 'Deep dive into God\'s Word with fellowship', '2024-03-27 18:00:00', NULL, 'Fellowship Hall', 'meeting', NULL, 0, NULL, NULL, 'upcoming', 1, '2026-03-29 16:31:28', '2026-03-29 16:31:28'),
-(3, 'Youth Conference', 'Annual youth gathering with speakers and worship', '2024-04-15 09:00:00', NULL, 'Youth Center', 'conference', NULL, 0, NULL, NULL, 'upcoming', 1, '2026-03-29 16:31:28', '2026-03-29 16:31:28');
+(1, 'Sunday Service', 'Join us for powerful worship and life-changing message', '2024-03-31 10:30:00', NULL, 'Main Sanctuary', 'service', NULL, 0, NULL, NULL, 'upcoming', 1, '2026-03-31 07:30:21', '2026-03-31 07:30:21'),
+(2, 'Bible Study', 'Deep dive into God\'s Word with fellowship', '2024-03-27 18:00:00', NULL, 'Fellowship Hall', 'meeting', NULL, 0, NULL, NULL, 'upcoming', 1, '2026-03-31 07:30:21', '2026-03-31 07:30:21'),
+(3, 'Youth Conference', 'Annual youth gathering with speakers and worship', '2024-04-15 09:00:00', NULL, 'Youth Center', 'conference', NULL, 0, NULL, NULL, 'upcoming', 1, '2026-03-31 07:30:21', '2026-03-31 07:30:21');
 
 -- --------------------------------------------------------
 
@@ -495,8 +495,8 @@ CREATE TABLE `gallery` (
 --
 
 INSERT INTO `gallery` (`id`, `title`, `description`, `file_url`, `file_type`, `file_size`, `dimensions`, `category`, `tags`, `is_featured`, `status`, `uploaded_by`, `created_at`, `updated_at`) VALUES
-(1, 'Sunday Service', 'Congregation worshiping together', '/assets/gallery/sunday-service-1.jpg', 'image', NULL, NULL, 'services', NULL, 0, 'published', 1, '2026-03-29 16:31:28', '2026-03-29 16:31:28'),
-(2, 'Youth Event', 'Youth fellowship activities', '/assets/gallery/youth-event-1.jpg', 'image', NULL, NULL, 'youth', NULL, 0, 'published', 1, '2026-03-29 16:31:28', '2026-03-29 16:31:28');
+(1, 'Sunday Service', 'Congregation worshiping together', '/assets/gallery/sunday-service-1.jpg', 'image', NULL, NULL, 'services', NULL, 0, 'published', 1, '2026-03-31 07:30:22', '2026-03-31 07:30:22'),
+(2, 'Youth Event', 'Youth fellowship activities', '/assets/gallery/youth-event-1.jpg', 'image', NULL, NULL, 'youth', NULL, 0, 'published', 1, '2026-03-31 07:30:22', '2026-03-31 07:30:22');
 
 -- --------------------------------------------------------
 
@@ -525,11 +525,11 @@ CREATE TABLE `ministries` (
 --
 
 INSERT INTO `ministries` (`id`, `name`, `description`, `leader_name`, `leader_email`, `meeting_day`, `meeting_time`, `location`, `requirements`, `featured_image_url`, `is_active`, `created_at`, `updated_at`) VALUES
-(1, 'Children Ministry', 'Spiritual education and fun activities for children ages 0-13', 'Children Ministry Director', NULL, 'Sunday', '08:00 AM & 10:30 AM', 'Children Wing', NULL, NULL, 1, '2026-03-29 16:31:28', '2026-03-29 16:31:28'),
-(2, 'Youth Ministry', 'Empowering teenagers to live for Christ', 'Youth Director', NULL, 'Friday', '17:00 PM', 'Youth Center', NULL, NULL, 1, '2026-03-29 16:31:28', '2026-03-29 16:31:28'),
-(3, 'Women Ministry', 'Fellowship and spiritual growth for women', 'Women Ministry Leader', NULL, 'Tuesday', '18:00 PM', 'Fellowship Hall', NULL, NULL, 1, '2026-03-29 16:31:28', '2026-03-29 16:31:28'),
-(4, 'Men Ministry', 'Building strong men of faith', 'Men Ministry Leader', NULL, 'Thursday', '19:00 PM', 'Conference Room', NULL, NULL, 1, '2026-03-29 16:31:28', '2026-03-29 16:31:28'),
-(5, 'Music Ministry', 'Leading worship through music and song', 'Music Director', NULL, 'Saturday', '15:00 PM', 'Sanctuary', NULL, NULL, 1, '2026-03-29 16:31:28', '2026-03-29 16:31:28');
+(1, 'Children Ministry', 'Spiritual education and fun activities for children ages 0-13', 'Children Ministry Director', NULL, 'Sunday', '08:00 AM & 10:30 AM', 'Children Wing', NULL, NULL, 1, '2026-03-31 07:30:21', '2026-03-31 07:30:21'),
+(2, 'Youth Ministry', 'Empowering teenagers to live for Christ', 'Youth Director', NULL, 'Friday', '17:00 PM', 'Youth Center', NULL, NULL, 1, '2026-03-31 07:30:21', '2026-03-31 07:30:21'),
+(3, 'Women Ministry', 'Fellowship and spiritual growth for women', 'Women Ministry Leader', NULL, 'Tuesday', '18:00 PM', 'Fellowship Hall', NULL, NULL, 1, '2026-03-31 07:30:21', '2026-03-31 07:30:21'),
+(4, 'Men Ministry', 'Building strong men of faith', 'Men Ministry Leader', NULL, 'Thursday', '19:00 PM', 'Conference Room', NULL, NULL, 1, '2026-03-31 07:30:21', '2026-03-31 07:30:21'),
+(5, 'Music Ministry', 'Leading worship through music and song', 'Music Director', NULL, 'Saturday', '15:00 PM', 'Sanctuary', NULL, NULL, 1, '2026-03-31 07:30:21', '2026-03-31 07:30:21');
 
 -- --------------------------------------------------------
 
@@ -564,8 +564,8 @@ CREATE TABLE `news` (
 --
 
 INSERT INTO `news` (`id`, `title`, `slug`, `excerpt`, `content`, `featured_image_url`, `author_id`, `category`, `tags`, `meta_title`, `meta_description`, `views_count`, `likes_count`, `is_featured`, `is_breaking`, `status`, `published_at`, `created_at`, `updated_at`) VALUES
-(1, 'Church Anniversary Celebration', 'church-anniversary-celebration', 'Join us as we celebrate 10 years of God\'s faithfulness', 'We are excited to celebrate a decade of ministry...', NULL, 1, 'Announcements', NULL, NULL, NULL, 0, 0, 0, 0, 'published', '2026-03-29 16:31:28', '2026-03-29 16:31:28', '2026-03-29 16:31:28'),
-(2, 'New Youth Program Launch', 'new-youth-program-launch', 'Exciting new programs for our youth ministry', 'Starting next month, we are launching new programs...', NULL, 1, 'Youth', NULL, NULL, NULL, 0, 0, 0, 0, 'published', '2026-03-29 16:31:28', '2026-03-29 16:31:28', '2026-03-29 16:31:28');
+(1, 'Church Anniversary Celebration', 'church-anniversary-celebration', 'Join us as we celebrate 10 years of God\'s faithfulness', 'We are excited to celebrate a decade of ministry...', NULL, 1, 'Announcements', NULL, NULL, NULL, 0, 0, 0, 0, 'published', '2026-03-31 07:30:23', '2026-03-31 07:30:23', '2026-03-31 07:30:23'),
+(2, 'New Youth Program Launch', 'new-youth-program-launch', 'Exciting new programs for our youth ministry', 'Starting next month, we are launching new programs...', NULL, 1, 'Youth', NULL, NULL, NULL, 0, 0, 0, 0, 'published', '2026-03-31 07:30:23', '2026-03-31 07:30:23', '2026-03-31 07:30:23');
 
 -- --------------------------------------------------------
 
@@ -585,6 +585,77 @@ CREATE TABLE `password_resets` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `pastor_bookings`
+--
+
+CREATE TABLE `pastor_bookings` (
+  `id` int NOT NULL,
+  `booking_reference` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `pastor_id` int NOT NULL,
+  `user_id` int DEFAULT NULL,
+  `client_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `client_email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `client_phone` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `booking_date` date NOT NULL,
+  `start_time` time NOT NULL,
+  `end_time` time NOT NULL,
+  `duration_minutes` int NOT NULL,
+  `booking_type` enum('counseling','prayer','guidance','deliverance','thanksgiving','general') COLLATE utf8mb4_unicode_ci DEFAULT 'counseling',
+  `google_meet_link` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `google_meet_id` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `meet_join_code` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `status` enum('pending','confirmed','in_progress','completed','cancelled','no_show') COLLATE utf8mb4_unicode_ci DEFAULT 'pending',
+  `confirmation_sent` tinyint(1) DEFAULT '0',
+  `reminder_sent` tinyint(1) DEFAULT '0',
+  `subject` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `description` text COLLATE utf8mb4_unicode_ci,
+  `prayer_points` text COLLATE utf8mb4_unicode_ci,
+  `special_requests` text COLLATE utf8mb4_unicode_ci,
+  `assigned_pastor` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `internal_notes` text COLLATE utf8mb4_unicode_ci,
+  `confirmed_by` int DEFAULT NULL,
+  `confirmed_at` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `pastor_booking_availability`
+--
+
+CREATE TABLE `pastor_booking_availability` (
+  `id` int NOT NULL,
+  `pastor_id` int NOT NULL,
+  `day_of_week` enum('sunday','monday','tuesday','wednesday','thursday','friday','saturday') COLLATE utf8mb4_unicode_ci NOT NULL,
+  `start_time` time NOT NULL,
+  `end_time` time NOT NULL,
+  `is_available` tinyint(1) DEFAULT '1',
+  `booking_duration_minutes` int DEFAULT '30',
+  `max_bookings_per_day` int DEFAULT '5',
+  `is_active` tinyint(1) DEFAULT '1',
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `pastor_booking_availability`
+--
+
+INSERT INTO `pastor_booking_availability` (`id`, `pastor_id`, `day_of_week`, `start_time`, `end_time`, `is_available`, `booking_duration_minutes`, `max_bookings_per_day`, `is_active`, `created_at`, `updated_at`) VALUES
+(1, 2, 'monday', '09:00:00', '12:00:00', 1, 30, 4, 1, '2026-03-31 07:30:21', '2026-03-31 07:30:21'),
+(2, 2, 'monday', '14:00:00', '17:00:00', 1, 30, 4, 1, '2026-03-31 07:30:21', '2026-03-31 07:30:21'),
+(3, 2, 'tuesday', '09:00:00', '12:00:00', 1, 30, 4, 1, '2026-03-31 07:30:21', '2026-03-31 07:30:21'),
+(4, 2, 'tuesday', '14:00:00', '17:00:00', 1, 30, 4, 1, '2026-03-31 07:30:21', '2026-03-31 07:30:21'),
+(5, 2, 'wednesday', '09:00:00', '12:00:00', 1, 30, 4, 1, '2026-03-31 07:30:21', '2026-03-31 07:30:21'),
+(6, 2, 'thursday', '09:00:00', '12:00:00', 1, 30, 4, 1, '2026-03-31 07:30:21', '2026-03-31 07:30:21'),
+(7, 2, 'thursday', '14:00:00', '17:00:00', 1, 30, 4, 1, '2026-03-31 07:30:21', '2026-03-31 07:30:21'),
+(8, 2, 'friday', '09:00:00', '12:00:00', 1, 30, 4, 1, '2026-03-31 07:30:21', '2026-03-31 07:30:21');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `prayer_requests`
 --
 
@@ -592,14 +663,19 @@ CREATE TABLE `prayer_requests` (
   `id` int NOT NULL,
   `requester_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `requester_email` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `request_type` enum('general','healing','guidance','protection','thanksgiving','other') COLLATE utf8mb4_unicode_ci DEFAULT 'general',
+  `requester_phone` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `request_type` enum('general','healing','guidance','protection','thanksgiving','deliverance','family','financial','spiritual_growth','other') COLLATE utf8mb4_unicode_ci DEFAULT 'general',
   `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `description` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `prayer_points` text COLLATE utf8mb4_unicode_ci,
   `is_anonymous` tinyint(1) DEFAULT '0',
   `is_public` tinyint(1) DEFAULT '1',
+  `is_urgent` tinyint(1) DEFAULT '0',
   `prayer_count` int DEFAULT '0',
-  `status` enum('pending','praying','answered','closed') COLLATE utf8mb4_unicode_ci DEFAULT 'pending',
+  `status` enum('pending','praying','answered','archived') COLLATE utf8mb4_unicode_ci DEFAULT 'pending',
   `answered_date` timestamp NULL DEFAULT NULL,
+  `assigned_to` int DEFAULT NULL,
+  `internal_notes` text COLLATE utf8mb4_unicode_ci,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -608,9 +684,9 @@ CREATE TABLE `prayer_requests` (
 -- Dumping data for table `prayer_requests`
 --
 
-INSERT INTO `prayer_requests` (`id`, `requester_name`, `requester_email`, `request_type`, `title`, `description`, `is_anonymous`, `is_public`, `prayer_count`, `status`, `answered_date`, `created_at`, `updated_at`) VALUES
-(1, 'John Doe', 'john@example.com', 'healing', 'Healing for Family Member', 'Please pray for my mother\'s recovery from surgery', 0, 1, 0, 'pending', NULL, '2026-03-29 16:31:28', '2026-03-29 16:31:28'),
-(2, 'Jane Smith', 'jane@example.com', 'guidance', 'Career Decision', 'Seeking God\'s guidance for a job opportunity', 0, 1, 0, 'pending', NULL, '2026-03-29 16:31:28', '2026-03-29 16:31:28');
+INSERT INTO `prayer_requests` (`id`, `requester_name`, `requester_email`, `requester_phone`, `request_type`, `title`, `description`, `prayer_points`, `is_anonymous`, `is_public`, `is_urgent`, `prayer_count`, `status`, `answered_date`, `assigned_to`, `internal_notes`, `created_at`, `updated_at`) VALUES
+(1, 'John Doe', 'john@example.com', NULL, 'healing', 'Healing for Family Member', 'Please pray for my mother\'s recovery from surgery', NULL, 0, 1, 0, 0, 'pending', NULL, NULL, NULL, '2026-03-31 07:30:21', '2026-03-31 07:30:21'),
+(2, 'Jane Smith', 'jane@example.com', NULL, 'guidance', 'Career Decision', 'Seeking God\'s guidance for a job opportunity', NULL, 0, 1, 0, 0, 'pending', NULL, NULL, NULL, '2026-03-31 07:30:21', '2026-03-31 07:30:21');
 
 -- --------------------------------------------------------
 
@@ -625,6 +701,7 @@ CREATE TABLE `prayer_responses` (
   `responder_email` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `message` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `is_anonymous` tinyint(1) DEFAULT '1',
+  `prayer_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -660,8 +737,8 @@ CREATE TABLE `sermons` (
 --
 
 INSERT INTO `sermons` (`id`, `title`, `preacher`, `bible_reference`, `sermon_date`, `description`, `video_url`, `audio_url`, `transcript`, `featured_image_url`, `sermon_series`, `tags`, `views_count`, `is_featured`, `status`, `created_by`, `created_at`, `updated_at`) VALUES
-(1, 'The Power of Faith', 'Pastor John Smith', 'Hebrews 11:1', '2024-03-24', 'Discover the transformative power of unwavering faith in God', NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, 'published', 1, '2026-03-29 16:31:28', '2026-03-29 16:31:28'),
-(2, 'Walking in Love', 'Pastor Mary Johnson', '1 Corinthians 13', '2024-03-17', 'Learn how to love others as Christ loves us', NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, 'published', 1, '2026-03-29 16:31:28', '2026-03-29 16:31:28');
+(1, 'The Power of Faith', 'Pastor John Smith', 'Hebrews 11:1', '2024-03-24', 'Discover the transformative power of unwavering faith in God', NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, 'published', 1, '2026-03-31 07:30:21', '2026-03-31 07:30:21'),
+(2, 'Walking in Love', 'Pastor Mary Johnson', '1 Corinthians 13', '2024-03-17', 'Learn how to love others as Christ loves us', NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, 'published', 1, '2026-03-31 07:30:21', '2026-03-31 07:30:21');
 
 -- --------------------------------------------------------
 
@@ -687,10 +764,10 @@ CREATE TABLE `service_times` (
 --
 
 INSERT INTO `service_times` (`id`, `service_name`, `day_of_week`, `start_time`, `end_time`, `location`, `description`, `is_active`, `created_at`, `updated_at`) VALUES
-(1, '1st Service', 'sunday', '08:00:00', '09:30:00', 'Main Sanctuary', 'Morning Worship Service', 1, '2026-03-29 16:31:28', '2026-03-29 16:31:28'),
-(2, '2nd Service', 'sunday', '10:30:00', '12:00:00', 'Main Sanctuary', 'Main Worship Service', 1, '2026-03-29 16:31:28', '2026-03-29 16:31:28'),
-(3, 'Prayers', 'wednesday', '17:30:00', '18:30:00', 'Prayer Room', 'Mid-week Prayer Meeting', 1, '2026-03-29 16:31:28', '2026-03-29 16:31:28'),
-(4, 'Youth Fellowship', 'friday', '17:00:00', '18:30:00', 'Youth Center', 'Youth Ministry Gathering', 1, '2026-03-29 16:31:28', '2026-03-29 16:31:28');
+(1, '1st Service', 'sunday', '08:00:00', '09:30:00', 'Main Sanctuary', 'Morning Worship Service', 1, '2026-03-31 07:30:21', '2026-03-31 07:30:21'),
+(2, '2nd Service', 'sunday', '10:30:00', '12:00:00', 'Main Sanctuary', 'Main Worship Service', 1, '2026-03-31 07:30:21', '2026-03-31 07:30:21'),
+(3, 'Prayers', 'wednesday', '17:30:00', '18:30:00', 'Prayer Room', 'Mid-week Prayer Meeting', 1, '2026-03-31 07:30:21', '2026-03-31 07:30:21'),
+(4, 'Youth Fellowship', 'friday', '17:00:00', '18:30:00', 'Youth Center', 'Youth Ministry Gathering', 1, '2026-03-31 07:30:21', '2026-03-31 07:30:21');
 
 -- --------------------------------------------------------
 
@@ -717,8 +794,8 @@ CREATE TABLE `testimonials` (
 --
 
 INSERT INTO `testimonials` (`id`, `name`, `email`, `occupation`, `testimonial`, `rating`, `photo_url`, `is_featured`, `is_approved`, `created_at`, `updated_at`) VALUES
-(1, 'Sarah Williams', 'sarah@example.com', 'Teacher', 'This church has transformed my spiritual life. The teachings are practical and life-changing.', 5, NULL, 0, 1, '2026-03-29 16:31:28', '2026-03-29 16:31:28'),
-(2, 'Michael Brown', 'michael@example.com', 'Engineer', 'I found a loving community here that supports me in my faith journey.', 5, NULL, 0, 1, '2026-03-29 16:31:28', '2026-03-29 16:31:28');
+(1, 'Sarah Williams', 'sarah@example.com', 'Teacher', 'This church has transformed my spiritual life. The teachings are practical and life-changing.', 5, NULL, 0, 1, '2026-03-31 07:30:22', '2026-03-31 07:30:22'),
+(2, 'Michael Brown', 'michael@example.com', 'Engineer', 'I found a loving community here that supports me in my faith journey.', 5, NULL, 0, 1, '2026-03-31 07:30:22', '2026-03-31 07:30:22');
 
 -- --------------------------------------------------------
 
@@ -747,7 +824,8 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `first_name`, `last_name`, `email`, `phone`, `password_hash`, `role`, `avatar_url`, `is_active`, `email_verified`, `last_login`, `created_at`, `updated_at`) VALUES
-(1, 'Admin', 'User', 'admin@salemministries.com', NULL, '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'admin', NULL, 1, 1, NULL, '2026-03-29 16:31:28', '2026-03-29 16:31:28');
+(1, 'Admin', 'User', 'admin@salemministries.com', NULL, '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'admin', NULL, 1, 1, NULL, '2026-03-31 07:30:21', '2026-03-31 07:30:21'),
+(2, 'Senior', 'Pastor', 'pastor@salemdominionministries.com', NULL, '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'pastor', NULL, 1, 1, NULL, '2026-03-31 07:30:21', '2026-03-31 07:30:21');
 
 -- --------------------------------------------------------
 
@@ -971,6 +1049,27 @@ ALTER TABLE `password_resets`
   ADD KEY `idx_user` (`user_id`);
 
 --
+-- Indexes for table `pastor_bookings`
+--
+ALTER TABLE `pastor_bookings`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `booking_reference` (`booking_reference`),
+  ADD KEY `idx_booking_date` (`booking_date`),
+  ADD KEY `idx_status` (`status`),
+  ADD KEY `idx_client_email` (`client_email`),
+  ADD KEY `idx_reference` (`booking_reference`),
+  ADD KEY `idx_pastor_id` (`pastor_id`);
+
+--
+-- Indexes for table `pastor_booking_availability`
+--
+ALTER TABLE `pastor_booking_availability`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idx_pastor` (`pastor_id`),
+  ADD KEY `idx_day` (`day_of_week`),
+  ADD KEY `idx_active` (`is_active`);
+
+--
 -- Indexes for table `prayer_requests`
 --
 ALTER TABLE `prayer_requests`
@@ -978,7 +1077,8 @@ ALTER TABLE `prayer_requests`
   ADD KEY `idx_status` (`status`),
   ADD KEY `idx_is_public` (`is_public`),
   ADD KEY `idx_created_at` (`created_at`),
-  ADD KEY `idx_type` (`request_type`);
+  ADD KEY `idx_type` (`request_type`),
+  ADD KEY `idx_urgent` (`is_urgent`);
 
 --
 -- Indexes for table `prayer_responses`
@@ -1159,6 +1259,18 @@ ALTER TABLE `password_resets`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `pastor_bookings`
+--
+ALTER TABLE `pastor_bookings`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `pastor_booking_availability`
+--
+ALTER TABLE `pastor_booking_availability`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
 -- AUTO_INCREMENT for table `prayer_requests`
 --
 ALTER TABLE `prayer_requests`
@@ -1192,7 +1304,7 @@ ALTER TABLE `testimonials`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `user_sessions`

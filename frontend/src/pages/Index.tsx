@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { BookOpen, Heart, Calendar, Clock, MapPin, Phone, Mail, ChevronRight, PlayCircle, Users } from 'lucide-react';
+import { BookOpen, Heart, Calendar, Clock, MapPin, Phone, Mail, ChevronRight, PlayCircle, Users, Video } from 'lucide-react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import HeroSection from '../components/Hero/HeroSection';
@@ -287,22 +287,29 @@ const Index = () => {
         <div className="absolute bottom-1/4 right-1/4 w-52 h-52 bg-gradient-navy rounded-full opacity-6 blur-3xl floating-delayed"></div>
         
         <div className="container mx-auto px-4 relative z-10">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-            <Link to="/contact" className="group glassmorphism-enhanced rounded-2xl p-8 text-center shadow-gold-enhanced card-hover-3d border border-white/10 slide-in-up">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
+            <Link to="/book-pastor-call" className="group glassmorphism-enhanced rounded-2xl p-8 text-center shadow-gold-enhanced card-hover-3d border border-white/10 slide-in-up">
+              <div className="w-16 h-16 rounded-full bg-gradient-gold flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform shadow-gold-intense pulse-gold">
+                <Video className="text-primary" size={32} />
+              </div>
+              <h3 className="font-blackadder text-xl font-bold text-foreground mb-2 text-gradient-gold">Book Pastor Call</h3>
+              <p className="font-gabriola text-muted-foreground text-sm">Schedule a Google Meet session</p>
+            </Link>
+            <Link to="/prayer-request" className="group glassmorphism-enhanced rounded-2xl p-8 text-center shadow-gold-enhanced card-hover-3d border border-white/10 slide-in-up" style={{ animationDelay: '0.1s' }}>
+              <div className="w-16 h-16 rounded-full bg-gradient-gold flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform shadow-gold-intense pulse-gold">
+                <Heart className="text-primary" size={32} />
+              </div>
+              <h3 className="font-blackadder text-xl font-bold text-foreground mb-2 text-gradient-gold">Prayer Request</h3>
+              <p className="font-gabriola text-muted-foreground text-sm">Let us pray with you</p>
+            </Link>
+            <Link to="/contact" className="group glassmorphism-enhanced rounded-2xl p-8 text-center shadow-gold-enhanced card-hover-3d border border-white/10 slide-in-up" style={{ animationDelay: '0.2s' }}>
               <div className="w-16 h-16 rounded-full bg-gradient-gold flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform shadow-gold-intense pulse-gold">
                 <span className="text-3xl">👉</span>
               </div>
               <h3 className="font-blackadder text-xl font-bold text-foreground mb-2 text-gradient-gold">Plan a Visit</h3>
               <p className="font-gabriola text-muted-foreground text-sm">Let us know you're coming!</p>
             </Link>
-            <Link to="/sermons" className="group glassmorphism-enhanced rounded-2xl p-8 text-center shadow-gold-enhanced card-hover-3d border border-white/10 slide-in-up" style={{ animationDelay: '0.2s' }}>
-              <div className="w-16 h-16 rounded-full bg-gradient-gold flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform shadow-gold-intense pulse-gold">
-                <PlayCircle className="text-primary" size={32} />
-              </div>
-              <h3 className="font-blackadder text-xl font-bold text-foreground mb-2 text-gradient-gold">Watch Online</h3>
-              <p className="font-gabriola text-muted-foreground text-sm">Join our live services</p>
-            </Link>
-            <Link to="/donate" className="group glassmorphism-enhanced rounded-2xl p-8 text-center shadow-gold-enhanced card-hover-3d border border-white/10 slide-in-up" style={{ animationDelay: '0.4s' }}>
+            <Link to="/donate" className="group glassmorphism-enhanced rounded-2xl p-8 text-center shadow-gold-enhanced card-hover-3d border border-white/10 slide-in-up" style={{ animationDelay: '0.3s' }}>
               <div className="w-16 h-16 rounded-full bg-gradient-gold flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform shadow-gold-intense pulse-gold">
                 <Heart className="text-primary" size={32} />
               </div>
