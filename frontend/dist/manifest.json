@@ -83,21 +83,21 @@
       "short_name": "Stream",
       "description": "Watch live services",
       "url": "/sermons",
-      "icons": [{ "src": "/icons/stream.svg", "sizes": "96x96" }]
+      "icons": [{ "src": "/icons/icon-96x96.svg", "sizes": "96x96" }]
     },
     {
       "name": "Prayer Requests",
       "short_name": "Prayers",
       "description": "Submit and view prayers",
-      "url": "/prayers",
-      "icons": [{ "src": "/icons/prayer.svg", "sizes": "96x96" }]
+      "url": "/prayer-request",
+      "icons": [{ "src": "/icons/icon-96x96.svg", "sizes": "96x96" }]
     },
     {
       "name": "Events",
       "short_name": "Events",
       "description": "Upcoming church events",
       "url": "/events",
-      "icons": [{ "src": "/icons/events.svg", "sizes": "96x96" }]
+      "icons": [{ "src": "/icons/icon-96x96.svg", "sizes": "96x96" }]
     }
   ],
   "related_applications": [],
