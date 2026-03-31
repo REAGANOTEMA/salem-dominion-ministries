@@ -3,21 +3,24 @@ const CACHE_NAME = 'salem-dominion-v1.0.0';
 const STATIC_CACHE = 'salem-static-v1.0.0';
 const DYNAMIC_CACHE = 'salem-dynamic-v1.0.0';
 
+// Subdirectory base path
+const BASE_PATH = '/salem-dominion-ministries';
+
 // Files to cache for offline functionality
 const STATIC_ASSETS = [
-  '/',
-  '/index.html',
-  '/manifest.json',
-  '/offline.html',
+  BASE_PATH + '/',
+  BASE_PATH + '/index.html',
+  BASE_PATH + '/manifest.json',
+  BASE_PATH + '/offline.html',
   // Church logo icons (SVG for better quality)
-  '/icons/icon-72x72.svg',
-  '/icons/icon-96x96.svg',
-  '/icons/icon-128x128.svg',
-  '/icons/icon-144x144.svg',
-  '/icons/icon-152x152.svg',
-  '/icons/icon-192x192.svg',
-  '/icons/icon-384x384.svg',
-  '/icons/icon-512x512.svg'
+  BASE_PATH + '/icons/icon-72x72.svg',
+  BASE_PATH + '/icons/icon-96x96.svg',
+  BASE_PATH + '/icons/icon-128x128.svg',
+  BASE_PATH + '/icons/icon-144x144.svg',
+  BASE_PATH + '/icons/icon-152x152.svg',
+  BASE_PATH + '/icons/icon-192x192.svg',
+  BASE_PATH + '/icons/icon-384x384.svg',
+  BASE_PATH + '/icons/icon-512x512.svg'
 ];
 
 // Install event - cache static assets
@@ -134,8 +137,8 @@ self.addEventListener('push', (event) => {
   
   const options = {
     body: event.data ? event.data.text() : 'New update from Salem Dominion Ministries',
-    icon: '/icons/icon-192x192.png',
-    badge: '/icons/badge-72x72.png',
+    icon: BASE_PATH + '/icons/icon-192x192.svg',
+    badge: BASE_PATH + '/icons/icon-72x72.svg',
     vibrate: [100, 50, 100],
     data: {
       dateOfArrival: Date.now(),
@@ -145,12 +148,12 @@ self.addEventListener('push', (event) => {
       {
         action: 'explore',
         title: 'Open App',
-        icon: '/icons/checkmark.png'
+        icon: BASE_PATH + '/icons/icon-72x72.svg'
       },
       {
         action: 'close',
         title: 'Close',
-        icon: '/icons/xmark.png'
+        icon: BASE_PATH + '/icons/icon-72x72.svg'
       }
     ]
   };
@@ -168,7 +171,7 @@ self.addEventListener('notificationclick', (event) => {
   
   if (event.action === 'explore') {
     event.waitUntil(
-      clients.openWindow('/')
+      clients.openWindow(BASE_PATH + '/')
     );
   } else if (event.action === 'close') {
     // Just close the notification
@@ -177,12 +180,12 @@ self.addEventListener('notificationclick', (event) => {
     event.waitUntil(
       clients.matchAll().then((clientList) => {
         for (const client of clientList) {
-          if (client.url === '/' && 'focus' in client) {
+          if (client.url === BASE_PATH + '/' && 'focus' in client) {
             return client.focus();
           }
         }
         if (clients.openWindow) {
-          return clients.openWindow('/');
+          return clients.openWindow(BASE_PATH + '/');
         }
       })
     );
