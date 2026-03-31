@@ -12,9 +12,9 @@ import pastorJothamImg from "@/assets/Pastor-jotham-Bright-Mulinde.jpeg";
 import pastorJonathanImg from "@/assets/pastor-jonathan-Ngobi.jpeg";
 
 const Leadership = () => {
-  const leaders = [
+const leaders = [
     {
-      name: "Pastor Faty Musasizi",
+      name: "Apostle Faty Musasizi",
       role: "Senior Pastor & Founder",
       img: pastorImg,
       bio: "Visionary leader and founder of Salem Dominion Ministries, dedicated to spreading God's word and building a Christ-centered community. Provides overall spiritual direction and guidance.",
@@ -89,7 +89,7 @@ const Leadership = () => {
                 </span>
 
                 <h2 className="font-heading text-3xl md:text-4xl font-bold text-gradient-gold mt-2 mb-4 animate-slide-up">
-                  Pastor [Main Pastor Name]
+                  Apostle Faty Musasizi
                 </h2>
 
                 <p className="text-muted-foreground leading-relaxed animate-fade-in" style={{animationDelay: '0.2s'}}>

@@ -57,7 +57,7 @@ const Index = () => {
                 grow into their God-given purpose. We look forward to worshipping with you.
               </p>
               <p className="font-blackadder text-2xl md:text-3xl text-foreground italic text-gradient-gold animate-fade-in-up">
-                — The Pastor, Salem Dominion Ministries
+                — Apostle Faty Musasizi, Senior Pastor
               </p>
             </div>
           </div>
