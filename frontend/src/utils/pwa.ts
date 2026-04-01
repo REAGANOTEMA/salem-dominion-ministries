@@ -1,10 +1,4 @@
-// Progressive Web App (PWA) utilities
-
-// Interface for service worker messages
-interface ServiceWorkerMessage {
-  type: string;
-  [key: string]: unknown;
-}
+// Progressive Web App (PWA) utilities for Salem Dominion Ministries
 
 // Interface for install prompt event
 interface BeforeInstallPromptEvent extends Event {
@@ -16,17 +10,11 @@ interface BeforeInstallPromptEvent extends Event {
   prompt(): Promise<void>;
 }
 
-// Interface for offline data
-interface OfflineDataItem {
-  id: string;
-  data: unknown;
-  timestamp: number;
-}
-
 export class PWAManager {
   private swRegistration: ServiceWorkerRegistration | null = null;
   private isOnline: boolean = navigator.onLine;
   private deferredPrompt: BeforeInstallPromptEvent | null = null;
+  private installPromptHandled: boolean = false;
 
   constructor() {
     this.setupEventListeners();
@@ -42,7 +30,9 @@ export class PWAManager {
     }
 
     try {
-      const registration = await navigator.serviceWorker.register('/salem-dominion-ministries/sw.js', { scope: '/salem-dominion-ministries/' });
+      const registration = await navigator.serviceWorker.register('/salem-dominion-ministries/sw.js', { 
+        scope: '/salem-dominion-ministries/' 
+      });
       this.swRegistration = registration;
       console.log('✅ Service Worker registered successfully');
 
@@ -72,7 +62,6 @@ export class PWAManager {
     window.addEventListener('online', () => {
       this.isOnline = true;
       this.showConnectionStatus(true);
-      this.syncOfflineData();
     });
 
     window.addEventListener('offline', () => {
@@ -86,13 +75,14 @@ export class PWAManager {
       });
     }
 
+    // Setup install prompt handler - don't prevent default yet
     this.setupInstallPrompt();
   }
 
   /** ---------------------------
    * Service Worker Messages
    * --------------------------- */
-  private handleServiceWorkerMessage(data: ServiceWorkerMessage): void {
+  private handleServiceWorkerMessage(data: { type: string }): void {
     if (!data || !data.type) return;
     
     switch (data.type) {
@@ -102,8 +92,6 @@ export class PWAManager {
       case 'NEW_CONTENT_AVAILABLE':
         this.showUpdateAvailable();
         break;
-      default:
-        console.log('Unknown message type:', data.type);
     }
   }
 
@@ -132,12 +120,6 @@ export class PWAManager {
       statusElement.textContent = online ? 'Online' : 'Offline';
       statusElement.className = online ? 'text-green-500' : 'text-red-500';
     }
-
-    if (!online) {
-      this.showNotification('Offline Mode', 'You are currently offline. Some features may be limited.');
-    } else {
-      this.showNotification('Back Online', 'Connection restored!');
-    }
   }
 
   /** ---------------------------
@@ -150,8 +132,6 @@ export class PWAManager {
         icon: '/salem-dominion-ministries/icons/icon-192x192.svg',
         badge: '/salem-dominion-ministries/icons/icon-72x72.svg',
       });
-    } else {
-      console.log(`${title}: ${body}`);
     }
   }
 
@@ -166,106 +146,83 @@ export class PWAManager {
   }
 
   /** ---------------------------
-   * Offline Data & Sync
-   * --------------------------- */
-  private async syncOfflineData(): Promise<void> {
-    if ('serviceWorker' in navigator && this.swRegistration?.sync) {
-      try {
-        await this.swRegistration.sync.register('sync-prayer-requests');
-        await this.swRegistration.sync.register('sync-donations');
-        console.log('🔄 Background sync triggered');
-      } catch {
-        console.log('Background sync not supported');
-      }
-    }
-  }
-
-  async storeOfflineData(key: string, data: OfflineDataItem['data']): Promise<void> {
-    try {
-      const db = await this.openDB();
-      const tx = db.transaction(['offline'], 'readwrite');
-      const store = tx.objectStore('offline');
-      const item: OfflineDataItem = { id: key, data, timestamp: Date.now() };
-      store.put(item);
-      await new Promise<void>((resolve, reject) => {
-        tx.oncomplete = () => resolve();
-        tx.onerror = () => reject(tx.error);
-      });
-    } catch {
-      console.error('Error storing offline data');
-    }
-  }
-
-  async getOfflineData(key: string): Promise<unknown> {
-    try {
-      const db = await this.openDB();
-      const tx = db.transaction(['offline'], 'readonly');
-      const store = tx.objectStore('offline');
-      const request = store.get(key);
-      return new Promise((resolve) => {
-        request.onsuccess = () => {
-          const result = request.result as OfflineDataItem | undefined;
-          resolve(result?.data || null);
-        };
-        request.onerror = () => {
-          console.error('Error getting offline data');
-          resolve(null);
-        };
-      });
-    } catch {
-      console.error('Error getting offline data');
-      return null;
-    }
-  }
-
-  private openDB(): Promise<IDBDatabase> {
-    return new Promise((resolve, reject) => {
-      const request = indexedDB.open('salem-pwa-db', 1);
-      request.onerror = () => reject(request.error);
-      request.onsuccess = () => resolve(request.result);
-      request.onupgradeneeded = () => {
-        const db = request.result;
-        if (!db.objectStoreNames.contains('offline')) {
-          db.createObjectStore('offline', { keyPath: 'id' });
-        }
-      };
-    });
-  }
-
-  /** ---------------------------
    * PWA Installation
    * --------------------------- */
   isAppInstalled(): boolean {
     return window.matchMedia('(display-mode: standalone)').matches || 
-           ((window.navigator as { standalone?: boolean }).standalone === true) ||
-           document.referrer.includes('android-app://');
+           ((window.navigator as { standalone?: boolean }).standalone === true);
   }
 
   setupInstallPrompt(): void {
+    // Listen for beforeinstallprompt event
     window.addEventListener('beforeinstallprompt', (e: Event) => {
+      // Prevent the mini-infobar from appearing on mobile
       e.preventDefault();
-      this.deferredPrompt = (e as BeforeInstallPromptEvent);
+      // Store the event for later use
+      this.deferredPrompt = e as BeforeInstallPromptEvent;
+      // Show our custom install button
       this.showInstallButton();
+      console.log('📱 PWA install prompt ready');
+    });
+
+    // Listen for app installed event
+    window.addEventListener('appinstalled', () => {
+      console.log('🎉 PWA installed successfully');
+      this.deferredPrompt = null;
+      this.hideInstallButton();
     });
   }
 
   private showInstallButton(): void {
     const btn = document.getElementById('install-app-btn');
-    if (!btn) return;
-    btn.style.display = 'block';
-    btn.addEventListener('click', () => this.installApp());
+    if (btn) {
+      btn.classList.remove('hidden');
+      btn.style.display = 'block';
+      btn.addEventListener('click', () => this.installApp());
+    }
+  }
+
+  private hideInstallButton(): void {
+    const btn = document.getElementById('install-app-btn');
+    if (btn) {
+      btn.classList.add('hidden');
+      btn.style.display = 'none';
+    }
   }
 
   async installApp(): Promise<boolean> {
-    if (!this.deferredPrompt) return false;
-    try {
-      this.deferredPrompt.prompt();
-      const { outcome } = await this.deferredPrompt.userChoice;
-      return outcome === 'accepted';
-    } catch {
+    if (!this.deferredPrompt) {
+      console.warn('No install prompt available');
       return false;
-    } finally {
+    }
+
+    if (this.installPromptHandled) {
+      console.warn('Install prompt already handled');
+      return false;
+    }
+
+    try {
+      // Show the install prompt
+      this.deferredPrompt.prompt();
+      this.installPromptHandled = true;
+      
+      // Wait for the user's response
+      const { outcome } = await this.deferredPrompt.userChoice;
+      
+      if (outcome === 'accepted') {
+        console.log('✅ User accepted the install prompt');
+      } else {
+        console.log('❌ User dismissed the install prompt');
+      }
+      
+      // Clear the deferred prompt
       this.deferredPrompt = null;
+      this.hideInstallButton();
+      
+      return outcome === 'accepted';
+    } catch (error) {
+      console.error('Error during install prompt:', error);
+      return false;
     }
   }
 
@@ -296,7 +253,7 @@ export class PWAManager {
   }
 
   /** ---------------------------
-   * PWA Features
+   * PWA Features Check
    * --------------------------- */
   async checkPWAFeatures(): Promise<{
     installable: boolean;
