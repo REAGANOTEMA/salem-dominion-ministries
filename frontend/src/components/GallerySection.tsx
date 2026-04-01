@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Heart, Eye, Calendar, User, Filter, Grid, List, Download, Share2, Maximize2 } from 'lucide-react';
+import { API_ENDPOINTS, apiRequest } from '@/utils/api';
 
 interface GalleryItem {
   id: number;
@@ -51,11 +52,10 @@ const GallerySection: React.FC<GallerySectionProps> = ({
     try {
       setLoading(true);
       const url = category 
-        ? `/api/gallery?status=published&category=${category}&limit=${limit}`
-        : `/api/gallery?status=published&limit=${limit}`;
+        ? `${API_ENDPOINTS.GALLERY}&status=published&category=${category}&limit=${limit}`
+        : `${API_ENDPOINTS.GALLERY}&status=published&limit=${limit}`;
       
-      const response = await fetch(url);
-      const data = await response.json();
+      const data = await apiRequest<{ success: boolean; data: { items: GalleryItem[] } }>(url);
       
       if (data.success) {
         setItems(data.data.items);
@@ -72,8 +72,7 @@ const GallerySection: React.FC<GallerySectionProps> = ({
 
   const fetchCategories = async () => {
     try {
-      const response = await fetch('/api/gallery');
-      const data = await response.json();
+      const data = await apiRequest<{ success: boolean; data: { items: GalleryItem[] } }>(API_ENDPOINTS.GALLERY);
       
       if (data.success) {
         const uniqueCategories = Array.from(

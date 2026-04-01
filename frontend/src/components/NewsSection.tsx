@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Calendar, User, Eye, Heart, Clock, AlertCircle, Image as ImageIcon } from 'lucide-react';
+import { API_ENDPOINTS, apiRequest } from '@/utils/api';
 
 interface NewsArticle {
   id: number;
@@ -47,11 +48,10 @@ const NewsSection: React.FC<NewsSectionProps> = ({
     try {
       setLoading(true);
       const url = category 
-        ? `/api/news?status=published&category=${category}&limit=${limit}`
-        : `/api/news?status=published&limit=${limit}`;
+        ? `${API_ENDPOINTS.NEWS}&status=published&category=${category}&limit=${limit}`
+        : `${API_ENDPOINTS.NEWS}&status=published&limit=${limit}`;
       
-      const response = await fetch(url);
-      const data = await response.json();
+      const data = await apiRequest<{ success: boolean; data: { articles: NewsArticle[] } }>(url);
       
       if (data.success) {
         setArticles(data.data.articles);
@@ -68,8 +68,7 @@ const NewsSection: React.FC<NewsSectionProps> = ({
 
   const fetchBreakingNews = async () => {
     try {
-      const response = await fetch('/api/news/breaking');
-      const data = await response.json();
+      const data = await apiRequest<{ success: boolean; data: { articles: NewsArticle[] } }>(API_ENDPOINTS.BREAKING_NEWS);
       
       if (data.success) {
         setBreakingNews(data.data.articles);

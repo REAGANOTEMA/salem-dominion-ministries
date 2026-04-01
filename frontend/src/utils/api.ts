@@ -4,13 +4,13 @@
 // Get API base URL from environment variable or use default
 const API_BASE_URL = import.meta.env.VITE_API_URL || '/salem-dominion-ministries/api.php';
 
-// API Endpoints
+// API Endpoints using query string format for api.php
 export const API_ENDPOINTS = {
   // Authentication
   AUTH: {
     LOGIN: `${API_BASE_URL}?route=auth&action=login`,
     REGISTER: `${API_BASE_URL}?route=auth&action=register`,
-    VERIFY: `${API_BASE_URL}?route=auth/verify`,
+    VERIFY: `${API_BASE_URL}?route=auth&action=verify`,
     UPLOAD_PROFILE: `${API_BASE_URL}?route=auth&action=upload_profile`,
   },
   
@@ -43,8 +43,6 @@ export const API_ENDPOINTS = {
   
   // News
   NEWS: `${API_BASE_URL}?route=news`,
-  
-  // Breaking News
   BREAKING_NEWS: `${API_BASE_URL}?route=news&type=breaking`,
   
   // Messages
@@ -79,11 +77,6 @@ export const EXTERNAL_LINKS = {
   DEVELOPER_WHATSAPP: 'https://wa.me/256772514889',
 } as const;
 
-// Helper function to get full API URL
-export const getApiUrl = (endpoint: string): string => {
-  return endpoint;
-};
-
 // Helper function to get file URL
 export const getFileUrl = (filename: string, type: 'profile' | 'gallery' | 'sermon' = 'gallery'): string => {
   const baseUrl = window.location.origin + '/salem-dominion-ministries/backend/uploads';
@@ -99,7 +92,10 @@ export const getFileUrl = (filename: string, type: 'profile' | 'gallery' | 'serm
   }
 };
 
-// API Request helper with proper error handling
+/**
+ * API Request helper with proper error handling
+ * Validates response is JSON before parsing
+ */
 export const apiRequest = async <T>(url: string, options: RequestInit = {}): Promise<T> => {
   const token = localStorage.getItem('token');
   const headers: HeadersInit = {
@@ -108,17 +104,22 @@ export const apiRequest = async <T>(url: string, options: RequestInit = {}): Pro
     ...options.headers,
   };
 
+  console.log('🔗 API Request:', url, options.method || 'GET');
+
   try {
     const response = await fetch(url, {
       ...options,
       headers,
     });
 
+    console.log('📥 API Response:', response.status, response.statusText);
+
     // Check if response is JSON
     const contentType = response.headers.get('content-type');
     if (!contentType || !contentType.includes('application/json')) {
       const text = await response.text();
-      console.error('Non-JSON response from:', url, 'Content:', text.substring(0, 200));
+      console.error('❌ Non-JSON response from:', url);
+      console.error('Response content:', text.substring(0, 500));
       throw new Error('Server returned non-JSON response. Please check API configuration.');
     }
 
@@ -127,7 +128,9 @@ export const apiRequest = async <T>(url: string, options: RequestInit = {}): Pro
       throw new Error(`API Error: ${response.status} ${response.statusText} - ${error.message}`);
     }
 
-    return response.json();
+    const data = await response.json();
+    console.log('✅ API Success:', url, data);
+    return data as T;
   } catch (error) {
     if (error instanceof TypeError && error.message.includes('fetch')) {
       throw new Error('Network error. Please check your connection.');
@@ -136,7 +139,9 @@ export const apiRequest = async <T>(url: string, options: RequestInit = {}): Pro
   }
 };
 
-// File upload helper
+/**
+ * File upload helper
+ */
 export const uploadFile = async (url: string, file: File, additionalData: Record<string, string | number> = {}) => {
   const formData = new FormData();
   formData.append('file', file);
