@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Heart, Eye, Calendar, User, Filter, Grid, List, Download, Share2, Maximize2 } from 'lucide-react';
-import { API_ENDPOINTS, apiRequest } from '@/utils/api';
+import { API_ENDPOINTS, fetchAPI } from '@/utils/api';
 
 interface GalleryItem {
   id: number;
@@ -51,11 +51,11 @@ const GallerySection: React.FC<GallerySectionProps> = ({
   const fetchGallery = async () => {
     try {
       setLoading(true);
-      const url = category 
-        ? `${API_ENDPOINTS.GALLERY}&status=published&category=${category}&limit=${limit}`
-        : `${API_ENDPOINTS.GALLERY}&status=published&limit=${limit}`;
+      let endpoint = API_ENDPOINTS.GALLERY;
+      if (category) endpoint += `?category=${category}&limit=${limit}`;
+      else endpoint += `?limit=${limit}`;
       
-      const data = await apiRequest<{ success: boolean; data: { items: GalleryItem[] } }>(url);
+      const data = await fetchAPI<{ success: boolean; data: { items: GalleryItem[] } }>(endpoint);
       
       if (data.success) {
         setItems(data.data.items);
@@ -72,13 +72,14 @@ const GallerySection: React.FC<GallerySectionProps> = ({
 
   const fetchCategories = async () => {
     try {
-      const data = await apiRequest<{ success: boolean; data: { items: GalleryItem[] } }>(API_ENDPOINTS.GALLERY);
+      const data = await fetchAPI<{ success: boolean; data: { items: GalleryItem[] } }>(API_ENDPOINTS.GALLERY);
       
       if (data.success) {
-        const uniqueCategories = Array.from(
-          new Set(data.data.items.map((item: GalleryItem) => item.category).filter(Boolean))
-        );
-        setCategories(uniqueCategories);
+        const categorySet = new Set<string>();
+        data.data.items.forEach((item: GalleryItem) => {
+          if (item.category) categorySet.add(item.category);
+        });
+        setCategories(Array.from(categorySet));
       }
     } catch (error) {
       console.error('Error fetching categories:', error);
