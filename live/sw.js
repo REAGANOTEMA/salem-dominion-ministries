@@ -1,12 +1,10 @@
 // Service Worker for Salem Dominion Ministries PWA
-const CACHE_NAME = 'salem-dominion-v1.0.3';
-const STATIC_CACHE = 'salem-static-v1.0.3';
-const DYNAMIC_CACHE = 'salem-dynamic-v1.0.3';
+const CACHE_NAME = 'salem-dominion-v1.0.4';
+const STATIC_CACHE = 'salem-static-v1.0.4';
 
-// Install event - only cache what exists
+// Install event - skip waiting immediately
 self.addEventListener('install', (event) => {
   console.log('🔧 Service Worker: Installing');
-  // Skip waiting immediately to avoid stale workers
   self.skipWaiting();
 });
 
@@ -18,7 +16,7 @@ self.addEventListener('activate', (event) => {
       .then((cacheNames) => {
         return Promise.all(
           cacheNames.map((cache) => {
-            if (cache !== STATIC_CACHE && cache !== DYNAMIC_CACHE) {
+            if (cache !== STATIC_CACHE) {
               console.log('🗑️ Service Worker: Deleting old cache:', cache);
               return caches.delete(cache);
             }
@@ -29,97 +27,66 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-// Fetch event
+// Fetch event - only cache static assets, bypass API requests
 self.addEventListener('fetch', (event) => {
-  const { request } = event;
-  
+  const url = new URL(event.request.url);
+
+  // Skip API requests completely - let them go directly to backend
+  if (url.origin.includes('localhost:5000') || 
+      url.pathname.includes('/api') ||
+      url.pathname.includes('/api.php') ||
+      url.search.includes('route=')) {
+    console.log('⏭️ Service Worker: Skipping API request:', url.href);
+    return;
+  }
+
+  // Only cache GET requests for static assets
+  if (event.request.method !== 'GET') {
+    return;
+  }
+
   // Skip non-HTTP requests
-  if (!request.url.startsWith('http')) {
+  if (!url.protocol.startsWith('http')) {
     return;
   }
 
-  // Handle API requests
-  if (request.url.includes('/api.php') || request.url.includes('/api/')) {
-    event.respondWith(
-      fetch(request)
-        .then((response) => {
-          if (response && response.ok) {
-            try {
-              const responseClone = response.clone();
-              caches.open(DYNAMIC_CACHE).then((cache) => {
-                cache.put(request, responseClone);
-              });
-            } catch (e) {
-              // Ignore caching errors
-            }
-          }
-          return response;
-        })
-        .catch(() => {
-          return new Response(JSON.stringify({
-            success: false,
-            message: 'You are offline. Please check your connection.'
-          }), {
-            status: 503,
-            headers: { 'Content-Type': 'application/json' }
-          });
-        })
-    );
-    return;
-  }
-
-  // Network first for documents, cache first for static assets
-  if (request.destination === 'document') {
-    event.respondWith(
-      fetch(request)
-        .then((response) => {
-          if (response && response.ok) {
-            try {
-              const responseClone = response.clone();
-              caches.open(DYNAMIC_CACHE).then((cache) => {
-                cache.put(request, responseClone);
-              });
-            } catch (e) {
-              // Ignore caching errors
-            }
-          }
-          return response;
-        })
-        .catch(() => {
-          return caches.match(request).then((cached) => {
-            return cached || new Response('Offline', { status: 503, headers: { 'Content-Type': 'text/html' } });
-          });
-        })
-    );
-    return;
-  }
-
-  // Cache first for static assets
   event.respondWith(
-    caches.match(request)
+    caches.match(event.request)
       .then((cachedResponse) => {
         if (cachedResponse) {
+          console.log('💾 Service Worker: Serving from cache:', url.pathname);
           return cachedResponse;
         }
 
-        return fetch(request)
+        // Fetch from network
+        return fetch(event.request)
           .then((response) => {
+            // Don't cache non-ok responses
             if (!response || response.status !== 200) {
               return response;
             }
 
-            try {
-              const responseToCache = response.clone();
-              caches.open(STATIC_CACHE).then((cache) => {
-                cache.put(request, responseToCache);
-              });
-            } catch (e) {
-              // Ignore caching errors
+            // Clone the response
+            const responseToCache = response.clone();
+
+            // Cache static assets only
+            if (event.request.destination === 'style' || 
+                event.request.destination === 'script' || 
+                event.request.destination === 'image' ||
+                event.request.destination === 'font') {
+              caches.open(STATIC_CACHE)
+                .then((cache) => {
+                  cache.put(event.request, responseToCache);
+                });
             }
 
             return response;
           })
           .catch(() => {
+            // Return offline response only for static assets
+            if (event.request.destination === 'document') {
+              return caches.match('/offline.html');
+            }
             return new Response('Offline', { status: 503 });
           });
       })
