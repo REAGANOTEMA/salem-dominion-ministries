@@ -4,6 +4,7 @@ import { ArrowRight, Church, Users, Calendar, Heart, BookOpen } from 'lucide-rea
 import AuthModal from '@/components/Auth/AuthModal';
 import DonationModal from '@/components/Donation/DonationModal';
 import { Button } from '@/components/ui/button';
+import { HeroAngels } from '@/components/HeroAngels';
 
 const HeroSection: React.FC = () => {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
@@ -17,6 +18,9 @@ const HeroSection: React.FC = () => {
   return (
     <>
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+        {/* Heavenly Angels Decoration */}
+        <HeroAngels show={true} />
+        
         {/* Background */}
         <div className="absolute inset-0 bg-gradient-to-br from-navy via-navy/90 to-navy/80">
           <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1515939356261-1cdb6915e4b3?q=80&w=1920')] bg-cover bg-center opacity-20"></div>

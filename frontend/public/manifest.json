@@ -11,22 +11,6 @@
   "lang": "en",
   "dir": "ltr",
   "categories": ["lifestyle", "education", "social"],
-  "screenshots": [
-    {
-      "src": "/salem-dominion-ministries/screenshots/home.png",
-      "sizes": "1280x720",
-      "type": "image/png",
-      "form_factor": "wide",
-      "label": "Home screen with worship services"
-    },
-    {
-      "src": "/salem-dominion-ministries/screenshots/mobile.png",
-      "sizes": "750x1334",
-      "type": "image/png",
-      "form_factor": "narrow",
-      "label": "Mobile view of church app"
-    }
-  ],
   "icons": [
     {
       "src": "/salem-dominion-ministries/icons/icon-72x72.svg",
@@ -83,29 +67,44 @@
       "short_name": "Stream",
       "description": "Watch live services",
       "url": "/salem-dominion-ministries/sermons",
-      "icons": [{ "src": "/salem-dominion-ministries/icons/icon-96x96.svg", "sizes": "96x96", "type": "image/svg+xml", "purpose": "any" }]
+      "icons": [
+        {
+          "src": "/salem-dominion-ministries/icons/icon-96x96.svg",
+          "sizes": "96x96",
+          "type": "image/svg+xml",
+          "purpose": "any"
+        }
+      ]
     },
     {
       "name": "Prayer Requests",
       "short_name": "Prayers",
       "description": "Submit and view prayers",
       "url": "/salem-dominion-ministries/prayer-request",
-      "icons": [{ "src": "/salem-dominion-ministries/icons/icon-96x96.svg", "sizes": "96x96", "type": "image/svg+xml", "purpose": "any" }]
+      "icons": [
+        {
+          "src": "/salem-dominion-ministries/icons/icon-96x96.svg",
+          "sizes": "96x96",
+          "type": "image/svg+xml",
+          "purpose": "any"
+        }
+      ]
     },
     {
       "name": "Events",
       "short_name": "Events",
       "description": "Upcoming church events",
       "url": "/salem-dominion-ministries/events",
-      "icons": [{ "src": "/salem-dominion-ministries/icons/icon-96x96.svg", "sizes": "96x96", "type": "image/svg+xml", "purpose": "any" }]
+      "icons": [
+        {
+          "src": "/salem-dominion-ministries/icons/icon-96x96.svg",
+          "sizes": "96x96",
+          "type": "image/svg+xml",
+          "purpose": "any"
+        }
+      ]
     }
   ],
   "related_applications": [],
-  "prefer_related_applications": false,
-  "edge_side_panel": {
-    "preferred_width": 400
-  },
-  "launch_handler": {
-    "client_mode": "navigate-existing"
-  }
+  "prefer_related_applications": false
 }

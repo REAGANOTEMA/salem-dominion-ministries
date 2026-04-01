@@ -5,6 +5,9 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useEffect } from "react";
 import { AuthProvider } from "@/contexts/AuthContext";
+import { HeavenlyAngels } from "@/components/HeavenlyAngels";
+import { HeavenlyEffects } from "@/components/HeavenlyEffects";
+import { WelcomeVoice } from "@/components/WelcomeVoice";
 import Index from "./pages/Index";
 import About from "./pages/About";
 import Leadership from "./pages/Leadership";
@@ -55,6 +58,11 @@ const App = () => {
           <Toaster />
           <Sonner />
           <BrowserRouter basename="/salem-dominion-ministries">
+          {/* Heavenly Decorations - Angels and Divine Effects */}
+          <HeavenlyAngels />
+          <HeavenlyEffects />
+          <WelcomeVoice />
+          
           <a
             href="#main-content"
             className="sr-only focus:not-sr-only focus:absolute focus:left-3 focus:top-3 focus:z-[100] focus:rounded-md focus:bg-primary focus:px-4 focus:py-2 focus:text-primary-foreground"

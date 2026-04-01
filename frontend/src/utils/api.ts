@@ -1,66 +1,66 @@
 // API Configuration for Salem Dominion Ministries
 // Centralized API endpoint management
 
-export const API_BASE_URL = '/api'; // Relative path for production
+export const API_BASE_URL = '/api.php'; // Direct API endpoint
 
 // API Endpoints
 export const API_ENDPOINTS = {
   // Authentication
   AUTH: {
-    LOGIN: `${API_BASE_URL}/auth?action=login`,
-    REGISTER: `${API_BASE_URL}/auth?action=register`,
-    VERIFY: `${API_BASE_URL}/auth/verify`,
-    UPLOAD_PROFILE: `${API_BASE_URL}/auth?action=upload_profile`,
+    LOGIN: `${API_BASE_URL}?route=auth&action=login`,
+    REGISTER: `${API_BASE_URL}?route=auth&action=register`,
+    VERIFY: `${API_BASE_URL}?route=auth/verify`,
+    UPLOAD_PROFILE: `${API_BASE_URL}?route=auth&action=upload_profile`,
   },
   
   // Users
-  USERS: `${API_BASE_URL}/users`,
+  USERS: `${API_BASE_URL}?route=users`,
   
   // Events
-  EVENTS: `${API_BASE_URL}/events`,
+  EVENTS: `${API_BASE_URL}?route=events`,
   
   // Sermons
-  SERMONS: `${API_BASE_URL}/sermons`,
+  SERMONS: `${API_BASE_URL}?route=sermons`,
   
   // Prayers
-  PRAYERS: `${API_BASE_URL}/prayers`,
+  PRAYERS: `${API_BASE_URL}?route=prayers`,
   
   // Prayer Booking
-  PRAYER_BOOKING: `${API_BASE_URL}/prayer-booking`,
+  PRAYER_BOOKING: `${API_BASE_URL}?route=prayer-booking`,
   
   // Donations
-  DONATIONS: `${API_BASE_URL}/donations`,
+  DONATIONS: `${API_BASE_URL}?route=donations`,
   
   // Contact
-  CONTACT: `${API_BASE_URL}/contact`,
+  CONTACT: `${API_BASE_URL}?route=contact`,
   
   // Blog
-  BLOG: `${API_BASE_URL}/blog`,
+  BLOG: `${API_BASE_URL}?route=blog`,
   
   // Gallery
-  GALLERY: `${API_BASE_URL}/gallery`,
+  GALLERY: `${API_BASE_URL}?route=gallery`,
   
   // News
-  NEWS: `${API_BASE_URL}/news`,
+  NEWS: `${API_BASE_URL}?route=news`,
   
   // Messages
-  MESSAGES: `${API_BASE_URL}/messages`,
+  MESSAGES: `${API_BASE_URL}?route=messages`,
   
   // Notifications
-  NOTIFICATIONS: `${API_BASE_URL}/notifications`,
+  NOTIFICATIONS: `${API_BASE_URL}?route=notifications`,
   
   // Children's Ministry
-  CHILDREN_MINISTRY: `${API_BASE_URL}/children_ministry`,
+  CHILDREN_MINISTRY: `${API_BASE_URL}?route=children_ministry`,
   
   // Health Check
-  HEALTH: `${API_BASE_URL}/health`,
+  HEALTH: `${API_BASE_URL}?route=health`,
 } as const;
 
 // File Upload URLs
 export const UPLOAD_URLS = {
-  PROFILE: `${API_BASE_URL}/auth?action=upload_profile`,
-  SERMON: `${API_BASE_URL}/sermons`,
-  GALLERY: `${API_BASE_URL}/gallery`,
+  PROFILE: `${API_BASE_URL}?route=auth&action=upload_profile`,
+  SERMON: `${API_BASE_URL}?route=sermons`,
+  GALLERY: `${API_BASE_URL}?route=gallery`,
 } as const;
 
 // External Links
@@ -95,7 +95,7 @@ export const getFileUrl = (filename: string, type: 'profile' | 'gallery' | 'serm
   }
 };
 
-// API Request helper
+// API Request helper with better error handling
 export const apiRequest = async (url: string, options: RequestInit = {}) => {
   const token = localStorage.getItem('token');
   const headers = {
@@ -109,8 +109,17 @@ export const apiRequest = async (url: string, options: RequestInit = {}) => {
     headers,
   });
 
+  // Check if response is JSON
+  const contentType = response.headers.get('content-type');
+  if (!contentType || !contentType.includes('application/json')) {
+    const text = await response.text();
+    console.error('Non-JSON response:', text.substring(0, 200));
+    throw new Error('Server returned non-JSON response');
+  }
+
   if (!response.ok) {
-    throw new Error(`API Error: ${response.status} ${response.statusText}`);
+    const error = await response.json().catch(() => ({ message: 'Unknown error' }));
+    throw new Error(`API Error: ${response.status} ${response.statusText} - ${error.message}`);
   }
 
   return response.json();

@@ -147,8 +147,8 @@ export class PWAManager {
     if ('Notification' in window && Notification.permission === 'granted') {
       new Notification(title, {
         body,
-        icon: '/icons/icon-192x192.svg',
-        badge: '/icons/badge-72x72.png',
+        icon: '/salem-dominion-ministries/icons/icon-192x192.svg',
+        badge: '/salem-dominion-ministries/icons/icon-72x72.svg',
       });
     } else {
       console.log(`${title}: ${body}`);

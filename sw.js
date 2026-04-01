@@ -3,7 +3,7 @@ const CACHE_NAME = 'salem-dominion-v1.0.0';
 const STATIC_CACHE = 'salem-static-v1.0.0';
 const DYNAMIC_CACHE = 'salem-dynamic-v1.0.0';
 
-// Subdirectory base path
+// Base path for the application
 const BASE_PATH = '/salem-dominion-ministries';
 
 // Files to cache for offline functionality
@@ -68,7 +68,7 @@ self.addEventListener('fetch', (event) => {
   }
   
   // Handle API requests
-  if (url.pathname.startsWith('/api/')) {
+  if (url.pathname.startsWith('/salem-dominion-ministries/api/') || url.pathname.startsWith('/api/')) {
     event.respondWith(
       fetch(request)
         .then((response) => {
@@ -111,7 +111,7 @@ self.addEventListener('fetch', (event) => {
           .catch(() => {
             // Serve offline page for navigation requests
             if (request.destination === 'document') {
-              return caches.match('/offline.html');
+              return caches.match(BASE_PATH + '/offline.html');
             }
           });
       })
@@ -143,19 +143,7 @@ self.addEventListener('push', (event) => {
     data: {
       dateOfArrival: Date.now(),
       primaryKey: 1
-    },
-    actions: [
-      {
-        action: 'explore',
-        title: 'Open App',
-        icon: BASE_PATH + '/icons/icon-72x72.svg'
-      },
-      {
-        action: 'close',
-        title: 'Close',
-        icon: BASE_PATH + '/icons/icon-72x72.svg'
-      }
-    ]
+    }
   };
   
   event.waitUntil(
@@ -169,27 +157,19 @@ self.addEventListener('notificationclick', (event) => {
   
   event.notification.close();
   
-  if (event.action === 'explore') {
-    event.waitUntil(
-      clients.openWindow(BASE_PATH + '/')
-    );
-  } else if (event.action === 'close') {
-    // Just close the notification
-  } else {
-    // Default action - open app
-    event.waitUntil(
-      clients.matchAll().then((clientList) => {
-        for (const client of clientList) {
-          if (client.url === BASE_PATH + '/' && 'focus' in client) {
-            return client.focus();
-          }
+  // Default action - open app
+  event.waitUntil(
+    clients.matchAll().then((clientList) => {
+      for (const client of clientList) {
+        if (client.url.includes(BASE_PATH) && 'focus' in client) {
+          return client.focus();
         }
-        if (clients.openWindow) {
-          return clients.openWindow(BASE_PATH + '/');
-        }
-      })
-    );
-  }
+      }
+      if (clients.openWindow) {
+        return clients.openWindow(BASE_PATH + '/');
+      }
+    })
+  );
 });
 
 // Sync offline prayer requests
@@ -199,7 +179,7 @@ async function syncPrayerRequests() {
     
     for (const prayer of offlinePrayers) {
       try {
-        const response = await fetch('/api/prayers', {
+        const response = await fetch(BASE_PATH + '/api/prayers', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -228,7 +208,7 @@ async function syncDonations() {
     
     for (const donation of offlineDonations) {
       try {
-        const response = await fetch('/api/donations', {
+        const response = await fetch(BASE_PATH + '/api/donations', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -324,7 +304,7 @@ self.addEventListener('periodicsync', (event) => {
 async function updateContent() {
   try {
     // Check for new content
-    const response = await fetch('/api/health');
+    const response = await fetch(BASE_PATH + '/api/health');
     
     if (response.ok) {
       // Notify clients about new content
