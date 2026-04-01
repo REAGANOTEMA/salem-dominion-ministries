@@ -45,6 +45,18 @@ export const EXTERNAL_LINKS = {
   DESIGNER: 'https://www.ctiauganda.com',
   DEVELOPER_WHATSAPP: 'https://wa.me/256772514889',
 } as const;
+
+/**
+ * Centralized API fetch function
+ * All API requests must use this function
+ * Logs every request and validates JSON response
+ */
+export const fetchAPI = async <T>(endpoint: string, options: RequestInit = {}): Promise<T> => {
+  const url = `${API_BASE_URL}${endpoint}`;
+  
+  console.log('🔗 Fetching:', url);
+  
+  const token = localStorage.getItem('token');
   const headers: HeadersInit = {
     'Content-Type': 'application/json',
     ...(token && { Authorization: `Bearer ${token}` }),

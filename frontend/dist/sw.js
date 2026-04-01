@@ -1,22 +1,49 @@
 // Service Worker for Salem Dominion Ministries PWA
-const CACHE_NAME = 'salem-dominion-v1.0.4';
-const STATIC_CACHE = 'salem-static-v1.0.4';
+const CACHE_NAME = 'salem-dominion-v1.0.0';
+const STATIC_CACHE = 'salem-static-v1.0.0';
+const DYNAMIC_CACHE = 'salem-dynamic-v1.0.0';
 
-// Install event - skip waiting immediately
+// Files to cache for offline functionality
+const STATIC_ASSETS = [
+  '/',
+  '/index.html',
+  '/manifest.json',
+  '/offline.html',
+  // Church logo icons (SVG for better quality)
+  '/icons/icon-72x72.svg',
+  '/icons/icon-96x96.svg',
+  '/icons/icon-128x128.svg',
+  '/icons/icon-144x144.svg',
+  '/icons/icon-152x152.svg',
+  '/icons/icon-192x192.svg',
+  '/icons/icon-384x384.svg',
+  '/icons/icon-512x512.svg'
+];
+
+// Install event - cache static assets
 self.addEventListener('install', (event) => {
   console.log('🔧 Service Worker: Installing');
-  self.skipWaiting();
+  
+  event.waitUntil(
+    caches.open(STATIC_CACHE)
+      .then((cache) => {
+        console.log('📦 Service Worker: Caching static assets');
+        return cache.addAll(STATIC_ASSETS);
+      })
+      .then(() => self.skipWaiting())
+  );
 });
 
 // Activate event - clean up old caches
 self.addEventListener('activate', (event) => {
   console.log('🚀 Service Worker: Activating');
+  
   event.waitUntil(
     caches.keys()
       .then((cacheNames) => {
         return Promise.all(
           cacheNames.map((cache) => {
-            if (cache !== STATIC_CACHE) {
+            if (cache !== STATIC_CACHE && cache !== DYNAMIC_CACHE) {
               console.log('🗑️ Service Worker: Deleting old cache:', cache);
               return caches.delete(cache);
             }
@@ -27,82 +54,107 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-// Fetch event - only cache static assets, bypass API requests
+// Fetch event - serve from cache when offline
 self.addEventListener('fetch', (event) => {
-  const url = new URL(event.request.url);
-
-  // Skip API requests completely - let them go directly to backend
-  if (url.origin.includes('localhost:5000') || 
-      url.pathname.includes('/api') ||
-      url.pathname.includes('/api.php') ||
-      url.search.includes('route=')) {
-    console.log('⏭️ Service Worker: Skipping API request:', url.href);
-    return;
-  }
-
-  // Only cache GET requests for static assets
-  if (event.request.method !== 'GET') {
-    return;
-  }
-
+  const { request } = event;
+  const url = new URL(request.url);
+  
   // Skip non-HTTP requests
-  if (!url.protocol.startsWith('http')) {
+  if (!request.url.startsWith('http')) {
     return;
   }
-
+  
+  // Handle API requests
+  if (url.pathname.startsWith('/api/')) {
+    event.respondWith(
+      fetch(request)
+        .then((response) => {
+          // Cache successful API responses
+          if (response.ok) {
+            const responseClone = response.clone();
+            caches.open(DYNAMIC_CACHE)
+              .then((cache) => cache.put(request, responseClone));
+          }
+          return response;
+        })
+        .catch(() => {
+          // Try to serve from cache if network fails
+          return caches.match(request);
+        })
+    );
+    return;
+  }
+  
+  // Handle static assets and pages
   event.respondWith(
-    caches.match(event.request)
-      .then((cachedResponse) => {
-        if (cachedResponse) {
-          console.log('💾 Service Worker: Serving from cache:', url.pathname);
-          return cachedResponse;
+    caches.match(request)
+      .then((response) => {
+        // Serve from cache if available
+        if (response) {
+          return response;
         }
-
+        
         // Fetch from network
-        return fetch(event.request)
+        return fetch(request)
           .then((response) => {
-            // Don't cache non-ok responses
-            if (!response || response.status !== 200) {
-              return response;
+            // Cache new static assets
+            if (response.ok && request.destination === 'document') {
+              const responseClone = response.clone();
+              caches.open(DYNAMIC_CACHE)
+                .then((cache) => cache.put(request, responseClone));
             }
-
-            // Clone the response
-            const responseToCache = response.clone();
-
-            // Cache static assets only
-            if (event.request.destination === 'style' || 
-                event.request.destination === 'script' || 
-                event.request.destination === 'image' ||
-                event.request.destination === 'font') {
-              caches.open(STATIC_CACHE)
-                .then((cache) => {
-                  cache.put(event.request, responseToCache);
-                });
-            }
-
             return response;
           })
           .catch(() => {
-            // Return offline response only for static assets
-            if (event.request.destination === 'document') {
+            // Serve offline page for navigation requests
+            if (request.destination === 'document') {
               return caches.match('/offline.html');
             }
-            return new Response('Offline', { status: 503 });
           });
-      })
-      .catch(() => {
-        return new Response('Offline', { status: 503 });
       })
   );
 });
 
+// Background sync for offline actions
+self.addEventListener('sync', (event) => {
+  console.log('🔄 Service Worker: Background sync', event.tag);
+  
+  if (event.tag === 'sync-prayer-requests') {
+    event.waitUntil(syncPrayerRequests());
+  }
+  
+  if (event.tag === 'sync-donations') {
+    event.waitUntil(syncDonations());
+  }
+});
+
 // Push notifications
 self.addEventListener('push', (event) => {
+  console.log('📢 Service Worker: Push notification received');
+  
   const options = {
     body: event.data ? event.data.text() : 'New update from Salem Dominion Ministries',
-    icon: '/icons/icon-192x192.svg',
-    badge: '/icons/icon-72x72.svg',
+    icon: '/icons/icon-192x192.png',
+    badge: '/icons/badge-72x72.png',
+    vibrate: [100, 50, 100],
+    data: {
+      dateOfArrival: Date.now(),
+      primaryKey: 1
+    },
+    actions: [
+      {
+        action: 'explore',
+        title: 'Open App',
+        icon: '/icons/checkmark.png'
+      },
+      {
+        action: 'close',
+        title: 'Close',
+        icon: '/icons/xmark.png'
+      }
+    ]
   };
+  
   event.waitUntil(
     self.registration.showNotification('Salem Dominion Ministries', options)
   );
@@ -110,24 +162,178 @@ self.addEventListener('push', (event) => {
 
 // Notification click handler
 self.addEventListener('notificationclick', (event) => {
+  console.log('👆 Service Worker: Notification click received');
+  
   event.notification.close();
-  event.waitUntil(
-    clients.matchAll().then((clientList) => {
-      for (const client of clientList) {
-        if (client.url === '/' && 'focus' in client) {
-          return client.focus();
+  
+  if (event.action === 'explore') {
+    event.waitUntil(
+      clients.openWindow('/')
+    );
+  } else if (event.action === 'close') {
+    // Just close the notification
+  } else {
+    // Default action - open app
+    event.waitUntil(
+      clients.matchAll().then((clientList) => {
+        for (const client of clientList) {
+          if (client.url === '/' && 'focus' in client) {
+            return client.focus();
+          }
         }
-      }
-      if (clients.openWindow) {
-        return clients.openWindow('/');
-      }
-    })
-  );
-});
-
-// Message handling
-self.addEventListener('message', (event) => {
-  if (event.data && event.data.type === 'SKIP_WAITING') {
-    event.waitUntil(self.skipWaiting());
+        if (clients.openWindow) {
+          return clients.openWindow('/');
+        }
+      })
+    );
   }
 });
+
+// Sync offline prayer requests
+async function syncPrayerRequests() {
+  try {
+    const offlinePrayers = await getOfflineData('prayer-requests');
+    
+    for (const prayer of offlinePrayers) {
+      try {
+        const response = await fetch('/api/prayers', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${prayer.token}`
+          },
+          body: JSON.stringify(prayer.data)
+        });
+        
+        if (response.ok) {
+          await removeOfflineData('prayer-requests', prayer.id);
+          console.log('✅ Synced prayer request:', prayer.id);
+        }
+      } catch (error) {
+        console.error('❌ Failed to sync prayer request:', error);
+      }
+    }
+  } catch (error) {
+    console.error('❌ Sync prayer requests failed:', error);
+  }
+}
+
+// Sync offline donations
+async function syncDonations() {
+  try {
+    const offlineDonations = await getOfflineData('donations');
+    
+    for (const donation of offlineDonations) {
+      try {
+        const response = await fetch('/api/donations', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${donation.token}`
+          },
+          body: JSON.stringify(donation.data)
+        });
+        
+        if (response.ok) {
+          await removeOfflineData('donations', donation.id);
+          console.log('✅ Synced donation:', donation.id);
+        }
+      } catch (error) {
+        console.error('❌ Failed to sync donation:', error);
+      }
+    }
+  } catch (error) {
+    console.error('❌ Sync donations failed:', error);
+  }
+}
+
+// IndexedDB helpers for offline storage
+async function getOfflineData(storeName) {
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.open('salem-offline-db', 1);
+    
+    request.onerror = () => reject(request.error);
+    request.onsuccess = () => {
+      const db = request.result;
+      const transaction = db.transaction(storeName, 'readonly');
+      const store = transaction.objectStore(storeName);
+      const getAll = store.getAll();
+      
+      getAll.onsuccess = () => resolve(getAll.result);
+      getAll.onerror = () => reject(getAll.error);
+    };
+    
+    request.onupgradeneeded = () => {
+      const db = request.result;
+      if (!db.objectStoreNames.contains(storeName)) {
+        db.createObjectStore(storeName, { keyPath: 'id' });
+      }
+    };
+  });
+}
+
+async function removeOfflineData(storeName, id) {
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.open('salem-offline-db', 1);
+    
+    request.onerror = () => reject(request.error);
+    request.onsuccess = () => {
+      const db = request.result;
+      const transaction = db.transaction(storeName, 'readwrite');
+      const store = transaction.objectStore(storeName);
+      const deleteRequest = store.delete(id);
+      
+      deleteRequest.onsuccess = () => resolve();
+      deleteRequest.onerror = () => reject(deleteRequest.error);
+    };
+  });
+}
+
+// Message handling for real-time updates
+self.addEventListener('message', (event) => {
+  console.log('📨 Service Worker: Message received', event.data);
+  
+  if (event.data && event.data.type === 'CACHE_UPDATED') {
+    // Notify clients about cache updates
+    event.waitUntil(
+      clients.matchAll().then((clientList) => {
+        clientList.forEach((client) => {
+          client.postMessage({
+            type: 'CACHE_UPDATED',
+            url: event.data.url
+          });
+        });
+      })
+    );
+  }
+});
+
+// Periodic background sync
+self.addEventListener('periodicsync', (event) => {
+  console.log('⏰ Service Worker: Periodic sync', event.tag);
+  
+  if (event.tag === 'update-content') {
+    event.waitUntil(updateContent());
+  }
+});
+
+// Update content in background
+async function updateContent() {
+  try {
+    // Check for new content
+    const response = await fetch('/api/health');
+    
+    if (response.ok) {
+      // Notify clients about new content
+      clients.matchAll().then((clientList) => {
+        clientList.forEach((client) => {
+          client.postMessage({
+            type: 'NEW_CONTENT_AVAILABLE'
+          });
+        });
+      });
+    }
+  } catch (error) {
+    console.error('❌ Content update failed:', error);
+  }
+}

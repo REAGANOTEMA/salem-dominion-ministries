@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { API_ENDPOINTS, fetchAPI } from '@/utils/api';
 
 interface User {
   id?: number;
@@ -63,17 +64,15 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         return;
       }
 
-      const response = await fetch('/api/auth/verify', {
+      // Use the new API configuration
+      const data = await fetchAPI<{ success: boolean; user: User }>(API_ENDPOINTS.AUTH_VERIFY, {
         headers: {
           'Authorization': `Bearer ${token}`,
         },
       });
 
-      if (response.ok) {
-        const data = await response.json();
-        if (data.success) {
-          setUser(data.user);
-        }
+      if (data.success) {
+        setUser(data.user);
       }
     } catch (error) {
       console.error('Error fetching user data:', error);
@@ -85,15 +84,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const login = async (email: string, password: string): Promise<boolean> => {
     try {
-      const response = await fetch('/api/auth?action=login', {
+      // Use the new API configuration
+      const data = await fetchAPI<{ success: boolean; token: string; user: User }>(API_ENDPOINTS.AUTH_LOGIN, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
         body: JSON.stringify({ email, password }),
       });
-
-      const data = await response.json();
 
       if (data.success) {
         localStorage.setItem('token', data.token);
@@ -109,15 +104,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const register = async (userData: RegisterData): Promise<boolean> => {
     try {
-      const response = await fetch('/api/auth?action=register', {
+      // Use the new API configuration
+      const data = await fetchAPI<{ success: boolean }>(API_ENDPOINTS.AUTH_REGISTER, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
         body: JSON.stringify(userData),
       });
-
-      const data = await response.json();
 
       if (data.success) {
         // Auto-login after successful registration
