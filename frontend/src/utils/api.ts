@@ -1,7 +1,8 @@
 // API Configuration for Salem Dominion Ministries
-// Centralized API endpoint management
+// Supports both development and production environments
 
-export const API_BASE_URL = '/api.php'; // Direct API endpoint
+// Get API base URL from environment variable or use default
+const API_BASE_URL = import.meta.env.VITE_API_URL || '/salem-dominion-ministries/api.php';
 
 // API Endpoints
 export const API_ENDPOINTS = {
@@ -42,6 +43,9 @@ export const API_ENDPOINTS = {
   
   // News
   NEWS: `${API_BASE_URL}?route=news`,
+  
+  // Breaking News
+  BREAKING_NEWS: `${API_BASE_URL}?route=news&type=breaking`,
   
   // Messages
   MESSAGES: `${API_BASE_URL}?route=messages`,
@@ -95,34 +99,41 @@ export const getFileUrl = (filename: string, type: 'profile' | 'gallery' | 'serm
   }
 };
 
-// API Request helper with better error handling
-export const apiRequest = async (url: string, options: RequestInit = {}) => {
+// API Request helper with proper error handling
+export const apiRequest = async <T>(url: string, options: RequestInit = {}): Promise<T> => {
   const token = localStorage.getItem('token');
-  const headers = {
+  const headers: HeadersInit = {
     'Content-Type': 'application/json',
     ...(token && { Authorization: `Bearer ${token}` }),
     ...options.headers,
   };
 
-  const response = await fetch(url, {
-    ...options,
-    headers,
-  });
+  try {
+    const response = await fetch(url, {
+      ...options,
+      headers,
+    });
 
-  // Check if response is JSON
-  const contentType = response.headers.get('content-type');
-  if (!contentType || !contentType.includes('application/json')) {
-    const text = await response.text();
-    console.error('Non-JSON response:', text.substring(0, 200));
-    throw new Error('Server returned non-JSON response');
+    // Check if response is JSON
+    const contentType = response.headers.get('content-type');
+    if (!contentType || !contentType.includes('application/json')) {
+      const text = await response.text();
+      console.error('Non-JSON response from:', url, 'Content:', text.substring(0, 200));
+      throw new Error('Server returned non-JSON response. Please check API configuration.');
+    }
+
+    if (!response.ok) {
+      const error = await response.json().catch(() => ({ message: 'Unknown error' }));
+      throw new Error(`API Error: ${response.status} ${response.statusText} - ${error.message}`);
+    }
+
+    return response.json();
+  } catch (error) {
+    if (error instanceof TypeError && error.message.includes('fetch')) {
+      throw new Error('Network error. Please check your connection.');
+    }
+    throw error;
   }
-
-  if (!response.ok) {
-    const error = await response.json().catch(() => ({ message: 'Unknown error' }));
-    throw new Error(`API Error: ${response.status} ${response.statusText} - ${error.message}`);
-  }
-
-  return response.json();
 };
 
 // File upload helper
@@ -135,7 +146,7 @@ export const uploadFile = async (url: string, file: File, additionalData: Record
   });
 
   const token = localStorage.getItem('token');
-  const headers = {
+  const headers: HeadersInit = {
     ...(token && { Authorization: `Bearer ${token}` }),
   };
 
