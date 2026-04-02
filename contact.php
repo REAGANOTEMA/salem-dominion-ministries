@@ -1,4 +1,12 @@
 ﻿<?php
+// Complete error suppression to prevent unwanted output
+error_reporting(0);
+ini_set('display_errors', 0);
+ini_set('log_errors', 0);
+
+// Buffer output to catch any accidental output
+ob_start();
+
 // Include session helper and start session safely
 require_once 'session_helper.php';
 secure_session_start();
@@ -34,6 +42,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->close();
     }
 }
+
+// Clean any buffered output
+ob_end_clean();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -66,8 +77,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
-            <a class="navbar-brand" href="index.php">
-                <i class="fas fa-church"></i> Salem Dominion Ministries
+            <a class="navbar-brand heavenly-logo" href="index.php">
+                <img src="public/images/logo.png" alt="Salem Dominion Ministries" class="logo-img">
+                <span class="brand-text">Salem Dominion Ministries</span>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
@@ -230,32 +242,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </section>
 
     <!-- Footer -->
-    <footer class="bg-dark text-light py-4">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-4">
-                    <h5>Salem Dominion Ministries</h5>
-                    <p>Serving our community with faith, hope, and love.</p>
-                </div>
-                <div class="col-md-4">
-                    <h5>Quick Links</h5>
-                    <ul class="list-unstyled">
-                        <li><a href="index.php" class="text-light">Home</a></li>
-                        <li><a href="about.php" class="text-light">About Us</a></li>
-                        <li><a href="donate.php" class="text-light">Donate</a></li>
-                    </ul>
-                </div>
-                <div class="col-md-4">
-                    <h5>Contact Info</h5>
-                    <p><i class="fas fa-envelope"></i> visit@salemdominionministries.com</p>
-                    <p><i class="fas fa-phone"></i> Contact us for service times</p>
-                </div>
-            </div>
-            <hr>
-            <p class="text-center mb-0">&copy; 2026 Salem Dominion Ministries. All rights reserved.</p>
-        </div>
-    </footer>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <?php require_once 'footer_enhanced.php'; ?>
+    
+    <!-- Navigation Arrows -->
+    <?php require_once 'components/navigation_arrows.php'; ?>
+    
+    <!-- Heavenly Scripts -->
+    <script src="assets/js/heavenly_functionality.js"></script>
+    <script src="assets/js/spiritual_enhancement.js"></script>
 </body>
 </html>

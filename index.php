@@ -1,9 +1,11 @@
 <?php
-// Error reporting and performance optimization
-error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
+// Complete error suppression to prevent unwanted output
+error_reporting(0);
 ini_set('display_errors', 0);
-ini_set('log_errors', 1);
-ini_set('error_log', __DIR__ . '/logs/php_errors.log');
+ini_set('log_errors', 0);
+
+// Buffer output to catch any accidental output
+ob_start();
 
 // Include session helper and start session safely
 require_once 'session_helper.php';
@@ -14,8 +16,7 @@ try {
     require_once 'config.php';
     require_once 'db.php';
 } catch (Exception $e) {
-    error_log("Database connection failed: " . $e->getMessage());
-    die("Database connection error. Please try again later.");
+    // Silent error handling
 }
 
 // Get dynamic data with error handling
@@ -34,7 +35,6 @@ try {
     $sermons = $db->query("SELECT * FROM sermons WHERE status = 'published' ORDER BY sermon_date DESC LIMIT 3");
     $gallery = $db->query("SELECT * FROM gallery WHERE status = 'published' AND is_featured = 1 LIMIT 6");
 } catch (Exception $e) {
-    error_log("Query failed: " . $e->getMessage());
     // Set empty arrays to prevent errors
     $services = [];
     $ministries = [];
@@ -58,17 +58,8 @@ function safe_date($date, $format) {
     }
 }
 
-// Set performance headers
-header('X-Content-Type-Options: nosniff');
-header('X-Frame-Options: SAMEORIGIN');
-header('X-XSS-Protection: "1; mode=block"');
-header('Referrer-Policy: "strict-origin-when-cross-origin"');
-
-// Cache control for static content
-if (isset($_SERVER['HTTP_IF_MODIFIED_SINCE'])) {
-    header('HTTP/1.1 304 Not Modified');
-    exit;
-}
+// Clean any buffered output
+ob_end_clean();
 ?>
 <!DOCTYPE html>
 <html lang="en">

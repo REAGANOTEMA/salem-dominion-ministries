@@ -244,3 +244,21 @@
 [02-Apr-2026 11:48:54 UTC] Environment Info: {"environment":"development","debug_mode":true,"database_host":"localhost","database_name":"salem_dominion_ministries","database_user":"root","app_url":"http:\/\/localhost\/salem-dominion-ministries","mail_enabled":false,"server_name":"localhost","http_host":"localhost","document_root":"C:\/xampp\/htdocs"}
 [02-Apr-2026 11:48:54 UTC] Database Connection Test: SUCCESS
 [02-Apr-2026 11:48:54 UTC] Environment Info: {"environment":"development","debug_mode":true,"database_host":"localhost","database_name":"salem_dominion_ministries","database_user":"root","app_url":"http:\/\/localhost\/salem-dominion-ministries","mail_enabled":false,"server_name":"localhost","http_host":"localhost","document_root":"C:\/xampp\/htdocs"}
+[02-Apr-2026 11:53:26 UTC] Environment Info: {"environment":"development","debug_mode":true,"database_host":"localhost","database_name":"salem_dominion_ministries","database_user":"root","app_url":"http:\/\/localhost\/salem-dominion-ministries","mail_enabled":false,"server_name":"localhost","http_host":"localhost","document_root":"C:\/xampp\/htdocs"}
+[02-Apr-2026 11:53:26 UTC] PHP Warning:  Undefined array key "category" in C:\xampp\htdocs\salem-dominion-ministries\ministries.php on line 176
+[02-Apr-2026 11:53:26 UTC] PHP Warning:  Undefined array key "category" in C:\xampp\htdocs\salem-dominion-ministries\ministries.php on line 177
+[02-Apr-2026 11:53:26 UTC] PHP Warning:  Undefined array key "category" in C:\xampp\htdocs\salem-dominion-ministries\ministries.php on line 176
+[02-Apr-2026 11:53:26 UTC] PHP Warning:  Undefined array key "category" in C:\xampp\htdocs\salem-dominion-ministries\ministries.php on line 177
+[02-Apr-2026 11:53:26 UTC] PHP Warning:  Undefined array key "category" in C:\xampp\htdocs\salem-dominion-ministries\ministries.php on line 176
+[02-Apr-2026 11:53:26 UTC] PHP Warning:  Undefined array key "category" in C:\xampp\htdocs\salem-dominion-ministries\ministries.php on line 177
+[02-Apr-2026 11:53:26 UTC] PHP Warning:  Undefined array key "category" in C:\xampp\htdocs\salem-dominion-ministries\ministries.php on line 176
+[02-Apr-2026 11:53:26 UTC] PHP Warning:  Undefined array key "category" in C:\xampp\htdocs\salem-dominion-ministries\ministries.php on line 177
+[02-Apr-2026 11:53:26 UTC] PHP Warning:  Undefined array key "category" in C:\xampp\htdocs\salem-dominion-ministries\ministries.php on line 176
+[02-Apr-2026 11:53:26 UTC] PHP Warning:  Undefined array key "category" in C:\xampp\htdocs\salem-dominion-ministries\ministries.php on line 177
+[02-Apr-2026 11:53:45 UTC] Environment Info: {"environment":"development","debug_mode":true,"database_host":"localhost","database_name":"salem_dominion_ministries","database_user":"root","app_url":"http:\/\/localhost\/salem-dominion-ministries","mail_enabled":false,"server_name":"localhost","http_host":"localhost","document_root":"C:\/xampp\/htdocs"}
+[02-Apr-2026 11:53:45 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'category' in 'where clause' in C:\xampp\htdocs\salem-dominion-ministries\children_ministry.php:8
+Stack trace:
+#0 C:\xampp\htdocs\salem-dominion-ministries\children_ministry.php(8): mysqli->query('SELECT * FROM e...')
+#1 {main}
+  thrown in C:\xampp\htdocs\salem-dominion-ministries\children_ministry.php on line 8
+[02-Apr-2026 11:53:51 UTC] Environment Info: {"environment":"development","debug_mode":true,"database_host":"localhost","database_name":"salem_dominion_ministries","database_user":"root","app_url":"http:\/\/localhost\/salem-dominion-ministries","mail_enabled":false,"server_name":"localhost","http_host":"localhost","document_root":"C:\/xampp\/htdocs"}

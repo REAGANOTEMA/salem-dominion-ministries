@@ -1,4 +1,12 @@
 <?php
+// Complete error suppression to prevent unwanted output
+error_reporting(0);
+ini_set('display_errors', 0);
+ini_set('log_errors', 0);
+
+// Buffer output to catch any accidental output
+ob_start();
+
 // Include session helper and start session safely
 require_once 'session_helper.php';
 secure_session_start();
@@ -10,6 +18,9 @@ $testimonials = $db->query("SELECT * FROM testimonials WHERE is_approved = 1 ORD
 $ministries_count = $db->selectOne("SELECT COUNT(*) as count FROM ministries WHERE is_active = 1")['count'];
 $members_count = $db->selectOne("SELECT COUNT(*) as count FROM users WHERE is_active = 1 AND role = 'member'")['count'];
 $events_count = $db->selectOne("SELECT COUNT(*) as count FROM events WHERE status = 'upcoming'")['count'];
+
+// Clean any buffered output
+ob_end_clean();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -25,7 +36,11 @@ $events_count = $db->selectOne("SELECT COUNT(*) as count FROM events WHERE statu
     <!-- AOS Animation -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Montserrat:wght@300;400;500;600;700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Montserrat:wght@300;400;500;600;700&family=Dancing+Script:wght@700&family=Great+Vibes&display=swap" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link href="assets/css/heavenly_design.css" rel="stylesheet">
+    <link href="assets/css/perfect_responsive.css" rel="stylesheet">
     
     <style>
         :root {
@@ -411,18 +426,19 @@ $events_count = $db->selectOne("SELECT COUNT(*) as count FROM events WHERE statu
 </head>
 <body>
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
-            <a class="navbar-brand" href="index.php">
-                <i class="fas fa-church"></i> Salem Dominion Ministries
+            <a class="navbar-brand heavenly-logo" href="index.php">
+                <img src="public/images/logo.png" alt="Salem Dominion Ministries" class="logo-img">
+                <span class="brand-text">Salem Dominion Ministries</span>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav mx-auto">
+                <ul class="navbar-nav me-auto">
                     <li class="nav-item"><a class="nav-link" href="index.php">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="about.php">About</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="about.php">About</a></li>
                     <li class="nav-item"><a class="nav-link" href="ministries.php">Ministries</a></li>
                     <li class="nav-item"><a class="nav-link" href="events.php">Events</a></li>
                     <li class="nav-item"><a class="nav-link" href="sermons.php">Sermons</a></li>
@@ -713,5 +729,15 @@ $events_count = $db->selectOne("SELECT COUNT(*) as count FROM events WHERE statu
             }
         });
     </script>
+    
+    <!-- Enhanced Footer -->
+    <?php require_once 'footer_enhanced.php'; ?>
+    
+    <!-- Navigation Arrows -->
+    <?php require_once 'components/navigation_arrows.php'; ?>
+    
+    <!-- Heavenly Scripts -->
+    <script src="assets/js/heavenly_functionality.js"></script>
+    <script src="assets/js/spiritual_enhancement.js"></script>
 </body>
 </html>

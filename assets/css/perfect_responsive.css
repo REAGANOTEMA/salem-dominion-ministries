@@ -1,4 +1,4 @@
-/* Perfect Responsive Design for Salem Dominion Ministries */
+/* Perfect Responsive Design for Salem Dominion Ministries - WONDERFUL VIEWS */
 
 /* ============================================
    MOBILE-FIRST APPROACH - Base Styles
@@ -1047,6 +1047,633 @@ img:not([src]) {
 /* ============================================
    BROWSER-SPECIFIC FIXES
    ============================================ */
+
+/* Safari Fixes */
+@supports (-webkit-appearance: none) {
+    .navbar-brand {
+        -webkit-font-smoothing: antialiased;
+    }
+}
+
+/* Edge Fixes */
+@supports (-ms-ime-align: auto) {
+    .hero-section {
+        background-attachment: scroll;
+    }
+}
+
+/* ============================================
+   WONDERFUL RESPONSIVE DESIGN FOR ALL DEVICES
+   ============================================ */
+
+/* Extra Small Mobile (320px - 375px) */
+@media (max-width: 375px) {
+    /* Typography */
+    .hero-title {
+        font-size: 2rem !important;
+        line-height: 1.2;
+        margin-bottom: 1rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1rem !important;
+        line-height: 1.4;
+    }
+    
+    .section-title {
+        font-size: 1.5rem !important;
+    }
+    
+    .section-subtitle {
+        font-size: 0.9rem !important;
+    }
+    
+    /* Navigation */
+    .navbar-brand {
+        font-size: 1.2rem !important;
+    }
+    
+    .heavenly-logo img {
+        height: 30px !important;
+    }
+    
+    .heavenly-logo .brand-text {
+        font-size: 1rem !important;
+    }
+    
+    /* Hero Section */
+    .hero-section {
+        padding: 100px 0 60px !important;
+        min-height: 80vh;
+    }
+    
+    .hero-logo img {
+        height: 80px !important;
+    }
+    
+    /* Cards */
+    .service-card,
+    .heavenly-card,
+    .children-card {
+        margin-bottom: 1rem;
+        border-radius: 15px;
+    }
+    
+    .pastor-image-container {
+        height: 250px !important;
+    }
+    
+    .leader-image-container {
+        height: 200px !important;
+    }
+    
+    .children-image-container {
+        height: 150px !important;
+    }
+    
+    /* Buttons */
+    .divine-cta,
+    .btn-hero {
+        padding: 12px 25px !important;
+        font-size: 0.9rem !important;
+        margin: 5px !important;
+    }
+    
+    /* Navigation Arrows */
+    .nav-arrow {
+        width: 35px !important;
+        height: 35px !important;
+        font-size: 0.8rem !important;
+    }
+    
+    /* Spacing */
+    .container {
+        padding: 0 15px;
+    }
+    
+    .section {
+        padding: 40px 0 !important;
+    }
+}
+
+/* Small Mobile (376px - 425px) */
+@media (min-width: 376px) and (max-width: 425px) {
+    .hero-title {
+        font-size: 2.5rem !important;
+    }
+    
+    .hero-subtitle {
+        font-size: 1.1rem !important;
+    }
+    
+    .section-title {
+        font-size: 1.8rem !important;
+    }
+    
+    .hero-logo img {
+        height: 90px !important;
+    }
+    
+    .pastor-image-container {
+        height: 280px !important;
+    }
+    
+    .leader-image-container {
+        height: 220px !important;
+    }
+    
+    .children-image-container {
+        height: 170px !important;
+    }
+}
+
+/* Large Mobile (426px - 576px) */
+@media (min-width: 426px) and (max-width: 576px) {
+    .hero-title {
+        font-size: 3rem !important;
+    }
+    
+    .hero-subtitle {
+        font-size: 1.2rem !important;
+    }
+    
+    .section-title {
+        font-size: 2rem !important;
+    }
+    
+    .hero-logo img {
+        height: 100px !important;
+    }
+    
+    .pastor-image-container {
+        height: 320px !important;
+    }
+    
+    .leader-image-container {
+        height: 250px !important;
+    }
+    
+    .children-image-container {
+        height: 200px !important;
+    }
+    
+    .divine-cta {
+        padding: 14px 35px !important;
+        font-size: 1rem !important;
+    }
+}
+
+/* Tablet Small (577px - 768px) */
+@media (min-width: 577px) and (max-width: 768px) {
+    /* Typography */
+    .hero-title {
+        font-size: 3.5rem !important;
+    }
+    
+    .hero-subtitle {
+        font-size: 1.3rem !important;
+    }
+    
+    .section-title {
+        font-size: 2.5rem !important;
+    }
+    
+    /* Navigation */
+    .heavenly-logo img {
+        height: 35px !important;
+    }
+    
+    .heavenly-logo .brand-text {
+        font-size: 1.3rem !important;
+    }
+    
+    /* Hero Section */
+    .hero-section {
+        padding: 120px 0 80px !important;
+    }
+    
+    .hero-logo img {
+        height: 110px !important;
+    }
+    
+    /* Cards */
+    .service-card,
+    .heavenly-card,
+    .children-card {
+        margin-bottom: 1.5rem;
+    }
+    
+    .pastor-image-container {
+        height: 350px !important;
+    }
+    
+    .leader-image-container {
+        height: 280px !important;
+    }
+    
+    .children-image-container {
+        height: 220px !important;
+    }
+    
+    /* Grid Layout */
+    .leadership-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 1.5rem;
+    }
+    
+    /* Buttons */
+    .divine-cta {
+        padding: 15px 40px !important;
+        font-size: 1.1rem !important;
+    }
+    
+    /* Navigation Arrows */
+    .nav-arrow {
+        width: 45px !important;
+        height: 45px !important;
+        font-size: 1rem !important;
+    }
+    
+    /* Spacing */
+    .section {
+        padding: 60px 0 !important;
+    }
+}
+
+/* Tablet Large (769px - 992px) */
+@media (min-width: 769px) and (max-width: 992px) {
+    /* Typography */
+    .hero-title {
+        font-size: 4rem !important;
+    }
+    
+    .hero-subtitle {
+        font-size: 1.4rem !important;
+    }
+    
+    .section-title {
+        font-size: 2.8rem !important;
+    }
+    
+    /* Navigation */
+    .heavenly-logo img {
+        height: 40px !important;
+    }
+    
+    .heavenly-logo .brand-text {
+        font-size: 1.5rem !important;
+    }
+    
+    /* Hero Section */
+    .hero-section {
+        padding: 140px 0 100px !important;
+    }
+    
+    .hero-logo img {
+        height: 120px !important;
+    }
+    
+    /* Cards */
+    .pastor-image-container {
+        height: 380px !important;
+    }
+    
+    .leader-image-container {
+        height: 300px !important;
+    }
+    
+    .children-image-container {
+        height: 240px !important;
+    }
+    
+    /* Grid Layout */
+    .leadership-grid {
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 2rem;
+    }
+    
+    /* Navigation */
+    .navbar-nav .nav-link {
+        font-size: 0.95rem !important;
+        padding: 0.5rem 1rem !important;
+    }
+    
+    /* Spacing */
+    .section {
+        padding: 80px 0 !important;
+    }
+}
+
+/* Desktop Small (993px - 1200px) */
+@media (min-width: 993px) and (max-width: 1200px) {
+    /* Typography */
+    .hero-title {
+        font-size: 4.5rem !important;
+    }
+    
+    .hero-subtitle {
+        font-size: 1.5rem !important;
+    }
+    
+    .section-title {
+        font-size: 3rem !important;
+    }
+    
+    /* Navigation */
+    .heavenly-logo img {
+        height: 45px !important;
+    }
+    
+    .heavenly-logo .brand-text {
+        font-size: 1.7rem !important;
+    }
+    
+    /* Hero Section */
+    .hero-section {
+        padding: 160px 0 120px !important;
+    }
+    
+    .hero-logo img {
+        height: 130px !important;
+    }
+    
+    /* Cards */
+    .pastor-image-container {
+        height: 400px !important;
+    }
+    
+    .leader-image-container {
+        height: 320px !important;
+    }
+    
+    .children-image-container {
+        height: 260px !important;
+    }
+    
+    /* Grid Layout */
+    .leadership-grid {
+        grid-template-columns: repeat(4, 1fr) !important;
+        gap: 2.5rem;
+    }
+    
+    /* Navigation */
+    .navbar-nav .nav-link {
+        font-size: 1rem !important;
+        padding: 0.5rem 1.2rem !important;
+    }
+    
+    /* Spacing */
+    .section {
+        padding: 100px 0 !important;
+    }
+}
+
+/* Desktop Large (1201px - 1400px) */
+@media (min-width: 1201px) and (max-width: 1400px) {
+    /* Typography */
+    .hero-title {
+        font-size: 5rem !important;
+    }
+    
+    .hero-subtitle {
+        font-size: 1.6rem !important;
+    }
+    
+    .section-title {
+        font-size: 3.5rem !important;
+    }
+    
+    /* Navigation */
+    .heavenly-logo img {
+        height: 50px !important;
+    }
+    
+    .heavenly-logo .brand-text {
+        font-size: 1.9rem !important;
+    }
+    
+    /* Hero Section */
+    .hero-section {
+        padding: 180px 0 140px !important;
+    }
+    
+    .hero-logo img {
+        height: 140px !important;
+    }
+    
+    /* Cards */
+    .pastor-image-container {
+        height: 420px !important;
+    }
+    
+    .leader-image-container {
+        height: 340px !important;
+    }
+    
+    .children-image-container {
+        height: 280px !important;
+    }
+    
+    /* Grid Layout */
+    .leadership-grid {
+        grid-template-columns: repeat(4, 1fr) !important;
+        gap: 3rem;
+    }
+    
+    /* Spacing */
+    .section {
+        padding: 120px 0 !important;
+    }
+}
+
+/* Desktop Extra Large (1401px and up) */
+@media (min-width: 1401px) {
+    /* Typography */
+    .hero-title {
+        font-size: 5.5rem !important;
+    }
+    
+    .hero-subtitle {
+        font-size: 1.8rem !important;
+    }
+    
+    .section-title {
+        font-size: 4rem !important;
+    }
+    
+    /* Navigation */
+    .heavenly-logo img {
+        height: 55px !important;
+    }
+    
+    .heavenly-logo .brand-text {
+        font-size: 2.1rem !important;
+    }
+    
+    /* Hero Section */
+    .hero-section {
+        padding: 200px 0 160px !important;
+    }
+    
+    .hero-logo img {
+        height: 150px !important;
+    }
+    
+    /* Cards */
+    .pastor-image-container {
+        height: 450px !important;
+    }
+    
+    .leader-image-container {
+        height: 360px !important;
+    }
+    
+    .children-image-container {
+        height: 300px !important;
+    }
+    
+    /* Grid Layout */
+    .leadership-grid {
+        grid-template-columns: repeat(4, 1fr) !important;
+        gap: 3.5rem;
+    }
+    
+    /* Spacing */
+    .section {
+        padding: 140px 0 !important;
+    }
+    
+    /* Container Max Width */
+    .container {
+        max-width: 1320px !important;
+    }
+}
+
+/* ============================================
+   SPECIAL DEVICE ADJUSTMENTS
+   ============================================ */
+
+/* Landscape Mobile */
+@media (max-width: 768px) and (orientation: landscape) {
+    .hero-section {
+        padding: 80px 0 60px !important;
+        min-height: 100vh;
+    }
+    
+    .hero-title {
+        font-size: 2rem !important;
+    }
+    
+    .hero-logo img {
+        height: 60px !important;
+    }
+}
+
+/* iPad Specific */
+@media only screen 
+and (min-device-width: 768px) 
+and (max-device-width: 1024px) 
+and (-webkit-min-device-pixel-ratio: 1) {
+    .hero-section {
+        padding: 130px 0 90px !important;
+    }
+    
+    .leadership-grid {
+        grid-template-columns: repeat(3, 1fr) !important;
+    }
+}
+
+/* iPad Pro */
+@media only screen 
+and (min-device-width: 1024px) 
+and (max-device-width: 1366px) 
+and (-webkit-min-device-pixel-ratio: 2) {
+    .hero-section {
+        padding: 150px 0 110px !important;
+    }
+    
+    .leadership-grid {
+        grid-template-columns: repeat(4, 1fr) !important;
+    }
+}
+
+/* ============================================
+   HIGH DPI DISPLAYS (RETINA)
+   ============================================ */
+
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .hero-logo img,
+    .heavenly-logo img,
+    .pastor-image,
+    .leader-image,
+    .children-image {
+        image-rendering: -webkit-optimize-contrast;
+        image-rendering: crisp-edges;
+    }
+}
+
+/* ============================================
+   DARK MODE SUPPORT
+   ============================================ */
+
+@media (prefers-color-scheme: dark) {
+    .hero-section {
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    }
+    
+    .heavenly-card,
+    .service-card,
+    .children-card {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(20px);
+        color: white;
+    }
+}
+
+/* ============================================
+   REDUCED MOTION SUPPORT
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+    
+    .hero-angel,
+    .floating-angel,
+    .divine-ray {
+        display: none;
+    }
+}
+
+/* ============================================
+   PRINT STYLES
+   ============================================ */
+
+@media print {
+    .navbar,
+    .heavenly-navigation,
+    .hero-angel,
+    .floating-angel,
+    .divine-ray {
+        display: none !important;
+    }
+    
+    .hero-section {
+        padding: 40px 0 !important;
+        background: white !important;
+    }
+    
+    .heavenly-card,
+    .service-card,
+    .children-card {
+        background: white !important;
+        border: 1px solid #ddd !important;
+        page-break-inside: avoid;
+    }
+}
 
 /* Safari Fix */
 @supports (-webkit-backdrop-filter: none) or (backdrop-filter: none) {
