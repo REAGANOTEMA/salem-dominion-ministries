@@ -2,63 +2,27 @@
   "name": "Salem Dominion Ministries",
   "short_name": "Salem Church",
   "description": "Connect with Salem Dominion Ministries - Worship, Prayer, Community",
-  "start_url": "/salem-dominion-ministries/",
+  "start_url": "./",
   "display": "standalone",
   "background_color": "#1e293b",
-  "theme_color": "#f59e0b",
+  "theme_color": "#FFD700",
   "orientation": "portrait",
-  "scope": "/salem-dominion-ministries/",
+  "scope": "./",
   "lang": "en",
   "dir": "ltr",
   "categories": ["lifestyle", "education", "social"],
   "icons": [
     {
-      "src": "/salem-dominion-ministries/icons/icon-72x72.svg",
-      "sizes": "72x72",
-      "type": "image/svg+xml",
-      "purpose": "maskable any"
-    },
-    {
-      "src": "/salem-dominion-ministries/icons/icon-96x96.svg",
-      "sizes": "96x96",
-      "type": "image/svg+xml",
-      "purpose": "maskable any"
-    },
-    {
-      "src": "/salem-dominion-ministries/icons/icon-128x128.svg",
-      "sizes": "128x128",
-      "type": "image/svg+xml",
-      "purpose": "maskable any"
-    },
-    {
-      "src": "/salem-dominion-ministries/icons/icon-144x144.svg",
-      "sizes": "144x144",
-      "type": "image/svg+xml",
-      "purpose": "maskable any"
-    },
-    {
-      "src": "/salem-dominion-ministries/icons/icon-152x152.svg",
-      "sizes": "152x152",
-      "type": "image/svg+xml",
-      "purpose": "maskable any"
-    },
-    {
-      "src": "/salem-dominion-ministries/icons/icon-192x192.svg",
+      "src": "public/images/logo.png",
       "sizes": "192x192",
-      "type": "image/svg+xml",
-      "purpose": "maskable any"
+      "type": "image/png",
+      "purpose": "any maskable"
     },
     {
-      "src": "/salem-dominion-ministries/icons/icon-384x384.svg",
-      "sizes": "384x384",
-      "type": "image/svg+xml",
-      "purpose": "maskable any"
-    },
-    {
-      "src": "/salem-dominion-ministries/icons/icon-512x512.svg",
+      "src": "public/images/logo.png",
       "sizes": "512x512",
-      "type": "image/svg+xml",
-      "purpose": "maskable any"
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ],
   "shortcuts": [
@@ -66,12 +30,12 @@
       "name": "Live Stream",
       "short_name": "Stream",
       "description": "Watch live services",
-      "url": "/salem-dominion-ministries/sermons",
+      "url": "./sermons",
       "icons": [
         {
-          "src": "/salem-dominion-ministries/icons/icon-96x96.svg",
+          "src": "public/images/logo.png",
           "sizes": "96x96",
-          "type": "image/svg+xml",
+          "type": "image/png",
           "purpose": "any"
         }
       ]
@@ -80,12 +44,12 @@
       "name": "Prayer Requests",
       "short_name": "Prayers",
       "description": "Submit and view prayers",
-      "url": "/salem-dominion-ministries/prayer-request",
+      "url": "./prayer-request",
       "icons": [
         {
-          "src": "/salem-dominion-ministries/icons/icon-96x96.svg",
+          "src": "public/images/logo.png",
           "sizes": "96x96",
-          "type": "image/svg+xml",
+          "type": "image/png",
           "purpose": "any"
         }
       ]
@@ -94,12 +58,12 @@
       "name": "Events",
       "short_name": "Events",
       "description": "Upcoming church events",
-      "url": "/salem-dominion-ministries/events",
+      "url": "./events",
       "icons": [
         {
-          "src": "/salem-dominion-ministries/icons/icon-96x96.svg",
+          "src": "public/images/logo.png",
           "sizes": "96x96",
-          "type": "image/svg+xml",
+          "type": "image/png",
           "purpose": "any"
         }
       ]

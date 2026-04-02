@@ -114,10 +114,9 @@ if (isset($_SERVER['HTTP_IF_MODIFIED_SINCE'])) {
     <link rel="preconnect" href="https://unpkg.com">
     
     <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
-    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     
     <!-- AOS Animation -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
@@ -1468,7 +1467,7 @@ if (isset($_SERVER['HTTP_IF_MODIFIED_SINCE'])) {
 </html>
 
 <!-- Scripts -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigS/jj88gg3TDOcYve" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 <script src="assets/js/heavenly_sounds.js"></script>
 <script src="assets/js/perfect_animations.js"></script>
@@ -1549,16 +1548,16 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     };
     
-    // PWA Service Worker registration
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('/sw.js')
-            .then(function(registration) {
-                console.log('SW registered');
-            })
-            .catch(function(error) {
-                console.log('SW registration failed');
-            });
-    }
+    // PWA Service Worker registration (disabled for now to avoid manifest errors)
+    // if ('serviceWorker' in navigator) {
+    //     navigator.serviceWorker.register('/sw.js')
+    //         .then(function(registration) {
+    //             console.log('SW registered');
+    //         })
+    //         .catch(function(error) {
+    //             console.log('SW registration failed');
+    //         });
+    // }
     
     // Add heavenly interactions
     if (window.heavenlyGuidance) {
