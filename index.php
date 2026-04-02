@@ -1047,6 +1047,11 @@ ob_end_clean();
                     <li class="nav-item"><a class="nav-link" href="news.php">News</a></li>
                     <li class="nav-item"><a class="nav-link" href="gallery.php">Gallery</a></li>
                     <li class="nav-item"><a class="nav-link" href="contact.php">Contact</a></li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="login.php" style="color: var(--heavenly-gold) !important; font-weight: 600;">
+                            <i class="fas fa-sign-in-alt me-2"></i>Login
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -1070,6 +1075,9 @@ ob_end_clean();
                 </a>
                 <a href="contact.php" class="btn-hero btn-outline">
                     <i class="fas fa-phone"></i> Connect With Us
+                </a>
+                <a href="login.php" class="btn-hero btn-primary">
+                    <i class="fas fa-sign-in-alt"></i> Member Login
                 </a>
             </div>
         </div>
