@@ -1,5 +1,7 @@
 ﻿<?php
-session_start();
+// Include session helper and start session safely
+require_once 'session_helper.php';
+secure_session_start();
 require_once 'db.php';
 
 // Get children ministry events
@@ -16,13 +18,14 @@ $children_news = $db->query("SELECT * FROM news WHERE category = 'children' ORDE
     <title>Children Ministry - Salem Dominion Ministries</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="assets/css/heavenly_design.css" rel="stylesheet">
     <style>
         .children-hero {
-            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1544717297-fa95b6ee9643?ixlib=rb-4.0.3');
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('public/images/children-hero.jpg');
             background-size: cover;
             background-position: center;
             color: white;
-            padding: 80px 0;
+            padding: 100px 0;
         }
         .navbar-brand {
             font-weight: bold;
@@ -33,9 +36,12 @@ $children_news = $db->query("SELECT * FROM news WHERE category = 'children' ORDE
             border: none;
             border-radius: 15px;
             transition: transform 0.3s ease;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
         }
         .children-card:hover {
             transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(255, 215, 0, 0.2);
         }
         .age-group-card {
             background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
@@ -227,6 +233,82 @@ $children_news = $db->query("SELECT * FROM news WHERE category = 'children' ORDE
         </div>
     </section>
 
+    <!-- Children's Gallery -->
+    <section class="py-5">
+        <div class="container">
+            <h2 class="text-center mb-5">Our Children in Action</h2>
+            <div class="row g-4">
+                <!-- Children's Images -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="children-card">
+                        <div class="children-image-container">
+                            <img src="public/images/children1.jpg" alt="Children Worship" class="children-image">
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">Children's Worship</h5>
+                            <p class="card-text">Our children praising God with joyful hearts and beautiful voices.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="children-card">
+                        <div class="children-image-container">
+                            <img src="public/images/children2.jpg" alt="Bible Study" class="children-image">
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">Bible Learning</h5>
+                            <p class="card-text">Children learning God's Word through engaging stories and activities.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="children-card">
+                        <div class="children-image-container">
+                            <img src="public/images/children3.jpg" alt="Arts and Crafts" class="children-image">
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">Creative Arts</h5>
+                            <p class="card-text">Expressing faith through creative crafts and artistic activities.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="children-card">
+                        <div class="children-image-container">
+                            <img src="public/images/children4.jpg" alt="Outdoor Activities" class="children-image">
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">Fun Activities</h5>
+                            <p class="card-text">Outdoor games and activities that teach teamwork and friendship.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="children-card">
+                        <div class="children-image-container">
+                            <img src="public/images/children5.jpg" alt="Prayer Time" class="children-image">
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">Prayer Time</h5>
+                            <p class="card-text">Children learning to pray and talk to God in their own special way.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="children-card">
+                        <div class="children-image-container">
+                            <img src="public/images/children6.jpg" alt="Community Service" class="children-image">
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">Service Projects</h5>
+                            <p class="card-text">Children serving others and learning the joy of helping those in need.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Upcoming Events & News -->
     <section class="py-5 bg-light">
         <div class="container">
@@ -305,32 +387,13 @@ $children_news = $db->query("SELECT * FROM news WHERE category = 'children' ORDE
     </section>
 
     <!-- Footer -->
-    <footer class="bg-dark text-light py-4">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-4">
-                    <h5>Salem Dominion Ministries</h5>
-                    <p>Serving our community with faith, hope, and love.</p>
-                </div>
-                <div class="col-md-4">
-                    <h5>Quick Links</h5>
-                    <ul class="list-unstyled">
-                        <li><a href="index.php" class="text-light">Home</a></li>
-                        <li><a href="about.php" class="text-light">About Us</a></li>
-                        <li><a href="donate.php" class="text-light">Donate</a></li>
-                    </ul>
-                </div>
-                <div class="col-md-4">
-                    <h5>Contact Info</h5>
-                    <p><i class="fas fa-envelope"></i> visit@salemdominionministries.com</p>
-                    <p><i class="fas fa-phone"></i> Contact us for service times</p>
-                </div>
-            </div>
-            <hr>
-            <p class="text-center mb-0">&copy; 2026 Salem Dominion Ministries. All rights reserved.</p>
-        </div>
-    </footer>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <?php require_once 'footer_enhanced.php'; ?>
+    
+    <!-- Navigation Arrows -->
+    <?php require_once 'components/navigation_arrows.php'; ?>
+    
+    <!-- Heavenly Scripts -->
+    <script src="assets/js/heavenly_functionality.js"></script>
+    <script src="assets/js/spiritual_enhancement.js"></script>
 </body>
 </html>

@@ -106,24 +106,24 @@ class SpiritualEnhancement {
             }
         ];
         
-        // Start with one verse after 10 seconds, then every 3-7 minutes
+        // Start with one verse after 10 seconds, then every 2 minutes (120000ms)
         setTimeout(() => {
             this.createFloatingScripture(verses[0], 0);
         }, 10000);
         
-        // Continue adding verses with much longer intervals
+        // Continue adding verses every 2 minutes
         setInterval(() => {
             const randomVerse = verses[Math.floor(Math.random() * verses.length)];
             this.createFloatingScripture(randomVerse, Math.floor(Math.random() * 1000));
-        }, 240000); // 4 minutes instead of 30 seconds
+        }, 120000); // 2 minutes instead of 4 minutes
         
-        // Additional random appearances (less frequent)
+        // Additional random appearances (every 3 minutes)
         setInterval(() => {
-            if (Math.random() > 0.7) { // 30% chance
+            if (Math.random() > 0.5) { // 50% chance
                 const randomVerse = verses[Math.floor(Math.random() * verses.length)];
                 this.createFloatingScripture(randomVerse, Math.floor(Math.random() * 1000));
             }
-        }, 360000); // 6 minutes
+        }, 180000); // 3 minutes instead of 6
     }
     
     createFloatingScripture(verse, index) {
@@ -448,7 +448,7 @@ class SpiritualEnhancement {
     }
     
     setupSpiritualGuidance() {
-        // Much less frequent guidance messages
+        // Much less frequent guidance messages (every 2 minutes)
         const guidanceMessages = [
             "God is with you always, guiding your steps.",
             "Trust in His perfect timing for your life.",
@@ -462,13 +462,13 @@ class SpiritualEnhancement {
             "You are His beloved child."
         ];
         
-        // Show guidance messages less frequently
+        // Show guidance messages every 2 minutes
         setInterval(() => {
-            if (Math.random() > 0.8) { // 20% chance
+            if (Math.random() > 0.5) { // 50% chance
                 const message = guidanceMessages[Math.floor(Math.random() * guidanceMessages.length)];
                 this.showSpiritualGuidance(message);
             }
-        }, 300000); // 5 minutes instead of 45 seconds
+        }, 120000); // 2 minutes instead of 5 minutes
     }
     
     showSpiritualGuidance(message) {

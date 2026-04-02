@@ -661,6 +661,278 @@ body {
     50% { transform: translateX(100%); }
 }
 
+/* Leadership Image Styles */
+.pastor-image-container {
+    position: relative;
+    height: 400px;
+    overflow: hidden;
+    border-radius: 20px 20px 0 0;
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(255, 255, 255, 0.95));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pastor-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transition: transform 0.3s ease;
+    filter: brightness(1.1) contrast(1.1);
+}
+
+.pastor-card:hover .pastor-image {
+    transform: scale(1.05);
+}
+
+.leader-image-container {
+    position: relative;
+    height: 300px;
+    overflow: hidden;
+    border-radius: 15px 15px 0 0;
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(255, 255, 255, 0.95));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.leader-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transition: transform 0.3s ease;
+    filter: brightness(1.1) contrast(1.1);
+}
+
+.leader-card:hover .leader-image {
+    transform: scale(1.1);
+}
+
+/* Image Fallback and Enhancement */
+.pastor-image-container::before,
+.leader-image-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.05), transparent);
+    pointer-events: none;
+    z-index: 1;
+}
+
+.pastor-image-container::after,
+.leader-image-container::after {
+    content: '🕊️';
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    font-size: 1.5rem;
+    opacity: 0.7;
+    z-index: 2;
+}
+
+/* Responsive Leadership Images */
+@media (max-width: 768px) {
+    .pastor-image-container {
+        height: 300px;
+    }
+    
+    .leader-image-container {
+        height: 250px;
+    }
+}
+
+@media (max-width: 576px) {
+    .pastor-image-container {
+        height: 250px;
+    }
+    
+    .leader-image-container {
+        height: 200px;
+    }
+}
+
+/* Navigation Arrows */
+.heavenly-navigation {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.nav-arrow {
+    width: 50px;
+    height: 50px;
+    background: var(--gradient-heaven);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #1a1a2e;
+    font-size: 1.2rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 25px rgba(255, 215, 0, 0.3);
+    text-decoration: none;
+    position: relative;
+    overflow: hidden;
+}
+
+.nav-arrow::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: all 0.5s ease;
+}
+
+.nav-arrow:hover::before {
+    left: 100%;
+}
+
+.nav-arrow:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 35px rgba(255, 215, 0, 0.4);
+    color: #1a1a2e;
+}
+
+.nav-arrow-up {
+    background: var(--gradient-divine);
+}
+
+.nav-arrow-home {
+    background: var(--gradient-angel);
+}
+
+.nav-arrow-home i {
+    color: #9370DB;
+}
+
+/* Tooltip for navigation arrows */
+.nav-arrow {
+    position: relative;
+}
+
+.nav-arrow::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 60px;
+    right: 50%;
+    transform: translateX(50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 0.8rem;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.nav-arrow:hover::after {
+    opacity: 1;
+}
+
+/* Children's Ministry Images */
+.children-image-container {
+    position: relative;
+    height: 250px;
+    overflow: hidden;
+    border-radius: 20px;
+    background: linear-gradient(135deg, rgba(255, 182, 193, 0.1), rgba(255, 255, 255, 0.95));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+}
+
+.children-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transition: transform 0.3s ease;
+    filter: brightness(1.1) contrast(1.05);
+}
+
+.children-card:hover .children-image {
+    transform: scale(1.05);
+}
+
+.children-image-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(255, 182, 193, 0.05), transparent);
+    pointer-events: none;
+    z-index: 1;
+}
+
+.children-image-container::after {
+    content: '👶';
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 1.5rem;
+    opacity: 0.7;
+    z-index: 2;
+}
+
+/* Responsive Children's Images */
+@media (max-width: 768px) {
+    .children-image-container {
+        height: 200px;
+    }
+}
+
+@media (max-width: 576px) {
+    .children-image-container {
+        height: 150px;
+    }
+}
+
+/* Responsive Navigation Arrows */
+@media (max-width: 768px) {
+    .heavenly-navigation {
+        bottom: 20px;
+        right: 20px;
+    }
+    
+    .nav-arrow {
+        width: 45px;
+        height: 45px;
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .heavenly-navigation {
+        bottom: 15px;
+        right: 15px;
+    }
+    
+    .nav-arrow {
+        width: 40px;
+        height: 40px;
+        font-size: 0.9rem;
+    }
+}
+
 /* Responsive Heaven */
 @media (max-width: 768px) {
     .heavenly-logo img {
