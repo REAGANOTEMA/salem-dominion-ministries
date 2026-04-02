@@ -1,32 +1,137 @@
 <?php
-session_start();
-require_once 'db.php';
+// Error reporting and performance optimization
+error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
+ini_set('display_errors', 0);
+ini_set('log_errors', 1);
+ini_set('error_log', __DIR__ . '/logs/php_errors.log');
 
-// Get dynamic data
-$services = $db->query("SELECT * FROM service_times WHERE is_active = 1 ORDER BY FIELD(day_of_week, 'sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'), start_time");
-$ministries = $db->query("SELECT * FROM ministries WHERE is_active = 1 LIMIT 3");
-$news = $db->query("SELECT * FROM news WHERE status = 'published' ORDER BY published_at DESC LIMIT 3");
-$events = $db->query("SELECT * FROM events WHERE status = 'upcoming' ORDER BY event_date ASC LIMIT 3");
-$sermons = $db->query("SELECT * FROM sermons WHERE status = 'published' ORDER BY sermon_date DESC LIMIT 3");
-$gallery = $db->query("SELECT * FROM gallery WHERE status = 'published' AND is_featured = 1 LIMIT 6");
+// Start session with secure settings
+if (session_status() === PHP_SESSION_NONE) {
+    ini_set('session.cookie_httponly', 1);
+    ini_set('session.cookie_secure', isset($_SERVER['HTTPS']));
+    ini_set('session.cookie_samesite', 'Strict');
+    session_start();
+}
+
+// Include required files with error handling
+try {
+    require_once 'config.php';
+    require_once 'db.php';
+} catch (Exception $e) {
+    error_log("Database connection failed: " . $e->getMessage());
+    die("Database connection error. Please try again later.");
+}
+
+// Get dynamic data with error handling
+$services = null;
+$ministries = null;
+$news = null;
+$events = null;
+$sermons = null;
+$gallery = null;
+
+try {
+    $services = $db->query("SELECT * FROM service_times WHERE is_active = 1 ORDER BY FIELD(day_of_week, 'sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'), start_time");
+    $ministries = $db->query("SELECT * FROM ministries WHERE is_active = 1 LIMIT 3");
+    $news = $db->query("SELECT * FROM news WHERE status = 'published' ORDER BY published_at DESC LIMIT 3");
+    $events = $db->query("SELECT * FROM events WHERE status = 'upcoming' ORDER BY event_date ASC LIMIT 3");
+    $sermons = $db->query("SELECT * FROM sermons WHERE status = 'published' ORDER BY sermon_date DESC LIMIT 3");
+    $gallery = $db->query("SELECT * FROM gallery WHERE status = 'published' AND is_featured = 1 LIMIT 6");
+} catch (Exception $e) {
+    error_log("Query failed: " . $e->getMessage());
+    // Set empty arrays to prevent errors
+    $services = [];
+    $ministries = [];
+    $news = [];
+    $events = [];
+    $sermons = [];
+    $gallery = [];
+}
+
+// Helper function for safe HTML output
+function safe_html($string, $default = '') {
+    return htmlspecialchars($string ?? $default, ENT_QUOTES, 'UTF-8');
+}
+
+// Helper function for safe date formatting
+function safe_date($date, $format) {
+    try {
+        return date($format, strtotime($date));
+    } catch (Exception $e) {
+        return 'Date not available';
+    }
+}
+
+// Set performance headers
+header('X-Content-Type-Options: nosniff');
+header('X-Frame-Options: SAMEORIGIN');
+header('X-XSS-Protection: "1; mode=block"');
+header('Referrer-Policy: "strict-origin-when-cross-origin"');
+
+// Cache control for static content
+if (isset($_SERVER['HTTP_IF_MODIFIED_SINCE'])) {
+    header('HTTP/1.1 304 Not Modified');
+    exit;
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Salem Dominion Ministries - Welcome Home</title>
+    <meta name="description" content="Welcome to Salem Dominion Ministries - Experience God's love, grow in faith, and serve our community together">
+    <meta name="keywords" content="church, ministry, faith, God, Jesus, worship, community, Salem Dominion Ministries">
+    <meta name="author" content="Salem Dominion Ministries">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="Salem Dominion Ministries - Welcome Home">
+    <meta property="og:description" content="Experience God's love, grow in faith, and serve our community together">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="<?php echo APP_URL; ?>">
+    <meta property="og:image" content="<?php echo APP_URL; ?>/assets/images/og-image.jpg">
+    <meta property="og:site_name" content="Salem Dominion Ministries">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Salem Dominion Ministries - Welcome Home">
+    <meta name="twitter:description" content="Experience God's love, grow in faith, and serve our community together">
+    <meta name="twitter:image" content="<?php echo APP_URL; ?>/assets/images/twitter-image.jpg">
+    
+    <!-- Favicon and App Icons -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/manifest.json">
+    
+    <!-- Theme Color -->
+    <meta name="theme-color" content="#FFD700">
+    <meta name="msapplication-TileColor" content="#FFD700">
+    
+    <!-- Preconnect for performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="preconnect" href="https://unpkg.com">
     
     <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    
     <!-- Font Awesome -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    
     <!-- AOS Animation -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Montserrat:wght@300;400;500;600;700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
     
+    <!-- Custom CSS -->
+    <link href="assets/css/perfect_responsive.css" rel="stylesheet">
+    
     <style>
+        /* Critical CSS for immediate rendering */
         :root {
             --primary-color: #2c3e50;
             --secondary-color: #e74c3c;
@@ -37,12 +142,10 @@ $gallery = $db->query("SELECT * FROM gallery WHERE status = 'published' AND is_f
             --grace-purple: #9370DB;
             --light-color: #ecf0f1;
             --dark-color: #34495e;
-            --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            --gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            --gradient-church: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
             --gradient-heavenly: linear-gradient(135deg, #FFD700 0%, #FFA500 50%, #FF6347 100%);
             --gradient-angel: linear-gradient(135deg, #F8F8FF 0%, #E6E6FA 50%, #D8BFD8 100%);
             --gradient-divine: linear-gradient(135deg, #4169E1 0%, #9370DB 50%, #FFD700 100%);
+            --gradient-church: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
         }
 
         * {
@@ -52,7 +155,7 @@ $gallery = $db->query("SELECT * FROM gallery WHERE status = 'published' AND is_f
         }
 
         body {
-            font-family: 'Montserrat', sans-serif;
+            font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             line-height: 1.6;
             color: var(--dark-color);
             overflow-x: hidden;
@@ -73,8 +176,62 @@ $gallery = $db->query("SELECT * FROM gallery WHERE status = 'published' AND is_f
         }
 
         h1, h2, h3, h4, h5, h6 {
-            font-family: 'Playfair Display', serif;
+            font-family: 'Playfair Display', Georgia, serif;
             font-weight: 700;
+            line-height: 1.2;
+        }
+
+        /* Skip to content for accessibility */
+        .skip-to-content {
+            position: absolute;
+            top: -40px;
+            left: 6px;
+            background: var(--heavenly-gold);
+            color: white;
+            padding: 8px;
+            text-decoration: none;
+            border-radius: 4px;
+            z-index: 10000;
+            transition: top 0.3s;
+        }
+
+        .skip-to-content:focus {
+            top: 6px;
+        }
+
+        /* Loading animation */
+        .loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+
+        .loader.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loader-content {
+            text-align: center;
+        }
+
+        .loader-icon {
+            font-size: 3rem;
+            color: var(--heavenly-gold);
+            animation: spin 2s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         /* Floating Angels */
@@ -85,26 +242,12 @@ $gallery = $db->query("SELECT * FROM gallery WHERE status = 'published' AND is_f
             opacity: 0.3;
             pointer-events: none;
             z-index: 2;
-            animation: float 6s ease-in-out infinite;
+            transition: all 0.3s ease;
         }
 
-        .angel-1 {
-            top: 20%;
-            left: 5%;
-            animation-delay: 0s;
-        }
-
-        .angel-2 {
-            top: 60%;
-            right: 5%;
-            animation-delay: 2s;
-        }
-
-        .angel-3 {
-            top: 40%;
-            left: 10%;
-            animation-delay: 4s;
-        }
+        .angel-1 { top: 20%; left: 5%; animation-delay: 0s; }
+        .angel-2 { top: 60%; right: 5%; animation-delay: 2s; }
+        .angel-3 { top: 40%; left: 10%; animation-delay: 4s; }
 
         @keyframes float {
             0%, 100% { transform: translateY(0px) rotate(0deg); }
@@ -164,8 +307,9 @@ $gallery = $db->query("SELECT * FROM gallery WHERE status = 'published' AND is_f
         /* Hero Section */
         .hero-section {
             height: 100vh;
+            min-height: 600px;
             background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
-                        url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3') center/cover;
+                        url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -199,15 +343,8 @@ $gallery = $db->query("SELECT * FROM gallery WHERE status = 'published' AND is_f
             animation: pulse 3s ease-in-out infinite;
         }
 
-        .angel-left {
-            top: 20%;
-            left: 10%;
-        }
-
-        .angel-right {
-            top: 20%;
-            right: 10%;
-        }
+        .angel-left { top: 20%; left: 10%; }
+        .angel-right { top: 20%; right: 10%; }
 
         @keyframes pulse {
             0%, 100% { transform: scale(1); opacity: 0.3; }
@@ -222,7 +359,7 @@ $gallery = $db->query("SELECT * FROM gallery WHERE status = 'published' AND is_f
         }
 
         .hero-title {
-            font-size: 4rem;
+            font-size: clamp(2rem, 5vw, 4rem);
             font-weight: 900;
             margin-bottom: 1.5rem;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
@@ -234,7 +371,7 @@ $gallery = $db->query("SELECT * FROM gallery WHERE status = 'published' AND is_f
         }
 
         .hero-subtitle {
-            font-size: 1.5rem;
+            font-size: clamp(1rem, 2.5vw, 1.5rem);
             margin-bottom: 2rem;
             font-weight: 300;
             animation: fadeInUp 1s ease 0.2s both;
@@ -252,18 +389,27 @@ $gallery = $db->query("SELECT * FROM gallery WHERE status = 'published' AND is_f
             }
         }
 
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: fadeInUp 1s ease 0.4s both;
+        }
+
         .btn-hero {
             padding: 15px 40px;
             font-size: 1.1rem;
             font-weight: 600;
             border: none;
             border-radius: 50px;
-            margin: 0.5rem;
             transition: all 0.3s ease;
             text-transform: uppercase;
             letter-spacing: 1px;
             position: relative;
             overflow: hidden;
+            min-height: 44px;
+            min-width: 44px;
         }
 
         .btn-primary-hero {
@@ -285,7 +431,7 @@ $gallery = $db->query("SELECT * FROM gallery WHERE status = 'published' AND is_f
 
         /* Section Styles */
         .section {
-            padding: 100px 0;
+            padding: clamp(60px, 8vw, 100px) 0;
             position: relative;
             z-index: 2;
         }
@@ -295,7 +441,7 @@ $gallery = $db->query("SELECT * FROM gallery WHERE status = 'published' AND is_f
         }
 
         .section-title {
-            font-size: 3rem;
+            font-size: clamp(2rem, 4vw, 3rem);
             font-weight: 900;
             text-align: center;
             margin-bottom: 1rem;
@@ -318,7 +464,7 @@ $gallery = $db->query("SELECT * FROM gallery WHERE status = 'published' AND is_f
 
         .section-subtitle {
             text-align: center;
-            font-size: 1.2rem;
+            font-size: clamp(1rem, 2vw, 1.2rem);
             color: var(--dark-color);
             margin-bottom: 3rem;
             max-width: 600px;
@@ -374,7 +520,7 @@ $gallery = $db->query("SELECT * FROM gallery WHERE status = 'published' AND is_f
             color: var(--primary-color);
         }
 
-        /* Service Times */
+        /* Service Cards */
         .service-card {
             background: white;
             border-radius: 15px;
@@ -410,32 +556,7 @@ $gallery = $db->query("SELECT * FROM gallery WHERE status = 'published' AND is_f
             animation: pulse 2s infinite;
         }
 
-        /* Ministries */
-        .ministry-card {
-            position: relative;
-            overflow: hidden;
-            border-radius: 20px;
-            background: white;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
-        }
-
-        .ministry-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 5px;
-            background: var(--gradient-heavenly);
-        }
-
-        .ministry-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(255, 215, 0, 0.2);
-        }
-
-        /* Events */
+        /* Event Cards */
         .event-card {
             background: white;
             border-radius: 15px;
@@ -496,7 +617,7 @@ $gallery = $db->query("SELECT * FROM gallery WHERE status = 'published' AND is_f
             opacity: 1;
         }
 
-        /* Sermons */
+        /* Sermon Cards */
         .sermon-card {
             background: white;
             border-radius: 15px;
@@ -527,7 +648,7 @@ $gallery = $db->query("SELECT * FROM gallery WHERE status = 'published' AND is_f
             margin-bottom: 1rem;
         }
 
-        /* Pastor Booking CTA */
+        /* CTA Section */
         .booking-cta {
             background: var(--gradient-divine);
             color: white;
@@ -551,6 +672,45 @@ $gallery = $db->query("SELECT * FROM gallery WHERE status = 'published' AND is_f
         @keyframes shimmer {
             0% { transform: translateX(-100%); }
             100% { transform: translateX(100%); }
+        }
+
+        /* App Banner */
+        .app-banner {
+            background: var(--gradient-heavenly);
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .app-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .app-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.8rem 1.5rem;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid white;
+            border-radius: 10px;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            min-height: 44px;
+            min-width: 44px;
+        }
+
+        .app-button:hover {
+            background: white;
+            color: var(--primary-color);
+            transform: translateY(-2px);
         }
 
         /* Footer */
@@ -610,123 +770,100 @@ $gallery = $db->query("SELECT * FROM gallery WHERE status = 'published' AND is_f
             transform: translateY(-3px);
         }
 
-        /* Mobile App Banner */
-        .app-banner {
-            background: var(--gradient-heavenly);
-            color: white;
-            padding: 2rem 0;
-            text-align: center;
-            position: relative;
-            z-index: 2;
-        }
-
-        .app-buttons {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            margin-top: 1rem;
-            flex-wrap: wrap;
-        }
-
-        .app-button {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.8rem 1.5rem;
-            background: rgba(255, 255, 255, 0.2);
-            border: 2px solid white;
-            border-radius: 10px;
-            color: white;
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
-
-        .app-button:hover {
-            background: white;
-            color: var(--primary-color);
-            transform: translateY(-2px);
-        }
-
-        /* Responsive */
+        /* Responsive adjustments */
         @media (max-width: 768px) {
-            .hero-title {
-                font-size: 2.5rem;
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
             }
             
-            .hero-subtitle {
-                font-size: 1.2rem;
-            }
-            
-            .section-title {
-                font-size: 2rem;
-            }
-            
-            .section {
-                padding: 60px 0;
+            .btn-hero {
+                width: 100%;
+                max-width: 280px;
             }
             
             .floating-angel {
+                font-size: 1.5rem;
+            }
+            
+            .angel-3 {
                 display: none;
             }
         }
 
-        /* Loading Animation */
-        .loader {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: white;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            transition: opacity 0.5s ease;
+        /* Performance optimizations */
+        .card-custom,
+        .service-card,
+        .event-card,
+        .sermon-card {
+            will-change: transform;
+            transform: translateZ(0);
         }
 
-        .loader.hidden {
-            opacity: 0;
-            pointer-events: none;
+        /* Accessibility */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
         }
 
-        .loader-content {
-            text-align: center;
+        /* Focus styles */
+        .btn:focus,
+        .nav-link:focus,
+        .card:focus {
+            outline: 3px solid var(--heavenly-gold);
+            outline-offset: 2px;
         }
 
-        .loader-icon {
-            font-size: 3rem;
-            color: var(--heavenly-gold);
-            animation: spin 2s linear infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        /* Print styles */
+        @media print {
+            .navbar,
+            .floating-angel,
+            .hero-angel,
+            .app-banner,
+            .booking-cta {
+                display: none !important;
+            }
+            
+            .hero-section {
+                background: white !important;
+                color: black !important;
+                height: auto !important;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Skip to content link for accessibility -->
+    <a href="#main-content" class="skip-to-content">Skip to main content</a>
+
     <!-- Floating Angels -->
-    <div class="floating-angel angel-1">🕊️</div>
-    <div class="floating-angel angel-2">✨</div>
-    <div class="floating-angel angel-3">👼</div>
+    <div class="floating-angel angel-1" role="img" aria-label="Decorative angel">🕊️</div>
+    <div class="floating-angel angel-2" role="img" aria-label="Decorative angel">✨</div>
+    <div class="floating-angel angel-3" role="img" aria-label="Decorative angel">👼</div>
 
     <!-- Loader -->
-    <div class="loader" id="loader">
+    <div class="loader" id="loader" role="status" aria-label="Loading">
         <div class="loader-content">
-            <i class="fas fa-dove loader-icon"></i>
+            <i class="fas fa-dove loader-icon" aria-hidden="true"></i>
             <p class="mt-3">Loading God's blessings...</p>
         </div>
     </div>
 
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg fixed-top">
+    <nav class="navbar navbar-expand-lg fixed-top" role="navigation" aria-label="Main navigation">
         <div class="container">
-            <a class="navbar-brand" href="index.php">
-                <i class="fas fa-church"></i> Salem Dominion Ministries
+            <a class="navbar-brand" href="index.php" aria-label="Salem Dominion Ministries Home">
+                <i class="fas fa-church" aria-hidden="true"></i> Salem Dominion Ministries
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
@@ -753,256 +890,299 @@ $gallery = $db->query("SELECT * FROM gallery WHERE status = 'published' AND is_f
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <section class="hero-section">
-        <div class="hero-angel angel-left">👼</div>
-        <div class="hero-angel angel-right">🕊️</div>
-        <div class="hero-content">
-            <h1 class="hero-title">Welcome to Salem Dominion Ministries</h1>
-            <p class="hero-subtitle">Experience God's love, grow in faith, and serve our community together</p>
-            <div class="hero-buttons">
-                <a href="about.php" class="btn btn-hero btn-primary-hero">
-                    <i class="fas fa-info-circle me-2"></i> Learn More
-                </a>
-                <a href="contact.php" class="btn btn-hero btn-outline-hero">
-                    <i class="fas fa-envelope me-2"></i> Contact Us
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <!-- Service Times -->
-    <section class="section section-alt">
-        <div class="container">
-            <h2 class="section-title" data-aos="fade-up">Service Times</h2>
-            <p class="section-subtitle" data-aos="fade-up" data-aos-delay="100">Join us for worship and fellowship</p>
-            
-            <div class="row">
-                <?php while ($service = $services->fetch_assoc()): ?>
-                <div class="col-md-6 col-lg-4 mb-4" data-aos="fade-up" data-aos-delay="200">
-                    <div class="service-card">
-                        <div class="service-icon">
-                            <i class="fas fa-clock"></i>
-                        </div>
-                        <h5 class="card-title"><?php echo ucfirst($service['day_of_week']); ?></h5>
-                        <h6 class="card-subtitle mb-2 text-muted"><?php echo htmlspecialchars($service['service_name']); ?></h6>
-                        <p class="card-text">
-                            <i class="fas fa-clock text-primary"></i> 
-                            <?php echo date('g:i A', strtotime($service['start_time'])); ?> - 
-                            <?php echo date('g:i A', strtotime($service['end_time'])); ?>
-                        </p>
-                        <p class="card-text">
-                            <i class="fas fa-map-marker-alt text-primary"></i> 
-                            <?php echo htmlspecialchars($service['location']); ?>
-                        </p>
-                        <?php if ($service['description']): ?>
-                        <p class="card-text small text-muted"><?php echo htmlspecialchars($service['description']); ?></p>
-                        <?php endif; ?>
-                    </div>
+    <!-- Main Content -->
+    <main id="main-content">
+        <!-- Hero Section -->
+        <section class="hero-section" role="banner" aria-labelledby="hero-title">
+            <div class="hero-angel angel-left" role="img" aria-label="Decorative angel">👼</div>
+            <div class="hero-angel angel-right" role="img" aria-label="Decorative angel">🕊️</div>
+            <div class="hero-content">
+                <h1 class="hero-title" id="hero-title">Welcome to Salem Dominion Ministries</h1>
+                <p class="hero-subtitle">Experience God's love, grow in faith, and serve our community together</p>
+                <div class="hero-buttons">
+                    <a href="about.php" class="btn btn-hero btn-primary-hero" aria-label="Learn more about our church">
+                        <i class="fas fa-info-circle" aria-hidden="true"></i> Learn More
+                    </a>
+                    <a href="contact.php" class="btn btn-hero btn-outline-hero" aria-label="Contact our church">
+                        <i class="fas fa-envelope" aria-hidden="true"></i> Contact Us
+                    </a>
                 </div>
-                <?php endwhile; ?>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Ministries Preview -->
-    <section class="section">
-        <div class="container">
-            <h2 class="section-title" data-aos="fade-up">Our Ministries</h2>
-            <p class="section-subtitle" data-aos="fade-up" data-aos-delay="100">Discover ways to get involved and grow in your faith</p>
-            
-            <div class="row">
-                <?php while ($ministry = $ministries->fetch_assoc()): ?>
-                <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="200">
-                    <div class="ministry-card card-custom">
-                        <div class="card-body">
-                            <h5 class="card-title">
-                                <i class="fas fa-users text-primary me-2"></i>
-                                <?php echo htmlspecialchars($ministry['name']); ?>
-                            </h5>
-                            <p class="card-text"><?php echo htmlspecialchars(substr($ministry['description'], 0, 150)) . '...'; ?></p>
-                            <?php if ($ministry['meeting_day'] && $ministry['meeting_time']): ?>
-                            <p class="card-text small text-muted">
-                                <i class="fas fa-calendar"></i> <?php echo htmlspecialchars($ministry['meeting_day']); ?> 
-                                <?php echo htmlspecialchars($ministry['meeting_time']); ?>
-                            </p>
-                            <?php endif; ?>
-                            <a href="ministries.php" class="btn btn-primary btn-sm">Learn More</a>
-                        </div>
-                    </div>
-                </div>
-                <?php endwhile; ?>
-            </div>
-            
-            <div class="text-center mt-4" data-aos="fade-up" data-aos-delay="300">
-                <a href="ministries.php" class="btn btn-primary btn-lg">View All Ministries</a>
-            </div>
-        </div>
-    </section>
-
-    <!-- Upcoming Events -->
-    <section class="section section-alt">
-        <div class="container">
-            <h2 class="section-title" data-aos="fade-up">Upcoming Events</h2>
-            <p class="section-subtitle" data-aos="fade-up" data-aos-delay="100">Join us for these exciting events</p>
-            
-            <div class="row">
-                <?php while ($event = $events->fetch_assoc()): ?>
-                <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="200">
-                    <div class="event-card">
-                        <div class="event-date">
-                            <i class="fas fa-calendar-alt me-2"></i>
-                            <?php echo date('F j, Y', strtotime($event['event_date'])); ?>
-                        </div>
-                        <div class="card-body">
-                            <h5 class="card-title"><?php echo htmlspecialchars($event['title']); ?></h5>
-                            <p class="card-text">
-                                <i class="fas fa-clock text-primary"></i> 
-                                <?php echo date('g:i A', strtotime($event['event_date'])); ?>
-                            </p>
-                            <?php if ($event['location']): ?>
-                            <p class="card-text">
-                                <i class="fas fa-map-marker-alt text-primary"></i> 
-                                <?php echo htmlspecialchars($event['location']); ?>
-                            </p>
-                            <?php endif; ?>
-                            <p class="card-text"><?php echo htmlspecialchars(substr($event['description'], 0, 100)) . '...'; ?></p>
-                            <a href="events.php" class="btn btn-primary btn-sm">Learn More</a>
-                        </div>
-                    </div>
-                </div>
-                <?php endwhile; ?>
-            </div>
-        </div>
-    </section>
-
-    <!-- Latest Sermons -->
-    <section class="section">
-        <div class="container">
-            <h2 class="section-title" data-aos="fade-up">Latest Sermons</h2>
-            <p class="section-subtitle" data-aos="fade-up" data-aos-delay="100">Be inspired by God's Word</p>
-            
-            <div class="row">
-                <?php while ($sermon = $sermons->fetch_assoc()): ?>
-                <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="200">
-                    <div class="sermon-card">
-                        <h5 class="card-title">
-                            <i class="fas fa-bible text-primary me-2"></i>
-                            <?php echo htmlspecialchars($sermon['title']); ?>
-                        </h5>
-                        <?php if ($sermon['bible_reference']): ?>
-                        <p class="sermon-verse"><?php echo htmlspecialchars($sermon['bible_reference']); ?></p>
-                        <?php endif; ?>
-                        <p class="card-text">
-                            <i class="fas fa-user text-primary"></i> 
-                            <?php echo htmlspecialchars($sermon['preacher']); ?>
-                        </p>
-                        <p class="card-text">
-                            <i class="fas fa-calendar text-primary"></i> 
-                            <?php echo date('F j, Y', strtotime($sermon['sermon_date'])); ?>
-                        </p>
-                        <?php if ($sermon['description']): ?>
-                        <p class="card-text"><?php echo htmlspecialchars(substr($sermon['description'], 0, 100)) . '...'; ?></p>
-                        <?php endif; ?>
-                        <div class="mt-3">
-                            <?php if ($sermon['video_url']): ?>
-                            <a href="<?php echo htmlspecialchars($sermon['video_url']); ?>" class="btn btn-primary btn-sm me-2" target="_blank">
-                                <i class="fas fa-play"></i> Watch
-                            </a>
-                            <?php endif; ?>
-                            <?php if ($sermon['audio_url']): ?>
-                            <a href="<?php echo htmlspecialchars($sermon['audio_url']); ?>" class="btn btn-outline-primary btn-sm" target="_blank">
-                                <i class="fas fa-headphones"></i> Listen
-                            </a>
-                            <?php endif; ?>
-                        </div>
-                    </div>
-                </div>
-                <?php endwhile; ?>
-            </div>
-        </div>
-    </section>
-
-    <!-- Gallery Preview -->
-    <section class="section section-alt">
-        <div class="container">
-            <h2 class="section-title" data-aos="fade-up">Gallery</h2>
-            <p class="section-subtitle" data-aos="fade-up" data-aos-delay="100">Moments from our church family</p>
-            
-            <div class="row">
-                <?php while ($item = $gallery->fetch_assoc()): ?>
-                <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="200">
-                    <div class="gallery-item">
-                        <img src="<?php echo htmlspecialchars($item['file_url']); ?>" alt="<?php echo htmlspecialchars($item['title']); ?>">
-                        <div class="gallery-overlay">
-                            <div>
-                                <h6><?php echo htmlspecialchars($item['title']); ?></h6>
-                                <?php if ($item['description']): ?>
-                                <p class="small"><?php echo htmlspecialchars(substr($item['description'], 0, 50)) . '...'; ?></p>
+        <!-- Service Times -->
+        <section class="section section-alt" aria-labelledby="services-title">
+            <div class="container">
+                <h2 class="section-title" id="services-title" data-aos="fade-up">Service Times</h2>
+                <p class="section-subtitle" data-aos="fade-up" data-aos-delay="100">Join us for worship and fellowship</p>
+                
+                <div class="row">
+                    <?php if ($services && $services->num_rows > 0): ?>
+                        <?php while ($service = $services->fetch_assoc()): ?>
+                        <div class="col-md-6 col-lg-4 mb-4" data-aos="fade-up" data-aos-delay="200">
+                            <div class="service-card">
+                                <div class="service-icon">
+                                    <i class="fas fa-clock" aria-hidden="true"></i>
+                                </div>
+                                <h3 class="card-title"><?php echo safe_html(ucfirst($service['day_of_week'])); ?></h3>
+                                <h4 class="card-subtitle mb-2 text-muted"><?php echo safe_html($service['service_name']); ?></h4>
+                                <p class="card-text">
+                                    <i class="fas fa-clock text-primary" aria-hidden="true"></i> 
+                                    <?php echo safe_date($service['start_time'], 'g:i A'); ?> - 
+                                    <?php echo safe_date($service['end_time'], 'g:i A'); ?>
+                                </p>
+                                <p class="card-text">
+                                    <i class="fas fa-map-marker-alt text-primary" aria-hidden="true"></i> 
+                                    <?php echo safe_html($service['location']); ?>
+                                </p>
+                                <?php if ($service['description']): ?>
+                                <p class="card-text small text-muted"><?php echo safe_html($service['description']); ?></p>
                                 <?php endif; ?>
                             </div>
                         </div>
-                    </div>
+                        <?php endwhile; ?>
+                    <?php else: ?>
+                        <div class="col-12">
+                            <div class="alert alert-info text-center">
+                                <i class="fas fa-info-circle" aria-hidden="true"></i> Service times will be available soon.
+                            </div>
+                        </div>
+                    <?php endif; ?>
                 </div>
-                <?php endwhile; ?>
             </div>
-            
-            <div class="text-center mt-4" data-aos="fade-up" data-aos-delay="300">
-                <a href="gallery.php" class="btn btn-primary btn-lg">View Full Gallery</a>
-            </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Pastor Booking CTA -->
-    <section class="booking-cta">
-        <div class="container">
-            <h2 class="text-white mb-4" data-aos="fade-up">Book a Call with Our Pastor</h2>
-            <p class="lead mb-4" data-aos="fade-up" data-aos-delay="100">
-                Need spiritual guidance, counseling, or prayer? Schedule a one-on-one session with our pastor.
-            </p>
-            <div data-aos="fade-up" data-aos-delay="200">
-                <a href="pastor_booking.php" class="btn btn-light btn-lg me-3">
-                    <i class="fas fa-calendar-check me-2"></i> Book Appointment
-                </a>
-                <a href="contact.php" class="btn btn-outline-light btn-lg">
-                    <i class="fas fa-phone me-2"></i> Contact Office
-                </a>
+        <!-- Ministries Preview -->
+        <section class="section" aria-labelledby="ministries-title">
+            <div class="container">
+                <h2 class="section-title" id="ministries-title" data-aos="fade-up">Our Ministries</h2>
+                <p class="section-subtitle" data-aos="fade-up" data-aos-delay="100">Discover ways to get involved and grow in your faith</p>
+                
+                <div class="row">
+                    <?php if ($ministries && $ministries->num_rows > 0): ?>
+                        <?php while ($ministry = $ministries->fetch_assoc()): ?>
+                        <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="200">
+                            <div class="ministry-card card-custom">
+                                <div class="card-body">
+                                    <h3 class="card-title">
+                                        <i class="fas fa-users text-primary" aria-hidden="true"></i>
+                                        <?php echo safe_html($ministry['name']); ?>
+                                    </h3>
+                                    <p class="card-text"><?php echo safe_html(substr($ministry['description'], 0, 150)) . '...'; ?></p>
+                                    <?php if ($ministry['meeting_day'] && $ministry['meeting_time']): ?>
+                                    <p class="card-text small text-muted">
+                                        <i class="fas fa-calendar" aria-hidden="true"></i> <?php echo safe_html($ministry['meeting_day']); ?> 
+                                        <?php echo safe_html($ministry['meeting_time']); ?>
+                                    </p>
+                                    <?php endif; ?>
+                                    <a href="ministries.php" class="btn btn-primary btn-sm" aria-label="Learn more about ministries">Learn More</a>
+                                </div>
+                            </div>
+                        </div>
+                        <?php endwhile; ?>
+                    <?php else: ?>
+                        <div class="col-12">
+                            <div class="alert alert-info text-center">
+                                <i class="fas fa-info-circle" aria-hidden="true"></i> Ministry information will be available soon.
+                            </div>
+                        </div>
+                    <?php endif; ?>
+                </div>
+                
+                <div class="text-center mt-4" data-aos="fade-up" data-aos-delay="300">
+                    <a href="ministries.php" class="btn btn-primary btn-lg" aria-label="View all ministries">View All Ministries</a>
+                </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Mobile App Banner -->
-    <section class="app-banner">
-        <div class="container">
-            <h3 class="mb-3" data-aos="fade-up">Take Our Church With You</h3>
-            <p class="mb-4" data-aos="fade-up" data-aos-delay="100">Download our mobile app for sermons, events, and more</p>
-            <div class="app-buttons" data-aos="fade-up" data-aos-delay="200">
-                <a href="#" class="app-button" onclick="installApp(); return false;">
-                    <i class="fas fa-download"></i> Install App
-                </a>
-                <a href="#" class="app-button">
-                    <i class="fab fa-apple"></i> App Store
-                </a>
-                <a href="#" class="app-button">
-                    <i class="fab fa-google-play"></i> Google Play
-                </a>
+        <!-- Upcoming Events -->
+        <section class="section section-alt" aria-labelledby="events-title">
+            <div class="container">
+                <h2 class="section-title" id="events-title" data-aos="fade-up">Upcoming Events</h2>
+                <p class="section-subtitle" data-aos="fade-up" data-aos-delay="100">Join us for these exciting events</p>
+                
+                <div class="row">
+                    <?php if ($events && $events->num_rows > 0): ?>
+                        <?php while ($event = $events->fetch_assoc()): ?>
+                        <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="200">
+                            <div class="event-card">
+                                <div class="event-date">
+                                    <i class="fas fa-calendar-alt" aria-hidden="true"></i>
+                                    <?php echo safe_date($event['event_date'], 'F j, Y'); ?>
+                                </div>
+                                <div class="card-body">
+                                    <h3 class="card-title"><?php echo safe_html($event['title']); ?></h3>
+                                    <p class="card-text">
+                                        <i class="fas fa-clock text-primary" aria-hidden="true"></i> 
+                                        <?php echo safe_date($event['event_date'], 'g:i A'); ?>
+                                    </p>
+                                    <?php if ($event['location']): ?>
+                                    <p class="card-text">
+                                        <i class="fas fa-map-marker-alt text-primary" aria-hidden="true"></i> 
+                                        <?php echo safe_html($event['location']); ?>
+                                    </p>
+                                    <?php endif; ?>
+                                    <p class="card-text"><?php echo safe_html(substr($event['description'], 0, 100)) . '...'; ?></p>
+                                    <a href="events.php" class="btn btn-primary btn-sm" aria-label="Learn more about events">Learn More</a>
+                                </div>
+                            </div>
+                        </div>
+                        <?php endwhile; ?>
+                    <?php else: ?>
+                        <div class="col-12">
+                            <div class="alert alert-info text-center">
+                                <i class="fas fa-info-circle" aria-hidden="true"></i> Event information will be available soon.
+                            </div>
+                        </div>
+                    <?php endif; ?>
+                </div>
             </div>
-        </div>
-    </section>
+        </section>
+
+        <!-- Latest Sermons -->
+        <section class="section" aria-labelledby="sermons-title">
+            <div class="container">
+                <h2 class="section-title" id="sermons-title" data-aos="fade-up">Latest Sermons</h2>
+                <p class="section-subtitle" data-aos="fade-up" data-aos-delay="100">Be inspired by God's Word</p>
+                
+                <div class="row">
+                    <?php if ($sermons && $sermons->num_rows > 0): ?>
+                        <?php while ($sermon = $sermons->fetch_assoc()): ?>
+                        <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="200">
+                            <div class="sermon-card">
+                                <h3 class="card-title">
+                                    <i class="fas fa-bible text-primary" aria-hidden="true"></i>
+                                    <?php echo safe_html($sermon['title']); ?>
+                                </h3>
+                                <?php if ($sermon['bible_reference']): ?>
+                                <p class="sermon-verse"><?php echo safe_html($sermon['bible_reference']); ?></p>
+                                <?php endif; ?>
+                                <p class="card-text">
+                                    <i class="fas fa-user text-primary" aria-hidden="true"></i> 
+                                    <?php echo safe_html($sermon['preacher']); ?>
+                                </p>
+                                <p class="card-text">
+                                    <i class="fas fa-calendar text-primary" aria-hidden="true"></i> 
+                                    <?php echo safe_date($sermon['sermon_date'], 'F j, Y'); ?>
+                                </p>
+                                <?php if ($sermon['description']): ?>
+                                <p class="card-text"><?php echo safe_html(substr($sermon['description'], 0, 100)) . '...'; ?></p>
+                                <?php endif; ?>
+                                <div class="mt-3">
+                                    <?php if ($sermon['video_url']): ?>
+                                    <a href="<?php echo safe_html($sermon['video_url']); ?>" class="btn btn-primary btn-sm me-2" target="_blank" rel="noopener" aria-label="Watch sermon video">
+                                        <i class="fas fa-play" aria-hidden="true"></i> Watch
+                                    </a>
+                                    <?php endif; ?>
+                                    <?php if ($sermon['audio_url']): ?>
+                                    <a href="<?php echo safe_html($sermon['audio_url']); ?>" class="btn btn-outline-primary btn-sm" target="_blank" rel="noopener" aria-label="Listen to sermon audio">
+                                        <i class="fas fa-headphones" aria-hidden="true"></i> Listen
+                                    </a>
+                                    <?php endif; ?>
+                                </div>
+                            </div>
+                        </div>
+                        <?php endwhile; ?>
+                    <?php else: ?>
+                        <div class="col-12">
+                            <div class="alert alert-info text-center">
+                                <i class="fas fa-info-circle" aria-hidden="true"></i> Sermon recordings will be available soon.
+                            </div>
+                        </div>
+                    <?php endif; ?>
+                </div>
+            </div>
+        </section>
+
+        <!-- Gallery Preview -->
+        <section class="section section-alt" aria-labelledby="gallery-title">
+            <div class="container">
+                <h2 class="section-title" id="gallery-title" data-aos="fade-up">Gallery</h2>
+                <p class="section-subtitle" data-aos="fade-up" data-aos-delay="100">Moments from our church family</p>
+                
+                <div class="row">
+                    <?php if ($gallery && $gallery->num_rows > 0): ?>
+                        <?php while ($item = $gallery->fetch_assoc()): ?>
+                        <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="200">
+                            <div class="gallery-item">
+                                <img src="<?php echo safe_html($item['file_url']); ?>" alt="<?php echo safe_html($item['title']); ?>" loading="lazy">
+                                <div class="gallery-overlay">
+                                    <div>
+                                        <h6><?php echo safe_html($item['title']); ?></h6>
+                                        <?php if ($item['description']): ?>
+                                        <p class="small"><?php echo safe_html(substr($item['description'], 0, 50)) . '...'; ?></p>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <?php endwhile; ?>
+                    <?php else: ?>
+                        <div class="col-12">
+                            <div class="alert alert-info text-center">
+                                <i class="fas fa-info-circle" aria-hidden="true"></i> Gallery images will be available soon.
+                            </div>
+                        </div>
+                    <?php endif; ?>
+                </div>
+                
+                <div class="text-center mt-4" data-aos="fade-up" data-aos-delay="300">
+                    <a href="gallery.php" class="btn btn-primary btn-lg" aria-label="View full gallery">View Full Gallery</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pastor Booking CTA -->
+        <section class="booking-cta" aria-labelledby="booking-title">
+            <div class="container">
+                <h2 class="text-white mb-4" id="booking-title" data-aos="fade-up">Book a Call with Our Pastor</h2>
+                <p class="lead mb-4" data-aos="fade-up" data-aos-delay="100">
+                    Need spiritual guidance, counseling, or prayer? Schedule a one-on-one session with our pastor.
+                </p>
+                <div data-aos="fade-up" data-aos-delay="200">
+                    <a href="pastor_booking.php" class="btn btn-light btn-lg me-3" aria-label="Book appointment with pastor">
+                        <i class="fas fa-calendar-check" aria-hidden="true"></i> Book Appointment
+                    </a>
+                    <a href="contact.php" class="btn btn-outline-light btn-lg" aria-label="Contact church office">
+                        <i class="fas fa-phone" aria-hidden="true"></i> Contact Office
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Mobile App Banner -->
+        <section class="app-banner" aria-labelledby="app-title">
+            <div class="container">
+                <h3 class="mb-3" id="app-title" data-aos="fade-up">Take Our Church With You</h3>
+                <p class="mb-4" data-aos="fade-up" data-aos-delay="100">Download our mobile app for sermons, events, and more</p>
+                <div class="app-buttons" data-aos="fade-up" data-aos-delay="200">
+                    <a href="#" class="app-button" onclick="installApp(); return false;" aria-label="Install mobile app">
+                        <i class="fas fa-download" aria-hidden="true"></i> Install App
+                    </a>
+                    <a href="#" class="app-button" aria-label="Download from App Store">
+                        <i class="fab fa-apple" aria-hidden="true"></i> App Store
+                    </a>
+                    <a href="#" class="app-button" aria-label="Download from Google Play">
+                        <i class="fab fa-google-play" aria-hidden="true"></i> Google Play
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
 
     <!-- Footer -->
-    <footer>
+    <footer role="contentinfo">
         <div class="container">
             <div class="row">
                 <div class="col-md-4 mb-4">
                     <div class="footer-widget">
-                        <h5><i class="fas fa-church me-2"></i> Salem Dominion Ministries</h5>
+                        <h5><i class="fas fa-church" aria-hidden="true"></i> Salem Dominion Ministries</h5>
                         <p>Serving our community with faith, hope, and love. Experience God's presence and grow in your spiritual journey.</p>
                         <div class="social-links">
-                            <a href="#"><i class="fab fa-facebook-f"></i></a>
-                            <a href="#"><i class="fab fa-twitter"></i></a>
-                            <a href="#"><i class="fab fa-instagram"></i></a>
-                            <a href="#"><i class="fab fa-youtube"></i></a>
+                            <a href="#" aria-label="Facebook" target="_blank" rel="noopener"><i class="fab fa-facebook-f" aria-hidden="true"></i></a>
+                            <a href="#" aria-label="Twitter" target="_blank" rel="noopener"><i class="fab fa-twitter" aria-hidden="true"></i></a>
+                            <a href="#" aria-label="Instagram" target="_blank" rel="noopener"><i class="fab fa-instagram" aria-hidden="true"></i></a>
+                            <a href="#" aria-label="YouTube" target="_blank" rel="noopener"><i class="fab fa-youtube" aria-hidden="true"></i></a>
                         </div>
                     </div>
                 </div>
@@ -1023,127 +1203,166 @@ $gallery = $db->query("SELECT * FROM gallery WHERE status = 'published' AND is_f
                     <div class="footer-widget">
                         <h5>Contact Info</h5>
                         <ul>
-                            <li><i class="fas fa-envelope me-2"></i> visit@salemdominionministries.com</li>
-                            <li><i class="fas fa-phone me-2"></i> +1 (555) 123-4567</li>
-                            <li><i class="fas fa-map-marker-alt me-2"></i> 123 Church Street, City, State</li>
-                            <li><i class="fas fa-clock me-2"></i> Office: Mon-Fri 9AM-5PM</li>
+                            <li><i class="fas fa-envelope" aria-hidden="true"></i> visit@salemdominionministries.com</li>
+                            <li><i class="fas fa-phone" aria-hidden="true"></i> +1 (555) 123-4567</li>
+                            <li><i class="fas fa-map-marker-alt" aria-hidden="true"></i> 123 Church Street, City, State</li>
+                            <li><i class="fas fa-clock" aria-hidden="true"></i> Office: Mon-Fri 9AM-5PM</li>
                         </ul>
                     </div>
                 </div>
             </div>
             <hr class="my-4" style="border-color: rgba(255,255,255,0.1);">
             <div class="text-center">
-                <p class="mb-0">&copy; 2026 Salem Dominion Ministries. All rights reserved. | 
+                <p class="mb-0">&copy; <?php echo date('Y'); ?> Salem Dominion Ministries. All rights reserved. | 
                     <a href="#" class="text-white-50">Privacy Policy</a> | 
                     <a href="#" class="text-white-50">Terms of Service</a>
                 </p>
             </div>
         </div>
     </footer>
+</body>
+</html>
 
-    <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script src="assets/js/heavenly_sounds.js"></script>
-    <script>
-        // Initialize AOS
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigS/jj88gg3TDOcYve" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script src="assets/js/heavenly_sounds.js"></script>
+<script src="assets/js/perfect_animations.js"></script>
+<script>
+// Initialize everything when DOM is ready
+document.addEventListener('DOMContentLoaded', function() {
+    'use strict';
+    
+    // Initialize AOS
+    try {
         AOS.init({
             duration: 1000,
             once: true,
-            offset: 100
+            offset: 100,
+            disable: window.matchMedia('(prefers-reduced-motion: reduce)').matches
         });
-
-        // Hide loader
-        window.addEventListener('load', function() {
-            setTimeout(function() {
-                document.getElementById('loader').classList.add('hidden');
-            }, 1500);
-        });
-
-        // Navbar scroll effect
-        window.addEventListener('scroll', function() {
-            const navbar = document.querySelector('.navbar');
-            if (window.scrollY > 100) {
+    } catch (error) {
+        console.warn('AOS initialization failed:', error);
+    }
+    
+    // Hide loader
+    setTimeout(function() {
+        const loader = document.getElementById('loader');
+        if (loader) {
+            loader.classList.add('hidden');
+        }
+    }, 1500);
+    
+    // Navbar scroll effect
+    let lastScrollTop = 0;
+    window.addEventListener('scroll', function() {
+        const navbar = document.querySelector('.navbar');
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        
+        if (navbar) {
+            if (scrollTop > 100) {
                 navbar.style.padding = '0.5rem 0';
                 navbar.style.boxShadow = '0 4px 30px rgba(0,0,0,0.1)';
             } else {
                 navbar.style.padding = '1rem 0';
                 navbar.style.boxShadow = '0 2px 20px rgba(0,0,0,0.1)';
             }
-        });
-
-        // Smooth scrolling for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
-        });
-
-        // Mobile app installation
-        function installApp() {
-            if ('serviceWorker' in navigator) {
-                window.addEventListener('beforeinstallprompt', (e) => {
-                    e.preventDefault();
-                    e.prompt();
-                    e.userChoice.then((choiceResult) => {
-                        if (choiceResult.outcome === 'accepted') {
-                            console.log('User accepted the install prompt');
-                        }
-                    });
+        }
+        
+        lastScrollTop = scrollTop;
+    });
+    
+    // Smooth scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
                 });
-            } else {
-                alert('App installation is not available on this device. Please visit our app store page.');
             }
-        }
-
-        // PWA Service Worker registration
+        });
+    });
+    
+    // Mobile app installation
+    window.installApp = function() {
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/sw.js')
-                .then(registration => console.log('SW registered'))
-                .catch(error => console.log('SW registration failed'));
-        }
-
-        // Add heavenly interactions
-        document.addEventListener('DOMContentLoaded', () => {
-            // Welcome message after page load
-            setTimeout(() => {
-                if (window.heavenlyGuidance) {
-                    window.heavenlyGuidance.showWelcomeMessage();
-                }
-            }, 4000);
-            
-            // Periodic angelic presence
-            setInterval(() => {
-                if (window.heavenlyGuidance && Math.random() > 0.95) {
-                    window.heavenlyGuidance.showAngelGuidance();
-                }
-            }, 45000); // Every 45 seconds
-            
-            // Heavenly hover effects
-            document.querySelectorAll('.btn-hero, .card-custom, .service-card').forEach(element => {
-                element.addEventListener('mouseenter', () => {
-                    if (window.heavenlyGuidance && Math.random() > 0.9) {
-                        window.heavenlyGuidance.playGentleChime();
+            window.addEventListener('beforeinstallprompt', function(e) {
+                e.preventDefault();
+                e.prompt();
+                e.userChoice.then(function(choiceResult) {
+                    if (choiceResult.outcome === 'accepted') {
+                        console.log('User accepted the install prompt');
                     }
                 });
             });
+        } else {
+            alert('App installation is not available on this device. Please visit our app store page.');
+        }
+    };
+    
+    // PWA Service Worker registration
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw.js')
+            .then(function(registration) {
+                console.log('SW registered');
+            })
+            .catch(function(error) {
+                console.log('SW registration failed');
+            });
+    }
+    
+    // Add heavenly interactions
+    if (window.heavenlyGuidance) {
+        setTimeout(function() {
+            window.heavenlyGuidance.showWelcomeMessage();
+        }, 4000);
+        
+        // Periodic angelic presence
+        setInterval(function() {
+            if (Math.random() > 0.95) {
+                window.heavenlyGuidance.showAngelGuidance();
+            }
+        }, 45000);
+        
+        // Heavenly hover effects
+        document.querySelectorAll('.btn-hero, .card-custom, .service-card').forEach(function(element) {
+            element.addEventListener('mouseenter', function() {
+                if (Math.random() > 0.9) {
+                    window.heavenlyGuidance.playGentleChime();
+                }
+            });
         });
+    }
+    
+    // Performance monitoring
+    if (window.performance && window.performance.navigation) {
+        const loadTime = performance.timing.loadEventEnd - performance.timing.navigationStart;
+        console.log('Page load time:', loadTime + 'ms');
+    }
+    
+    // Error handling
+    window.addEventListener('error', function(e) {
+        console.error('JavaScript error:', e.error);
+    });
+    
+    console.log('Salem Dominion Ministries website loaded successfully');
+});
 
-        // Floating angel animation
-        document.querySelectorAll('.floating-angel').forEach((angel, index) => {
-            setInterval(() => {
-                const randomX = Math.random() * 20 - 10;
-                const randomY = Math.random() * 20 - 10;
-                angel.style.transform = `translate(${randomX}px, ${randomY}px)`;
-            }, 3000 + (index * 1000));
-        });
-    </script>
-</body>
-</html>
+// Handle page visibility for performance
+document.addEventListener('visibilitychange', function() {
+    if (document.hidden) {
+        // Page is hidden, pause animations
+        if (window.perfectAnimations) {
+            window.perfectAnimations.pauseAnimations();
+        }
+    } else {
+        // Page is visible, resume animations
+        if (window.perfectAnimations) {
+            window.perfectAnimations.resumeAnimations();
+        }
+    }
+});
+</script>
