@@ -1,5 +1,7 @@
 ﻿<?php
-session_start();
+// Include session helper and start session safely
+require_once 'session_helper.php';
+secure_session_start();
 require_once 'db.php';
 
 // Get all ministries
