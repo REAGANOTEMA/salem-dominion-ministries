@@ -49,8 +49,17 @@ $is_localhost = (
     $server_name === 'salemdominionministries.localhost'
 );
 
+// FORCE PRODUCTION SETTINGS FOR HOSTING
+// This ensures production database credentials are used on hosting
+$force_production = false;
+
+// Check if we're on hosting (not localhost)
+if (!$is_localhost) {
+    $force_production = true;
+}
+
 // Database Configuration based on environment
-if ($is_localhost) {
+if ($is_localhost && !$force_production) {
     // Localhost (XAMPP) Settings - Use .env values
     define('DB_HOST', $_ENV['DB_HOST'] ?? 'localhost');
     define('DB_USER', $_ENV['DB_USER'] ?? 'root');
@@ -80,11 +89,11 @@ if ($is_localhost) {
     define('MAIL_ENABLED', false); // Disabled for localhost
     
 } else {
-    // Production (Hosting Platform) Settings
-    define('DB_HOST', $_ENV['DB_HOST'] ?? 'localhost');
-    define('DB_USER', $_ENV['DB_USER'] ?? 'salemdominionmin_db');
-    define('DB_PASSWORD', $_ENV['DB_PASSWORD'] ?? '22uHzNYEHwUsFKdVz3wT');
-    define('DB_NAME', $_ENV['DB_NAME'] ?? 'salem_dominion_ministries');
+    // Production (Hosting Platform) Settings - FORCE PRODUCTION CREDENTIALS
+    define('DB_HOST', $_ENV['PROD_DB_HOST'] ?? 'localhost');
+    define('DB_USER', $_ENV['PROD_DB_USER'] ?? 'salemdominionmin_db');
+    define('DB_PASSWORD', $_ENV['PROD_DB_PASSWORD'] ?? 'RwdT68fQ8FRgMcsrLyBB');
+    define('DB_NAME', $_ENV['PROD_DB_NAME'] ?? 'salemdominionmin_db');
     define('DB_CHARSET', 'utf8mb4');
     define('DB_PORT', 3306);
     
@@ -97,10 +106,8 @@ if ($is_localhost) {
     
     // Production Application Configuration
     define('APP_URL', 'https://salemdominionministries.com');
-    define('APP_ENV', 'production');
-    define('DEBUG_MODE', false);
-    
-    // Production Email Configuration (enabled for production)
+    define('APP_ENV', $_ENV['APP_ENV'] ?? 'production');
+    define('DEBUG_MODE', false); // Disable debug in production Email Configuration (enabled for production)
     define('MAIL_HOST', 'smtp.gmail.com');
     define('MAIL_PORT', 587);
     define('MAIL_USERNAME', 'visit@salemdominionministries.com');
