@@ -155,14 +155,12 @@ function getEnvironmentInfo() {
 // Auto-detect and set correct timezone
 date_default_timezone_set('UTC');
 
-// Set secure session parameters
-ini_set('session.cookie_httponly', 1);
-ini_set('session.cookie_secure', !DEBUG_MODE);
-ini_set('session.cookie_samesite', 'Strict');
-ini_set('session.use_strict_mode', 1);
-
-// Initialize session if not already started
+// Set secure session parameters (only if session hasn't started)
 if (session_status() === PHP_SESSION_NONE) {
+    ini_set('session.cookie_httponly', 1);
+    ini_set('session.cookie_secure', !DEBUG_MODE);
+    ini_set('session.cookie_samesite', 'Strict');
+    ini_set('session.use_strict_mode', 1);
     session_start();
 }
 

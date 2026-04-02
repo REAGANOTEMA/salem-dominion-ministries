@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Salem Dominion Ministries</title>
+    <style>
+        body {
+            font-family: 'Montserrat', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        .email-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        .header {
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            padding: 30px;
+            text-align: center;
+            color: #1a1a2e;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 2rem;
+            font-family: 'Dancing Script', cursive;
+        }
+        .content {
+            padding: 40px 30px;
+        }
+        .welcome-text {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+        .bible-verse {
+            background: #f8f9fa;
+            border-left: 4px solid #FFD700;
+            padding: 20px;
+            margin: 30px 0;
+            font-style: italic;
+            color: #666;
+        }
+        .action-buttons {
+            text-align: center;
+            margin: 30px 0;
+        }
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            margin: 10px;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            color: #1a1a2e;
+        }
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        .footer {
+            background: #1a1a2e;
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .contact-info {
+            margin: 20px 0;
+            line-height: 1.8;
+        }
+        .social-links {
+            margin: 20px 0;
+        }
+        .social-links a {
+            color: #FFD700;
+            text-decoration: none;
+            margin: 0 10px;
+            font-size: 1.2rem;
+        }
+        .divider {
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #FFD700, transparent);
+            margin: 30px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🕊️ Salem Dominion Ministries</h1>
+            <p>Where Faith Meets Hope</p>
+        </div>
+
+        <!-- Content -->
+        <div class="content">
+            <div class="welcome-text">
+                <h2>Welcome to Our Family! 🎉</h2>
+                <p>Dear {{name}},</p>
+                <p>We are absolutely delighted to welcome you to Salem Dominion Ministries! Your journey with us begins now, and we're excited to walk alongside you as you grow in faith and discover God's amazing plan for your life.</p>
+                
+                <p>At Salem Dominion Ministries, we're more than just a church – we're a family united by God's love, committed to serving our community, and dedicated to helping each person experience the transformative power of God's presence.</p>
+            </div>
+
+            <!-- Bible Verse -->
+            <div class="bible-verse">
+                <p>"For I know the thoughts that I think toward you, says the Lord, thoughts of peace and not of evil, to give you a future and a hope."</p>
+                <p><strong>- Jeremiah 29:11</strong></p>
+            </div>
+
+            <!-- What to Expect -->
+            <h3>What to Expect at Salem Dominion</h3>
+            <ul style="line-height: 1.8;">
+                <li>🙏 <strong>Powerful Worship</strong> - Uplifting music that draws you into God's presence</li>
+                <li>📖 <strong>Biblical Teaching</strong> - Practical, life-changing messages from God's Word</li>
+                <li>👥 <strong>Warm Community</strong> - Friendly people who will welcome you like family</li>
+                <li>🎯 <strong>Growth Opportunities</strong> - Programs for every age and stage of life</li>
+                <li>🤝 <strong>Serve Opportunities</strong> - Ways to use your gifts to make a difference</li>
+            </ul>
+
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <a href="{{site_url}}" class="btn btn-primary">Visit Our Website</a>
+                <a href="{{site_url}}/events.php" class="btn btn-secondary">Upcoming Events</a>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- Service Times -->
+            <h3>Join Us This Week!</h3>
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <p><strong>Sunday Services:</strong></p>
+                <p>🌅 Morning Service: 8:00 AM</p>
+                <p>☀️ Main Service: 10:00 AM</p>
+                <p>🌆 Evening Service: 6:00 PM</p>
+                
+                <p style="margin-top: 15px;"><strong>Wednesday Service:</strong></p>
+                <p>📖 Bible Study: 7:00 PM</p>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <h3>Get Connected</h3>
+            <div class="contact-info">
+                <p>📍 {{church_address}}</p>
+                <p>📞 {{church_phone}}</p>
+                <p>📧 {{church_email}}</p>
+                <p>🌐 {{site_url}}</p>
+            </div>
+            
+            <div class="social-links">
+                <a href="#">📘 Facebook</a>
+                <a href="#">🐦 Twitter</a>
+                <a href="#">📷 Instagram</a>
+                <a href="#">📺 YouTube</a>
+                <a href="#">💬 WhatsApp</a>
+            </div>
+            
+            <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #444;">
+                <p style="font-size: 0.9rem; opacity: 0.8;">
+                    © {{current_year}} Salem Dominion Ministries. All rights reserved.
+                </p>
+                <p style="font-size: 0.8rem; opacity: 0.6; margin-top: 10px;">
+                    You're receiving this email because you registered on our website.
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,6 +1,7 @@
 <?php
-session_start();
-require_once 'db.php';
+// Include session helper and start session safely
+require_once 'session_helper.php';
+secure_session_start();
 
 // Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
@@ -719,10 +720,15 @@ $recent_activities = $db->select("SELECT * FROM activity_logs WHERE user_id = ? 
         </div>
     </div>
 
+    <!-- Enhanced Footer -->
+    <?php require_once 'footer_enhanced.php'; ?>
+
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="assets/js/heavenly_sounds.js"></script>
+    <script src="assets/js/perfect_animations.js"></script>
+    <script src="assets/js/spiritual_enhancement.js"></script>
     <script>
         // Initialize AOS
         AOS.init({

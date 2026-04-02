@@ -5,13 +5,9 @@ ini_set('display_errors', 0);
 ini_set('log_errors', 1);
 ini_set('error_log', __DIR__ . '/logs/php_errors.log');
 
-// Start session with secure settings
-if (session_status() === PHP_SESSION_NONE) {
-    ini_set('session.cookie_httponly', 1);
-    ini_set('session.cookie_secure', isset($_SERVER['HTTPS']));
-    ini_set('session.cookie_samesite', 'Strict');
-    session_start();
-}
+// Include session helper and start session safely
+require_once 'session_helper.php';
+secure_session_start();
 
 // Include required files with error handling
 try {
@@ -1170,56 +1166,8 @@ if (isset($_SERVER['HTTP_IF_MODIFIED_SINCE'])) {
         </section>
     </main>
 
-    <!-- Footer -->
-    <footer role="contentinfo">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-4 mb-4">
-                    <div class="footer-widget">
-                        <h5><i class="fas fa-church" aria-hidden="true"></i> Salem Dominion Ministries</h5>
-                        <p>Serving our community with faith, hope, and love. Experience God's presence and grow in your spiritual journey.</p>
-                        <div class="social-links">
-                            <a href="#" aria-label="Facebook" target="_blank" rel="noopener"><i class="fab fa-facebook-f" aria-hidden="true"></i></a>
-                            <a href="#" aria-label="Twitter" target="_blank" rel="noopener"><i class="fab fa-twitter" aria-hidden="true"></i></a>
-                            <a href="#" aria-label="Instagram" target="_blank" rel="noopener"><i class="fab fa-instagram" aria-hidden="true"></i></a>
-                            <a href="#" aria-label="YouTube" target="_blank" rel="noopener"><i class="fab fa-youtube" aria-hidden="true"></i></a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4 mb-4">
-                    <div class="footer-widget">
-                        <h5>Quick Links</h5>
-                        <ul>
-                            <li><a href="about.php">About Us</a></li>
-                            <li><a href="ministries.php">Ministries</a></li>
-                            <li><a href="events.php">Events</a></li>
-                            <li><a href="sermons.php">Sermons</a></li>
-                            <li><a href="gallery.php">Gallery</a></li>
-                            <li><a href="contact.php">Contact</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-md-4 mb-4">
-                    <div class="footer-widget">
-                        <h5>Contact Info</h5>
-                        <ul>
-                            <li><i class="fas fa-envelope" aria-hidden="true"></i> visit@salemdominionministries.com</li>
-                            <li><i class="fas fa-phone" aria-hidden="true"></i> +1 (555) 123-4567</li>
-                            <li><i class="fas fa-map-marker-alt" aria-hidden="true"></i> 123 Church Street, City, State</li>
-                            <li><i class="fas fa-clock" aria-hidden="true"></i> Office: Mon-Fri 9AM-5PM</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <hr class="my-4" style="border-color: rgba(255,255,255,0.1);">
-            <div class="text-center">
-                <p class="mb-0">&copy; <?php echo date('Y'); ?> Salem Dominion Ministries. All rights reserved. | 
-                    <a href="#" class="text-white-50">Privacy Policy</a> | 
-                    <a href="#" class="text-white-50">Terms of Service</a>
-                </p>
-            </div>
-        </div>
-    </footer>
+    <!-- Enhanced Footer -->
+    <?php require_once 'footer_enhanced.php'; ?>
 </body>
 </html>
 
@@ -1228,6 +1176,7 @@ if (isset($_SERVER['HTTP_IF_MODIFIED_SINCE'])) {
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 <script src="assets/js/heavenly_sounds.js"></script>
 <script src="assets/js/perfect_animations.js"></script>
+    <script src="assets/js/spiritual_enhancement.js"></script>
 <script>
 // Initialize everything when DOM is ready
 document.addEventListener('DOMContentLoaded', function() {

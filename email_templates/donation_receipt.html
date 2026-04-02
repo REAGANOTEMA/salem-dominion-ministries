@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donation Receipt - Salem Dominion Ministries</title>
+    <style>
+        body {
+            font-family: 'Montserrat', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        .email-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        .header {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            padding: 40px 30px;
+            text-align: center;
+            color: white;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 2rem;
+            font-family: 'Dancing Script', cursive;
+        }
+        .content {
+            padding: 40px 30px;
+        }
+        .receipt-box {
+            background: #f8f9fa;
+            border: 2px solid #28a745;
+            border-radius: 10px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+        .receipt-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e9ecef;
+        }
+        .receipt-number {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #28a745;
+        }
+        .receipt-date {
+            color: #666;
+        }
+        .donation-details {
+            margin: 30px 0;
+        }
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+        .detail-row:last-child {
+            border-bottom: none;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #28a745;
+        }
+        .detail-label {
+            font-weight: 600;
+            color: #495057;
+        }
+        .detail-value {
+            text-align: right;
+        }
+        .thank-you-section {
+            background: linear-gradient(135deg, #d4edda, #c3e6cb);
+            border-left: 4px solid #28a745;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 30px 0;
+            text-align: center;
+        }
+        .thank-you-section h2 {
+            color: #155724;
+            margin-top: 0;
+        }
+        .bible-verse {
+            background: #f8f9fa;
+            border-left: 4px solid #FFD700;
+            padding: 20px;
+            margin: 30px 0;
+            font-style: italic;
+            color: #666;
+            text-align: center;
+        }
+        .tax-info {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .tax-info h4 {
+            color: #856404;
+            margin-top: 0;
+        }
+        .action-buttons {
+            text-align: center;
+            margin: 30px 0;
+        }
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            margin: 10px;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+        }
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        .footer {
+            background: #1a1a2e;
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .social-links {
+            margin: 20px 0;
+        }
+        .social-links a {
+            color: #FFD700;
+            text-decoration: none;
+            margin: 0 10px;
+            font-size: 1.2rem;
+        }
+        .impact-section {
+            background: #e8f5e8;
+            border-left: 4px solid #28a745;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .impact-section h4 {
+            color: #28a745;
+            margin-top: 0;
+        }
+        .payment-method {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        .payment-icon {
+            font-size: 1.5rem;
+            color: #28a745;
+        }
+        .divider {
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #28a745, transparent);
+            margin: 30px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🕊️ Salem Dominion Ministries</h1>
+            <p>Donation Receipt</p>
+        </div>
+
+        <!-- Content -->
+        <div class="content">
+            <!-- Receipt Box -->
+            <div class="receipt-box">
+                <div class="receipt-header">
+                    <div>
+                        <div class="receipt-number">Receipt #{{receipt_number}}</div>
+                        <div class="receipt-date">{{receipt_date}}</div>
+                    </div>
+                    <div style="text-align: right;">
+                        <div style="font-weight: 700; font-size: 1.2rem;">PAID</div>
+                        <div style="color: #28a745;">✓ Thank You!</div>
+                    </div>
+                </div>
+
+                <!-- Donor Information -->
+                <h3>👤 Donor Information</h3>
+                <div class="donation-details">
+                    <div class="detail-row">
+                        <span class="detail-label">Name:</span>
+                        <span class="detail-value">{{donor_name}}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Email:</span>
+                        <span class="detail-value">{{donor_email}}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Phone:</span>
+                        <span class="detail-value">{{donor_phone}}</span>
+                    </div>
+                    <?php if (!empty($donor_address)): ?>
+                    <div class="detail-row">
+                        <span class="detail-label">Address:</span>
+                        <span class="detail-value">{{donor_address}}</span>
+                    </div>
+                    <?php endif; ?>
+                </div>
+
+                <!-- Donation Details -->
+                <h3>💝 Donation Details</h3>
+                <div class="donation-details">
+                    <div class="detail-row">
+                        <span class="detail-label">Donation Type:</span>
+                        <span class="detail-value">{{donation_type}}</span>
+                    </div>
+                    <?php if (!empty($donation_purpose)): ?>
+                    <div class="detail-row">
+                        <span class="detail-label">Purpose:</span>
+                        <span class="detail-value">{{donation_purpose}}</span>
+                    </div>
+                    <?php endif; ?>
+                    <?php if (!empty($donation_frequency)): ?>
+                    <div class="detail-row">
+                        <span class="detail-label">Frequency:</span>
+                        <span class="detail-value">{{donation_frequency}}</span>
+                    </div>
+                    <?php endif; ?>
+                    <div class="detail-row">
+                        <span class="detail-label">Payment Method:</span>
+                        <span class="detail-value">
+                            <div class="payment-method">
+                                <span class="payment-icon">{{payment_method_icon}}</span>
+                                {{payment_method}}
+                            </div>
+                        </span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Subtotal:</span>
+                        <span class="detail-value">{{currency}}{{subtotal}}</span>
+                    </div>
+                    <?php if (!empty($transaction_fee)): ?>
+                    <div class="detail-row">
+                        <span class="detail-label">Transaction Fee:</span>
+                        <span class="detail-value">{{currency}}{{transaction_fee}}</span>
+                    </div>
+                    <?php endif; ?>
+                    <div class="detail-row">
+                        <span class="detail-label">Total Amount:</span>
+                        <span class="detail-value">{{currency}}{{total_amount}}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Thank You Message -->
+            <div class="thank-you-section">
+                <h2>🙏 Thank You for Your Generosity!</h2>
+                <p>Dear {{donor_first_name}},</p>
+                <p>Your donation of {{currency}}{{total_amount}} makes a real difference in the lives of those we serve. Your generosity helps us continue our mission to spread God's love, support our community, and make a positive impact in the world.</p>
+                <p>May God bless you abundantly for your faithfulness and generosity!</p>
+            </div>
+
+            <!-- Bible Verse -->
+            <div class="bible-verse">
+                <h3>📖 God's Promise on Giving</h3>
+                <p style="font-size: 1.1rem; color: #1a1a2e;">"Give, and it will be given to you. A good measure, pressed down, shaken together and running over, will be poured into your lap. For with the measure you use, it will be measured to you."</p>
+                <p><strong>- Luke 6:38</strong></p>
+            </div>
+
+            <!-- Impact Section -->
+            <div class="impact-section">
+                <h4>🎯 Your Impact</h4>
+                <p>Your donation helps us:</p>
+                <ul style="line-height: 1.8;">
+                    <li>🙏 Support our ministry programs and services</li>
+                    <li>👥 Reach more people with the Gospel</li>
+                    <li>🏗️ Maintain our church facilities</li>
+                    <li>🍖 Provide for those in need in our community</li>
+                    <li>👦 Support our children and youth programs</li>
+                    <li>📚 Fund educational and spiritual growth resources</li>
+                </ul>
+            </div>
+
+            <!-- Tax Information -->
+            <div class="tax-info">
+                <h4>📋 Tax Information</h4>
+                <p>Salem Dominion Ministries is a registered 501(c)(3) non-profit organization. Your donation is tax-deductible to the extent allowed by law.</p>
+                <p><strong>Tax ID:</strong> {{tax_id}}</p>
+                <p>No goods or services were provided in exchange for this donation, unless otherwise noted above.</p>
+                <p>Please keep this receipt for your tax records.</p>
+            </div>
+
+            <!-- Recurring Donation Info -->
+            <?php if ($donation_frequency === 'Monthly' || $donation_frequency === 'Weekly'): ?>
+            <div style="background: #e3f2fd; border-left: 4px solid #2196f3; padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <h4 style="color: #2196f3; margin-top: 0;">🔄 Recurring Donation</h4>
+                <p>This is a {{donation_frequency.toLowerCase()}} recurring donation. You will receive a receipt after each payment.</p>
+                <p><strong>Next Payment Date:</strong> {{next_payment_date}}</p>
+                <p>To manage or cancel your recurring donation, please contact us at {{church_email}} or call {{church_phone}}.</p>
+            </div>
+            <?php endif; ?>
+
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <a href="{{giving_link}}" class="btn btn-primary">Give Again</a>
+                <a href="{{site_url}}" class="btn btn-secondary">Visit Website</a>
+                <a href="{{download_link}}" class="btn btn-secondary">Download PDF</a>
+            </div>
+
+            <!-- Contact Information -->
+            <h3>📞 Questions About Your Donation?</h3>
+            <p>If you have any questions about your donation or need a correction, please don't hesitate to contact us:</p>
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <p>📧 Email: {{church_email}}</p>
+                <p>📞 Phone: {{church_phone}}</p>
+                <p>💬 WhatsApp: +256753244480</p>
+                <p>📱 WhatsApp: +256772514889 (Technical Support)</p>
+            </div>
+
+            <!-- Ways to Give More -->
+            <h3>💝 Other Ways to Give</h3>
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                    <div>
+                        <h4 style="color: #28a745; margin-top: 0;">💳 Online</h4>
+                        <p>{{giving_online_link}}</p>
+                    </div>
+                    <div>
+                        <h4 style="color: #28a745; margin-top: 0;">📱 Mobile App</h4>
+                        <p>{{giving_app_info}}</p>
+                    </div>
+                    <div>
+                        <h4 style="color: #28a745; margin-top: 0;">🏦 Bank Transfer</h4>
+                        <p>{{giving_bank_info}}</p>
+                    </div>
+                    <div>
+                        <h4 style="color: #28a745; margin-top: 0;">💰 In Person</h4>
+                        <p>During services at church</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <h3>Stay Connected</h3>
+            <div class="social-links">
+                <a href="#">📘 Facebook</a>
+                <a href="#">🐦 Twitter</a>
+                <a href="#">📷 Instagram</a>
+                <a href="#">📺 YouTube</a>
+                <a href="#">💬 WhatsApp</a>
+            </div>
+            
+            <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #444;">
+                <p style="font-size: 0.9rem; opacity: 0.8;">
+                    © {{current_year}} Salem Dominion Ministries. All rights reserved.
+                </p>
+                <p style="font-size: 0.8rem; opacity: 0.6; margin-top: 10px;">
+                    {{church_address}} | {{church_phone}}
+                </p>
+                <p style="font-size: 0.8rem; opacity: 0.6; margin-top: 5px;">
+                    Designed & Managed by Reagan Otema | +256772514889
+                </p>
+                <p style="font-size: 0.8rem; opacity: 0.6; margin-top: 5px;">
+                    Tax ID: {{tax_id}}
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
