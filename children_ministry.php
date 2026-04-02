@@ -21,7 +21,7 @@ $children_news = $db->query("SELECT * FROM news WHERE category = 'children' ORDE
     <link href="assets/css/heavenly_design.css" rel="stylesheet">
     <style>
         .children-hero {
-            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('public/images/children-hero.jpg');
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('public/images/hero/hero-worship.jpg');
             background-size: cover;
             background-position: center;
             color: white;
@@ -242,7 +242,7 @@ $children_news = $db->query("SELECT * FROM news WHERE category = 'children' ORDE
                 <div class="col-lg-4 col-md-6">
                     <div class="children-card">
                         <div class="children-image-container">
-                            <img src="public/images/children1.jpg" alt="Children Worship" class="children-image">
+                            <img src="public/images/children/children-worship.jpeg" alt="Children Worship" class="children-image">
                         </div>
                         <div class="card-body">
                             <h5 class="card-title">Children's Worship</h5>
@@ -253,7 +253,7 @@ $children_news = $db->query("SELECT * FROM news WHERE category = 'children' ORDE
                 <div class="col-lg-4 col-md-6">
                     <div class="children-card">
                         <div class="children-image-container">
-                            <img src="public/images/children2.jpg" alt="Bible Study" class="children-image">
+                            <img src="public/images/children/children-with-books.jpeg" alt="Bible Study" class="children-image">
                         </div>
                         <div class="card-body">
                             <h5 class="card-title">Bible Learning</h5>
@@ -264,7 +264,7 @@ $children_news = $db->query("SELECT * FROM news WHERE category = 'children' ORDE
                 <div class="col-lg-4 col-md-6">
                     <div class="children-card">
                         <div class="children-image-container">
-                            <img src="public/images/children3.jpg" alt="Arts and Crafts" class="children-image">
+                            <img src="public/images/children/children-celebrating.jpeg" alt="Arts and Crafts" class="children-image">
                         </div>
                         <div class="card-body">
                             <h5 class="card-title">Creative Arts</h5>
@@ -275,7 +275,7 @@ $children_news = $db->query("SELECT * FROM news WHERE category = 'children' ORDE
                 <div class="col-lg-4 col-md-6">
                     <div class="children-card">
                         <div class="children-image-container">
-                            <img src="public/images/children4.jpg" alt="Outdoor Activities" class="children-image">
+                            <img src="public/images/children/children-kindness.jpeg" alt="Outdoor Activities" class="children-image">
                         </div>
                         <div class="card-body">
                             <h5 class="card-title">Fun Activities</h5>
@@ -286,7 +286,7 @@ $children_news = $db->query("SELECT * FROM news WHERE category = 'children' ORDE
                 <div class="col-lg-4 col-md-6">
                     <div class="children-card">
                         <div class="children-image-container">
-                            <img src="public/images/children5.jpg" alt="Prayer Time" class="children-image">
+                            <img src="public/images/children/children-eating-with-pastor.jpeg" alt="Prayer Time" class="children-image">
                         </div>
                         <div class="card-body">
                             <h5 class="card-title">Prayer Time</h5>
@@ -297,7 +297,7 @@ $children_news = $db->query("SELECT * FROM news WHERE category = 'children' ORDE
                 <div class="col-lg-4 col-md-6">
                     <div class="children-card">
                         <div class="children-image-container">
-                            <img src="public/images/children6.jpg" alt="Community Service" class="children-image">
+                            <img src="public/images/children/support-children.jpeg" alt="Community Service" class="children-image">
                         </div>
                         <div class="card-body">
                             <h5 class="card-title">Service Projects</h5>

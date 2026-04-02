@@ -561,34 +561,35 @@ secure_session_start();
     </section>
 
     <!-- Senior Pastor Section -->
-    <section class="senior-pastor-section">
+    <section class="senior-pastor-section py-5">
         <div class="container">
-            <div class="senior-pastor-card" data-aos="fade-up">
-                <div class="pastor-image-container">
-                    <img src="public/images/pastor.jpeg" alt="Apostle Faty Musasizi" class="pastor-image">
-                    <div class="pastor-badge">Senior Pastor</div>
+            <div class="row align-items-center">
+                <div class="col-lg-6" data-aos="fade-right">
+                    <div class="pastor-image-container">
+                        <img src="public/images/leadership/senior-pastor.jpeg" alt="Apostle Faty Musasizi" class="pastor-image">
+                    </div>
                 </div>
-                <div class="pastor-content">
-                    <h2 class="pastor-name">Apostle Faty Musasizi</h2>
-                    <p class="pastor-title">Senior Pastor & Founder</p>
-                    <p class="pastor-bio">
-                        Apostle Faty Musasizi is the visionary founder and Senior Pastor of Salem Dominion Ministries. 
-                        With over two decades of ministry experience, he carries a powerful apostolic mandate to 
-                        establish God's kingdom and transform lives through the preaching of the Gospel. 
-                        His leadership is characterized by deep wisdom, unwavering faith, and a profound love for God's people.
-                    </p>
-                    <p class="pastor-bio">
-                        Under his guidance, Salem Dominion Ministries has grown into a thriving spiritual family, 
-                        touching countless lives in Iganga and beyond. His teaching combines biblical depth with 
-                        practical application, making the Word of God accessible and relevant to daily life.
-                    </p>
-                    <div class="pastor-contact">
-                        <a href="tel:+256753244480" class="contact-btn btn-primary-pastor">
-                            <i class="fas fa-phone"></i> Contact Pastor
-                        </a>
-                        <a href="pastor_booking.php" class="contact-btn btn-secondary-pastor">
-                            <i class="fas fa-calendar"></i> Book Appointment
-                        </a>
+                <div class="col-lg-6" data-aos="fade-left">
+                    <div class="pastor-content">
+                        <h2 class="pastor-name">Apostle Faty Musasizi</h2>
+                        <p class="pastor-title">Senior Pastor & Founder</p>
+                        <p class="pastor-bio">
+                            Apostle Faty Musasizi is the visionary founder and Senior Pastor of Salem Dominion Ministries. 
+                            With over 20 years of ministry experience, he has dedicated his life to spreading the 
+                            gospel and building a community of faith, hope, and love in Iganga and beyond.
+                        </p>
+                        <div class="pastor-contacts">
+                            <p><i class="fas fa-envelope"></i> apostle@salemdominionministries.com</p>
+                            <p><i class="fas fa-phone"></i> +256 XXX XXX XXX</p>
+                        </div>
+                        <div class="pastor-actions">
+                            <button class="btn btn-primary" onclick="openPrayerModal()">
+                                <i class="fas fa-praying-hands"></i> Prayer Request
+                            </button>
+                            <button class="btn btn-outline-primary" onclick="contactPastor()">
+                                <i class="fas fa-envelope"></i> Contact Pastor
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -607,7 +608,7 @@ secure_session_start();
                 <!-- Pastor Nabulya Joyce -->
                 <div class="leader-card" data-aos="fade-up" data-aos-delay="100">
                     <div class="leader-image-container">
-                        <img src="public/images/pastor1.jpeg" alt="Pastor Nabulya Joyce" class="leader-image">
+                        <img src="public/images/leadership/church-treasurer.jpeg" alt="Pastor Nabulya Joyce" class="leader-image">
                         <div class="leader-position-badge">Church Treasurer</div>
                     </div>
                     <div class="leader-content">
@@ -632,7 +633,7 @@ secure_session_start();
                 <!-- Apostle Irene Mirembe -->
                 <div class="leader-card" data-aos="fade-up" data-aos-delay="200">
                     <div class="leader-image-container">
-                        <img src="public/images/pastor2.jpeg" alt="Apostle Irene Mirembe" class="leader-image">
+                        <img src="public/images/leadership/church-administrator.jpeg" alt="Apostle Irene Mirembe" class="leader-image">
                         <div class="leader-position-badge">Church Administrator</div>
                     </div>
                     <div class="leader-content">
@@ -657,7 +658,7 @@ secure_session_start();
                 <!-- Evangelist Kisakye Halima -->
                 <div class="leader-card" data-aos="fade-up" data-aos-delay="300">
                     <div class="leader-image-container">
-                        <img src="public/images/pastor3.jpeg" alt="Evangelist Kisakye Halima" class="leader-image">
+                        <img src="public/images/leadership/mission-director.jpeg" alt="Evangelist Kisakye Halima" class="leader-image">
                         <div class="leader-position-badge">Mission Director</div>
                     </div>
                     <div class="leader-content">
@@ -682,7 +683,7 @@ secure_session_start();
                 <!-- Pastor Damali Namwima -->
                 <div class="leader-card" data-aos="fade-up" data-aos-delay="400">
                     <div class="leader-image-container">
-                        <img src="public/images/pastor4.jpeg" alt="Pastor Damali Namwima" class="leader-image">
+                        <img src="public/images/leadership/altars-director.jpeg" alt="Pastor Damali Namwima" class="leader-image">
                         <div class="leader-position-badge">Altars Director</div>
                     </div>
                     <div class="leader-content">
@@ -707,7 +708,7 @@ secure_session_start();
                 <!-- Pastor Jotham Bright Mulinde -->
                 <div class="leader-card" data-aos="fade-up" data-aos-delay="500">
                     <div class="leader-image-container">
-                        <img src="public/images/pastor5.jpeg" alt="Pastor Jotham Bright Mulinde" class="leader-image">
+                        <img src="public/images/leadership/church-elder.jpeg" alt="Pastor Jotham Bright Mulinde" class="leader-image">
                         <div class="leader-position-badge">Church Elder</div>
                     </div>
                     <div class="leader-content">
@@ -732,7 +733,7 @@ secure_session_start();
                 <!-- Pastor Jonathan Ngobi -->
                 <div class="leader-card" data-aos="fade-up" data-aos-delay="600">
                     <div class="leader-image-container">
-                        <img src="public/images/pastor6.jpeg" alt="Pastor Jonathan Ngobi" class="leader-image">
+                        <img src="public/images/leadership/bulanga-branch-pastor.jpeg" alt="Pastor Jonathan Ngobi" class="leader-image">
                         <div class="leader-position-badge">Bulanga Branch Pastor</div>
                     </div>
                     <div class="leader-content">
@@ -757,7 +758,7 @@ secure_session_start();
                 <!-- Pastor Miriam Gerald -->
                 <div class="leader-card" data-aos="fade-up" data-aos-delay="700">
                     <div class="leader-image-container">
-                        <img src="public/images/pastor7.jpeg" alt="Pastor Miriam Gerald" class="leader-image">
+                        <img src="public/images/leadership/children-ministry-director.jpeg" alt="Pastor Miriam Gerald" class="leader-image">
                         <div class="leader-position-badge">Children's Ministry Director</div>
                     </div>
                     <div class="leader-content">
