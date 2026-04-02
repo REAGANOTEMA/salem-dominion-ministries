@@ -1088,21 +1088,8 @@ ob_end_clean();
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="bg-dark text-light py-4">
-        <div class="container text-center">
-            <div class="mb-3">
-                <img src="public/images/logo.png" alt="Salem Dominion Ministries" style="height: 60px; border-radius: 50%; background: white; padding: 10px;">
-            </div>
-            <h4 class="font-divine mb-3">Salem Dominion Ministries</h4>
-            <p class="mb-2">Main Street, Iganga Town, Uganda</p>
-            <p class="mb-2">
-                <i class="fas fa-phone me-2"></i> +256753244480
-                <i class="fas fa-envelope me-2 ms-3"></i> apostle@salemdominionministries.com
-            </p>
-            <p class="mb-0">&copy; 2026 Salem Dominion Ministries. All rights reserved.</p>
-        </div>
-    </footer>
+    <!-- Ultimate Footer -->
+    <?php require_once 'components/ultimate_footer.php'; ?>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

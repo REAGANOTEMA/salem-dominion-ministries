@@ -1063,6 +1063,23 @@ ob_end_clean();
         <div class="hero-particles" id="heroParticles"></div>
         
         <div class="hero-content" data-aos="fade-up" data-aos-duration="1500">
+            <!-- Newsletter Success/Error Messages -->
+            <?php if (isset($_GET['newsletter_success'])): ?>
+                <div class="alert alert-success alert-dismissible fade show position-fixed" style="top: 100px; right: 20px; z-index: 9999; max-width: 350px;" role="alert">
+                    <i class="fas fa-check-circle me-2"></i>
+                    <?php echo htmlspecialchars($_GET['newsletter_success']); ?>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            <?php endif; ?>
+            
+            <?php if (isset($_GET['newsletter_error'])): ?>
+                <div class="alert alert-danger alert-dismissible fade show position-fixed" style="top: 100px; right: 20px; z-index: 9999; max-width: 350px;" role="alert">
+                    <i class="fas fa-exclamation-circle me-2"></i>
+                    <?php echo htmlspecialchars($_GET['newsletter_error']); ?>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            <?php endif; ?>
+            
             <div class="hero-logo">
                 <img src="public/images/logo.png" alt="Salem Dominion Ministries">
             </div>
@@ -1251,36 +1268,8 @@ ob_end_clean();
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="footer-content">
-            <div class="footer-logo" data-aos="fade-up">
-                <img src="public/images/logo.png" alt="Salem Dominion Ministries">
-                <div class="footer-church-name">Salem Dominion Ministries</div>
-                <div class="footer-tagline">Where Faith Meets Divine Purpose</div>
-            </div>
-            
-            <div class="footer-links" data-aos="fade-up" data-aos-delay="100">
-                <a href="index.php">Home</a>
-                <a href="about.php">About</a>
-                <a href="ministries.php">Ministries</a>
-                <a href="events.php">Events</a>
-                <a href="sermons.php">Sermons</a>
-                <a href="contact.php">Contact</a>
-            </div>
-            
-            <div class="footer-contact" data-aos="fade-up" data-aos-delay="200">
-                <p><i class="fas fa-phone me-2"></i> +256753244480</p>
-                <p><i class="fas fa-envelope me-2"></i> apostle@salemdominionministries.com</p>
-                <p><i class="fas fa-user me-2"></i> Apostle Faty Musasizi, Senior Pastor</p>
-            </div>
-            
-            <div class="footer-copyright" data-aos="fade-up" data-aos-delay="300">
-                <p>&copy; 2026 Salem Dominion Ministries. All rights reserved.</p>
-                <p>Main Street, Iganga Town, Uganda • Serving with Divine Love</p>
-            </div>
-        </div>
-    </footer>
+    <!-- Ultimate Footer -->
+    <?php require_once 'components/ultimate_footer.php'; ?>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
