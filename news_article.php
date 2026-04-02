@@ -10,7 +10,7 @@ if (!$id) {
 }
 
 // Get news article
-$stmt = $db->prepare("SELECT n.*, u.username FROM news n LEFT JOIN users u ON n.author_id = u.id WHERE n.id = ?");
+$stmt = $db->prepare("SELECT n.*, u.first_name, u.last_name FROM news n LEFT JOIN users u ON n.author_id = u.id WHERE n.id = ?");
 $stmt->bind_param('i', $id);
 $stmt->execute();
 $result = $stmt->get_result();
@@ -23,10 +23,10 @@ if ($result->num_rows === 0) {
 $news = $result->fetch_assoc();
 
 // Update view count
-$db->query("UPDATE news SET views = views + 1 WHERE id = $id");
+$db->query("UPDATE news SET views_count = views_count + 1 WHERE id = $id");
 
 // Get related news (same category, excluding current)
-$related_news = $db->query("SELECT id, title, excerpt, created_at FROM news WHERE category = '{$news['category']}' AND id != $id ORDER BY created_at DESC LIMIT 3");
+$related_news = $db->query("SELECT id, title, excerpt, created_at FROM news WHERE category = '{$news['category']}' AND status = 'published' AND id != $id ORDER BY created_at DESC LIMIT 3");
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -132,13 +132,13 @@ $related_news = $db->query("SELECT id, title, excerpt, created_at FROM news WHER
                                 <div class="row align-items-center">
                                     <div class="col-md-6">
                                         <small class="text-muted">
-                                            <i class="fas fa-user"></i> By <?php echo htmlspecialchars($news['username'] ?: 'Church Staff'); ?><br>
-                                            <i class="fas fa-calendar"></i> <?php echo date('F j, Y \a\t g:i A', strtotime($news['created_at'])); ?>
+                                            <i class="fas fa-user"></i> By <?php echo htmlspecialchars(($news['first_name'] ?? '') . ' ' . ($news['last_name'] ?? '') ?: 'Church Staff'); ?><br>
+                                            <i class="fas fa-calendar"></i> <?php echo date('F j, Y \a\t g:i A', strtotime($news['published_at'] ?? $news['created_at'])); ?>
                                         </small>
                                     </div>
                                     <div class="col-md-6 text-end">
                                         <small class="text-muted">
-                                            <i class="fas fa-eye"></i> <?php echo $news['views']; ?> views
+                                            <i class="fas fa-eye"></i> <?php echo $news['views_count']; ?> views
                                         </small>
                                     </div>
                                 </div>

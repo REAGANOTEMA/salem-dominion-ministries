@@ -43,10 +43,19 @@ require_once 'db.php';
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item"><a class="nav-link" href="index.php">Home</a></li>
                     <li class="nav-item"><a class="nav-link" href="about.php">About</a></li>
-                    <li class="nav-item"><a class="nav-link" href="ministries.php">Ministries</a></li>
-                    <li class="nav-item"><a class="nav-link" href="events.php">Events</a></li>
-                    <li class="nav-item"><a class="nav-link" href="sermons.php">Sermons</a></li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+                            Resources
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="sermons.php">Sermons</a></li>
+                            <li><a class="dropdown-item" href="blog.php">Blog</a></li>
+                            <li><a class="dropdown-item" href="testimonials.php">Testimonies</a></li>
+                        </ul>
+                    </li>
                     <li class="nav-item"><a class="nav-link" href="news.php">News</a></li>
+                    <li class="nav-item"><a class="nav-link" href="events.php">Events</a></li>
+                    <li class="nav-item"><a class="nav-link" href="ministries.php">Ministries</a></li>
                     <li class="nav-item"><a class="nav-link" href="gallery.php">Gallery</a></li>
                     <li class="nav-item"><a class="nav-link" href="contact.php">Contact</a></li>
                 </ul>

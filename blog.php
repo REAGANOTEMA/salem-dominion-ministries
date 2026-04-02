@@ -1,37 +1,39 @@
-﻿<?php
+<?php
 session_start();
 require_once 'db.php';
 
-// Get recent news
+// Pagination
 $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
 $per_page = 9;
 $offset = ($page - 1) * $per_page;
 
+// Search and filter
 $category_filter = isset($_GET['category']) ? $_GET['category'] : '';
 $search = isset($_GET['search']) ? trim($_GET['search']) : '';
 
-$query = "SELECT n.*, u.first_name, u.last_name FROM news n LEFT JOIN users u ON n.author_id = u.id WHERE n.status = 'published'";
-$count_query = "SELECT COUNT(*) as total FROM news n WHERE n.status = 'published'";
+// Build query
+$query = "SELECT bp.*, u.first_name, u.last_name FROM blog_posts bp LEFT JOIN users u ON bp.author_id = u.id WHERE bp.status = 'published'";
+$count_query = "SELECT COUNT(*) as total FROM blog_posts bp WHERE bp.status = 'published'";
 
 $params = [];
 $types = '';
 
 if ($category_filter) {
-    $query .= " AND n.category = ?";
-    $count_query .= " AND n.category = ?";
+    $query .= " AND bp.category = ?";
+    $count_query .= " AND bp.category = ?";
     $params[] = $category_filter;
     $types .= 's';
 }
 
 if ($search) {
-    $query .= " AND (n.title LIKE ? OR n.content LIKE ? OR n.excerpt LIKE ?)";
-    $count_query .= " AND (n.title LIKE ? OR n.content LIKE ? OR n.excerpt LIKE ?)";
+    $query .= " AND (bp.title LIKE ? OR bp.content LIKE ? OR bp.excerpt LIKE ?)";
+    $count_query .= " AND (bp.title LIKE ? OR bp.content LIKE ? OR bp.excerpt LIKE ?)";
     $search_param = "%$search%";
     $params = array_merge($params, [$search_param, $search_param, $search_param]);
     $types .= 'sss';
 }
 
-$query .= " ORDER BY n.created_at DESC LIMIT ? OFFSET ?";
+$query .= " ORDER BY bp.published_at DESC, bp.created_at DESC LIMIT ? OFFSET ?";
 $params[] = $per_page;
 $params[] = $offset;
 $types .= 'ii';
@@ -41,36 +43,36 @@ if (!empty($params)) {
     $stmt->bind_param($types, ...$params);
 }
 $stmt->execute();
-$news_result = $stmt->get_result();
+$blog_result = $stmt->get_result();
 
 $count_stmt = $db->prepare($count_query);
 if (!empty($params) && strlen($types) > 2) {
-    $count_params = array_slice($params, 0, -2); // Remove LIMIT and OFFSET
+    $count_params = array_slice($params, 0, -2);
     $count_types = substr($types, 0, -2);
     $count_stmt->bind_param($count_types, ...$count_params);
 }
 $count_stmt->execute();
 $total_result = $count_stmt->get_result();
-$total_news = $total_result->fetch_assoc()['total'];
-$total_pages = ceil($total_news / $per_page);
+$total_posts = $total_result->fetch_assoc()['total'];
+$total_pages = ceil($total_posts / $per_page);
 
-// Get news categories
-$categories = $db->query("SELECT category, COUNT(*) as count FROM news GROUP BY category ORDER BY category");
+// Get categories
+$categories = $db->query("SELECT category, COUNT(*) as count FROM blog_posts WHERE status = 'published' AND category IS NOT NULL AND category != '' GROUP BY category ORDER BY count DESC");
 
-// Get featured news (latest 3)
-$featured_news = $db->query("SELECT n.*, u.first_name, u.last_name FROM news n LEFT JOIN users u ON n.author_id = u.id WHERE n.status = 'published' ORDER BY n.published_at DESC LIMIT 3");
+// Get featured posts
+$featured_posts = $db->query("SELECT bp.*, u.first_name, u.last_name FROM blog_posts bp LEFT JOIN users u ON bp.author_id = u.id WHERE bp.status = 'published' AND bp.is_featured = 1 ORDER BY bp.published_at DESC LIMIT 3");
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>News & Announcements - Salem Dominion Ministries</title>
+    <title>Blog - Salem Dominion Ministries</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        .news-hero {
-            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1504711434969-e33886168f5c?ixlib=rb-4.0.3');
+        .blog-hero {
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1519451241324-20b4ea2c4220?ixlib=rb-4.0.3');
             background-size: cover;
             background-position: center;
             color: white;
@@ -80,17 +82,21 @@ $featured_news = $db->query("SELECT n.*, u.first_name, u.last_name FROM news n L
             font-weight: bold;
             font-size: 1.5rem;
         }
-        .news-card {
+        .blog-card {
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
             border: none;
             border-radius: 15px;
             transition: transform 0.3s ease;
             overflow: hidden;
         }
-        .news-card:hover {
+        .blog-card:hover {
             transform: translateY(-5px);
         }
-        .featured-news {
+        .blog-card img {
+            height: 200px;
+            object-fit: cover;
+        }
+        .featured-blog {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             border-radius: 15px;
@@ -130,7 +136,7 @@ $featured_news = $db->query("SELECT n.*, u.first_name, u.last_name FROM news n L
                     <li class="nav-item"><a class="nav-link" href="ministries.php">Ministries</a></li>
                     <li class="nav-item"><a class="nav-link" href="events.php">Events</a></li>
                     <li class="nav-item"><a class="nav-link" href="sermons.php">Sermons</a></li>
-                    <li class="nav-item"><a class="nav-link active" href="news.php">News</a></li>
+                    <li class="nav-item"><a class="nav-link" href="news.php">News</a></li>
                     <li class="nav-item"><a class="nav-link" href="gallery.php">Gallery</a></li>
                     <li class="nav-item"><a class="nav-link" href="contact.php">Contact</a></li>
                 </ul>
@@ -148,10 +154,10 @@ $featured_news = $db->query("SELECT n.*, u.first_name, u.last_name FROM news n L
     </nav>
 
     <!-- Hero Section -->
-    <section class="news-hero">
+    <section class="blog-hero">
         <div class="container text-center">
-            <h1 class="display-4 fw-bold mb-4">News & Announcements</h1>
-            <p class="lead mb-4">Stay connected with the latest updates, announcements, and happenings in our church community.</p>
+            <h1 class="display-4 fw-bold mb-4">Blog & Articles</h1>
+            <p class="lead mb-4">Inspiring thoughts, spiritual growth, and community stories from our church family.</p>
         </div>
     </section>
 
@@ -163,7 +169,7 @@ $featured_news = $db->query("SELECT n.*, u.first_name, u.last_name FROM news n L
                     <form method="GET" action="" class="mb-4">
                         <div class="row g-3">
                             <div class="col-md-6">
-                                <input type="text" class="form-control" name="search" placeholder="Search news..."
+                                <input type="text" class="form-control" name="search" placeholder="Search articles..."
                                        value="<?php echo htmlspecialchars($search); ?>">
                             </div>
                             <div class="col-md-4">
@@ -189,12 +195,12 @@ $featured_news = $db->query("SELECT n.*, u.first_name, u.last_name FROM news n L
 
                     <!-- Category Filter -->
                     <div class="d-flex flex-wrap gap-2 justify-content-center">
-                        <a href="news.php" class="badge bg-primary category-badge px-3 py-2 text-decoration-none">All</a>
+                        <a href="blog.php" class="badge bg-primary category-badge px-3 py-2 text-decoration-none">All</a>
                         <?php
                         $categories->data_seek(0);
                         while ($cat = $categories->fetch_assoc()):
                         ?>
-                        <a href="news.php?category=<?php echo urlencode($cat['category']); ?>"
+                        <a href="blog.php?category=<?php echo urlencode($cat['category']); ?>"
                            class="badge bg-secondary category-badge px-3 py-2 text-decoration-none <?php echo $category_filter === $cat['category'] ? 'bg-primary' : ''; ?>">
                             <?php echo ucfirst(htmlspecialchars($cat['category'])); ?>
                         </a>
@@ -205,27 +211,27 @@ $featured_news = $db->query("SELECT n.*, u.first_name, u.last_name FROM news n L
         </div>
     </section>
 
-    <!-- Featured News -->
-    <?php if ($page === 1 && !$category_filter && !$search): ?>
+    <!-- Featured Posts -->
+    <?php if ($page === 1 && !$category_filter && !$search && $featured_posts->num_rows > 0): ?>
     <section class="py-5">
         <div class="container">
-            <h2 class="text-center mb-5"><i class="fas fa-star text-warning"></i> Featured News</h2>
+            <h2 class="text-center mb-5"><i class="fas fa-star text-warning"></i> Featured Articles</h2>
             <div class="row g-4">
-                <?php while ($news = $featured_news->fetch_assoc()): ?>
+                <?php while ($post = $featured_posts->fetch_assoc()): ?>
                     <div class="col-lg-4">
-                        <div class="card news-card featured-news h-100">
+                        <div class="card blog-card featured-blog h-100">
                             <div class="card-body d-flex flex-column p-4">
                                 <div class="mb-3">
-                                    <span class="badge bg-light text-dark mb-2"><?php echo ucfirst(htmlspecialchars($news['category'])); ?></span>
+                                    <span class="badge bg-light text-dark mb-2"><?php echo ucfirst(htmlspecialchars($post['category'] ?? 'General')); ?></span>
                                 </div>
-                                <h4 class="card-title"><?php echo htmlspecialchars($news['title']); ?></h4>
-                                <p class="card-text flex-grow-1"><?php echo htmlspecialchars($news['excerpt'] ?: substr($news['content'], 0, 150) . '...'); ?></p>
+                                <h4 class="card-title"><?php echo htmlspecialchars($post['title']); ?></h4>
+                                <p class="card-text flex-grow-1"><?php echo htmlspecialchars($post['excerpt'] ?: substr($post['content'], 0, 150) . '...'); ?></p>
                                 <div class="mt-auto">
                                     <small class="text-light opacity-75 d-block mb-2">
-                                        <i class="fas fa-user"></i> <?php echo htmlspecialchars(($news['first_name'] ?? '') . ' ' . ($news['last_name'] ?? '') ?: 'Church Staff'); ?> &bull;
-                                        <i class="fas fa-calendar"></i> <?php echo date('M j, Y', strtotime($news['published_at'] ?? $news['created_at'])); ?>
+                                        <i class="fas fa-user"></i> <?php echo htmlspecialchars(($post['first_name'] ?? '') . ' ' . ($post['last_name'] ?? '') ?: 'Church Staff'); ?> &bull;
+                                        <i class="fas fa-calendar"></i> <?php echo date('M j, Y', strtotime($post['published_at'] ?? $post['created_at'])); ?>
                                     </small>
-                                    <a href="news_article.php?id=<?php echo $news['id']; ?>" class="btn btn-light">Read More</a>
+                                    <a href="blog_post.php?id=<?php echo $post['id']; ?>" class="btn btn-light">Read More</a>
                                 </div>
                             </div>
                         </div>
@@ -236,29 +242,34 @@ $featured_news = $db->query("SELECT n.*, u.first_name, u.last_name FROM news n L
     </section>
     <?php endif; ?>
 
-    <!-- News Grid -->
+    <!-- Blog Grid -->
     <section class="py-5 bg-light">
         <div class="container">
-            <h2 class="text-center mb-5"><i class="fas fa-newspaper text-primary"></i> Latest News</h2>
+            <h2 class="text-center mb-5"><i class="fas fa-blog text-primary"></i> Latest Articles</h2>
 
             <div class="row g-4">
-                <?php if ($news_result->num_rows > 0): ?>
-                    <?php while ($news = $news_result->fetch_assoc()): ?>
+                <?php if ($blog_result->num_rows > 0): ?>
+                    <?php while ($post = $blog_result->fetch_assoc()): ?>
                         <div class="col-lg-6 col-xl-4">
-                            <div class="card news-card h-100">
-                                <img src="https://images.unsplash.com/photo-1504711434969-e33886168f5c?ixlib=rb-4.0.3&w=400" class="card-img-top" alt="News Image" style="height: 200px; object-fit: cover;">
+                            <div class="card blog-card h-100">
+                                <?php if ($post['featured_image_url']): ?>
+                                    <img src="<?php echo htmlspecialchars($post['featured_image_url']); ?>" class="card-img-top" alt="Blog Image">
+                                <?php else: ?>
+                                    <img src="https://images.unsplash.com/photo-1519451241324-20b4ea2c4220?ixlib=rb-4.0.3&w=400" class="card-img-top" alt="Blog Image" style="height: 200px; object-fit: cover;">
+                                <?php endif; ?>
                                 <div class="card-body d-flex flex-column">
                                     <div class="mb-2">
-                                        <span class="badge bg-primary"><?php echo ucfirst(htmlspecialchars($news['category'])); ?></span>
+                                        <span class="badge bg-primary"><?php echo ucfirst(htmlspecialchars($post['category'] ?? 'General')); ?></span>
                                     </div>
-                                    <h5 class="card-title"><?php echo htmlspecialchars($news['title']); ?></h5>
-                                    <p class="card-text flex-grow-1"><?php echo htmlspecialchars($news['excerpt'] ?: substr(strip_tags($news['content']), 0, 120) . '...'); ?></p>
+                                    <h5 class="card-title"><?php echo htmlspecialchars($post['title']); ?></h5>
+                                    <p class="card-text flex-grow-1"><?php echo htmlspecialchars($post['excerpt'] ?: substr(strip_tags($post['content']), 0, 120) . '...'); ?></p>
                                     <div class="mt-auto">
-                                    <small class="text-muted d-block mb-2">
-                                        <i class="fas fa-user"></i> <?php echo htmlspecialchars(($news['first_name'] ?? '') . ' ' . ($news['last_name'] ?? '') ?: 'Church Staff'); ?> &bull;
-                                        <i class="fas fa-calendar"></i> <?php echo date('M j, Y', strtotime($news['published_at'] ?? $news['created_at'])); ?>
+                                        <small class="text-muted d-block mb-2">
+                                            <i class="fas fa-user"></i> <?php echo htmlspecialchars(($post['first_name'] ?? '') . ' ' . ($post['last_name'] ?? '') ?: 'Church Staff'); ?> &bull;
+                                            <i class="fas fa-calendar"></i> <?php echo date('M j, Y', strtotime($post['published_at'] ?? $post['created_at'])); ?> &bull;
+                                            <i class="fas fa-eye"></i> <?php echo $post['views_count']; ?> views
                                         </small>
-                                        <a href="news_article.php?id=<?php echo $news['id']; ?>" class="btn btn-primary btn-sm">Read More</a>
+                                        <a href="blog_post.php?id=<?php echo $post['id']; ?>" class="btn btn-primary btn-sm">Read More</a>
                                     </div>
                                 </div>
                             </div>
@@ -266,10 +277,10 @@ $featured_news = $db->query("SELECT n.*, u.first_name, u.last_name FROM news n L
                     <?php endwhile; ?>
                 <?php else: ?>
                     <div class="col-12 text-center py-5">
-                        <i class="fas fa-newspaper fa-3x text-muted mb-3"></i>
-                        <h4 class="text-muted">No news found</h4>
+                        <i class="fas fa-blog fa-3x text-muted mb-3"></i>
+                        <h4 class="text-muted">No articles found</h4>
                         <p class="text-muted">Try adjusting your search or filter criteria.</p>
-                        <a href="news.php" class="btn btn-primary">View All News</a>
+                        <a href="blog.php" class="btn btn-primary">View All Articles</a>
                     </div>
                 <?php endif; ?>
             </div>

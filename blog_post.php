@@ -2,41 +2,25 @@
 session_start();
 require_once 'db.php';
 
-$post_id = $_GET['id'] ?? 0;
-$post = $db->query("SELECT bp.*, u.first_name, u.last_name, u.avatar_url FROM blog_posts bp JOIN users u ON bp.author_id = u.id WHERE bp.id = $post_id AND bp.status = 'published'")->fetch_assoc();
+$post_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
-if (!$post) {
-    header('Location: index.php');
+if (!$post_id) {
+    header('Location: blog.php');
     exit;
 }
 
-// Handle comment submission
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_comment'])) {
-    if (!isset($_SESSION['user_id'])) {
-        header('Location: login.php');
-        exit;
-    }
+$post = $db->query("SELECT bp.*, u.first_name, u.last_name, u.avatar_url FROM blog_posts bp LEFT JOIN users u ON bp.author_id = u.id WHERE bp.id = $post_id AND bp.status = 'published'")->fetch_assoc();
 
-    $comment = trim($_POST['comment']);
-    $user_id = $_SESSION['user_id'];
-    $author_name = $_SESSION['user_name'];
-
-    if (!empty($comment)) {
-        $stmt = $db->prepare("INSERT INTO blog_comments (post_id, user_id, author_name, comment) VALUES (?, ?, ?, ?)");
-        $stmt->bind_param('iiss', $post_id, $user_id, $author_name, $comment);
-        $stmt->execute();
-        $stmt->close();
-
-        header("Location: blog_post.php?id=$post_id&success=comment_added");
-        exit;
-    }
+if (!$post) {
+    header('Location: blog.php');
+    exit;
 }
-
-// Get comments
-$comments = $db->query("SELECT bc.*, u.avatar_url FROM blog_comments bc LEFT JOIN users u ON bc.user_id = u.id WHERE bc.post_id = $post_id AND bc.is_approved = 1 ORDER BY bc.created_at DESC");
 
 // Update view count
 $db->query("UPDATE blog_posts SET views_count = views_count + 1 WHERE id = $post_id");
+
+// Get related posts
+$related_posts = $db->query("SELECT id, title, excerpt, category FROM blog_posts WHERE id != $post_id AND status = 'published' ORDER BY created_at DESC LIMIT 3");
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -79,8 +63,13 @@ $db->query("UPDATE blog_posts SET views_count = views_count + 1 WHERE id = $post
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item"><a class="nav-link" href="index.php">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="about.php">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="ministries.php">Ministries</a></li>
+                    <li class="nav-item"><a class="nav-link" href="events.php">Events</a></li>
+                    <li class="nav-item"><a class="nav-link" href="sermons.php">Sermons</a></li>
                     <li class="nav-item"><a class="nav-link" href="news.php">News</a></li>
                     <li class="nav-item"><a class="nav-link active" href="blog.php">Blog</a></li>
+                    <li class="nav-item"><a class="nav-link" href="gallery.php">Gallery</a></li>
                     <li class="nav-item"><a class="nav-link" href="contact.php">Contact</a></li>
                 </ul>
                 <ul class="navbar-nav">
@@ -123,8 +112,8 @@ $db->query("UPDATE blog_posts SET views_count = views_count + 1 WHERE id = $post
                             </div>
                             <?php endif; ?>
                             <div>
-                                <strong><?php echo htmlspecialchars($post['first_name'] . ' ' . $post['last_name']); ?></strong>
-                                <br><small class="text-muted"><?php echo date('F j, Y \a\t g:i A', strtotime($post['created_at'])); ?></small>
+                                <strong><?php echo htmlspecialchars(($post['first_name'] ?? '') . ' ' . ($post['last_name'] ?? '') ?: 'Church Staff'); ?></strong>
+                                <br><small class="text-muted"><?php echo date('F j, Y \a\t g:i A', strtotime($post['published_at'] ?? $post['created_at'])); ?></small>
                             </div>
                         </div>
                         <?php if ($post['category']): ?>
@@ -133,59 +122,51 @@ $db->query("UPDATE blog_posts SET views_count = views_count + 1 WHERE id = $post
                         <div class="post-content">
                             <?php echo nl2br(htmlspecialchars($post['content'])); ?>
                         </div>
+                        
+                        <!-- Share Buttons -->
+                        <div class="share-buttons mt-4 pt-4 border-top">
+                            <h6 class="mb-3"><i class="fas fa-share-alt"></i> Share this article</h6>
+                            <a href="https://www.facebook.com/sharer/sharer.php?u=<?php echo urlencode('http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']); ?>" target="_blank" class="btn btn-outline-primary btn-sm">
+                                <i class="fab fa-facebook-f"></i> Facebook
+                            </a>
+                            <a href="https://twitter.com/intent/tweet?url=<?php echo urlencode('http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']); ?>&text=<?php echo urlencode($post['title']); ?>" target="_blank" class="btn btn-outline-info btn-sm">
+                                <i class="fab fa-twitter"></i> Twitter
+                            </a>
+                            <a href="https://wa.me/?text=<?php echo urlencode($post['title'] . ' - ' . 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']); ?>" target="_blank" class="btn btn-outline-success btn-sm">
+                                <i class="fab fa-whatsapp"></i> WhatsApp
+                            </a>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Comments Section -->
-                <div class="card">
+                <!-- Related Posts -->
+                <?php if ($related_posts->num_rows > 0): ?>
+                <div class="card mb-4">
                     <div class="card-header">
-                        <h5 class="mb-0"><i class="fas fa-comments"></i> Comments (<?php echo $comments->num_rows; ?>)</h5>
+                        <h5 class="mb-0"><i class="fas fa-newspaper text-primary"></i> Related Articles</h5>
                     </div>
                     <div class="card-body">
-                        <?php if (isset($_SESSION['user_id'])): ?>
-                        <!-- Comment Form -->
-                        <form method="POST" class="mb-4">
-                            <div class="mb-3">
-                                <label class="form-label">Add a Comment</label>
-                                <textarea class="form-control" name="comment" rows="3" required></textarea>
-                            </div>
-                            <button type="submit" name="submit_comment" class="btn btn-primary"><i class="fas fa-paper-plane"></i> Post Comment</button>
-                        </form>
-                        <?php else: ?>
-                        <div class="alert alert-info">
-                            <i class="fas fa-info-circle"></i> <a href="login.php" class="alert-link">Login</a> to leave a comment.
-                        </div>
-                        <?php endif; ?>
-
-                        <!-- Comments List -->
-                        <div class="comments-list">
-                            <?php if ($comments->num_rows > 0): ?>
-                                <?php while ($comment = $comments->fetch_assoc()): ?>
-                                <div class="comment mb-3 p-3 border rounded">
-                                    <div class="d-flex align-items-start">
-                                        <?php if ($comment['avatar_url']): ?>
-                                        <img src="<?php echo htmlspecialchars($comment['avatar_url']); ?>" alt="Commenter Avatar" class="comment-avatar me-3">
-                                        <?php else: ?>
-                                        <div class="bg-secondary text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 32px; height: 32px;">
-                                            <i class="fas fa-user"></i>
-                                        </div>
-                                        <?php endif; ?>
-                                        <div class="flex-grow-1">
-                                            <strong><?php echo htmlspecialchars($comment['author_name']); ?></strong>
-                                            <small class="text-muted ms-2"><?php echo date('M j, Y \a\t g:i A', strtotime($comment['created_at'])); ?></small>
-                                            <div class="mt-2">
-                                                <?php echo nl2br(htmlspecialchars($comment['comment'])); ?>
-                                            </div>
-                                        </div>
+                        <div class="row g-3">
+                            <?php while ($related = $related_posts->fetch_assoc()): ?>
+                            <div class="col-md-4">
+                                <div class="card h-100">
+                                    <div class="card-body">
+                                        <h6 class="card-title">
+                                            <a href="blog_post.php?id=<?php echo $related['id']; ?>" class="text-decoration-none">
+                                                <?php echo htmlspecialchars($related['title']); ?>
+                                            </a>
+                                        </h6>
+                                        <p class="card-text small text-muted">
+                                            <?php echo htmlspecialchars(substr($related['excerpt'] ?: strip_tags($related['content']), 0, 80) . '...'); ?>
+                                        </p>
                                     </div>
                                 </div>
-                                <?php endwhile; ?>
-                            <?php else: ?>
-                                <p class="text-muted">No comments yet. Be the first to comment!</p>
-                            <?php endif; ?>
+                            </div>
+                            <?php endwhile; ?>
                         </div>
                     </div>
                 </div>
+                <?php endif; ?>
             </div>
         </div>
     </div>

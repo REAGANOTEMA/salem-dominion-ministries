@@ -3,10 +3,10 @@ session_start();
 require_once 'db.php';
 
 // Get recent sermons
-$recent_sermons = $db->query("SELECT s.*, u.username FROM sermons s LEFT JOIN users u ON s.speaker_id = u.id ORDER BY s.sermon_date DESC LIMIT 12");
+$recent_sermons = $db->query("SELECT s.*, u.first_name, u.last_name FROM sermons s LEFT JOIN users u ON s.created_by = u.id WHERE s.status = 'published' ORDER BY s.sermon_date DESC LIMIT 12");
 
 // Get sermon series
-$sermon_series = $db->query("SELECT series, COUNT(*) as count FROM sermons GROUP BY series ORDER BY series");
+$sermon_series = $db->query("SELECT sermon_series as series, COUNT(*) as count FROM sermons WHERE sermon_series IS NOT NULL AND sermon_series != '' GROUP BY sermon_series ORDER BY series");
 
 // Handle view count update (AJAX)
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_view'])) {
@@ -155,7 +155,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_view'])) {
             <div class="row g-4" id="sermonsContainer">
                 <?php if ($recent_sermons->num_rows > 0): ?>
                     <?php while ($sermon = $recent_sermons->fetch_assoc()): ?>
-                        <div class="col-lg-6 col-xl-4 sermon-item" data-series="<?php echo htmlspecialchars($sermon['series']); ?>">
+                        <div class="col-lg-6 col-xl-4 sermon-item" data-series="<?php echo htmlspecialchars($sermon['sermon_series'] ?? ''); ?>">
                             <div class="card sermon-card h-100">
                                 <div class="sermon-thumbnail">
                                     <?php if ($sermon['video_url']): ?>
@@ -172,21 +172,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_view'])) {
                                 </div>
                                 <div class="card-body d-flex flex-column">
                                     <div class="mb-2">
-                                        <span class="badge bg-primary mb-2"><?php echo htmlspecialchars($sermon['series']); ?></span>
+                                        <?php if ($sermon['sermon_series']): ?>
+                                        <span class="badge bg-primary mb-2"><?php echo htmlspecialchars($sermon['sermon_series']); ?></span>
+                                        <?php endif; ?>
                                     </div>
                                     <h5 class="card-title"><?php echo htmlspecialchars($sermon['title']); ?></h5>
-                                    <p class="card-text flex-grow-1"><?php echo htmlspecialchars(substr($sermon['description'], 0, 100)); ?>...</p>
+                                    <p class="card-text flex-grow-1"><?php echo htmlspecialchars(substr($sermon['description'] ?? '', 0, 100)); ?>...</p>
                                     <div class="mb-3">
                                         <small class="text-muted d-block">
-                                            <i class="fas fa-user"></i> <?php echo htmlspecialchars($sermon['speaker_name'] ?: $sermon['username'] ?: 'Church Staff'); ?>
+                                            <i class="fas fa-user"></i> <?php echo htmlspecialchars($sermon['preacher'] ?: ($sermon['first_name'] . ' ' . $sermon['last_name']) ?: 'Church Staff'); ?>
                                         </small>
                                         <small class="text-muted d-block">
                                             <i class="fas fa-calendar"></i> <?php echo date('M j, Y', strtotime($sermon['sermon_date'])); ?>
-                                            <i class="fas fa-eye ms-2"></i> <?php echo $sermon['views']; ?> views
+                                            <i class="fas fa-eye ms-2"></i> <?php echo $sermon['views_count']; ?> views
                                         </small>
-                                        <?php if ($sermon['scripture_reference']): ?>
+                                        <?php if ($sermon['bible_reference']): ?>
                                             <small class="text-muted d-block">
-                                                <i class="fas fa-book"></i> <?php echo htmlspecialchars($sermon['scripture_reference']); ?>
+                                                <i class="fas fa-book"></i> <?php echo htmlspecialchars($sermon['bible_reference']); ?>
                                             </small>
                                         <?php endif; ?>
                                     </div>

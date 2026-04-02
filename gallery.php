@@ -19,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_SESSION['user_id']) && isse
             $filepath = $upload_dir . $filename;
 
             if (move_uploaded_file($file['tmp_name'], $filepath)) {
-                $stmt = $db->prepare("INSERT INTO gallery (user_id, image_path, title, description) VALUES (?, ?, ?, ?)");
+                $stmt = $db->prepare("INSERT INTO gallery (uploaded_by, file_url, title, description, file_type, status) VALUES (?, ?, ?, ?, 'image', 'published')");
                 $title = trim($_POST['title'] ?? '');
                 $description = trim($_POST['description'] ?? '');
                 $stmt->bind_param('isss', $user_id, $filepath, $title, $description);
@@ -38,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_SESSION['user_id']) && isse
 }
 
 // Get gallery images
-$gallery_images = $db->query("SELECT g.*, u.username, u.avatar FROM gallery g LEFT JOIN users u ON g.user_id = u.id ORDER BY g.created_at DESC");
+$gallery_images = $db->query("SELECT g.*, u.first_name, u.last_name FROM gallery g LEFT JOIN users u ON g.uploaded_by = u.id WHERE g.status = 'published' ORDER BY g.created_at DESC");
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -187,14 +187,14 @@ $gallery_images = $db->query("SELECT g.*, u.username, u.avatar FROM gallery g LE
                     <?php while ($image = $gallery_images->fetch_assoc()): ?>
                         <div class="col-lg-4 col-md-6">
                             <div class="gallery-item">
-                                <img src="<?php echo htmlspecialchars($image['image_path']); ?>" alt="<?php echo htmlspecialchars($image['title'] ?: 'Gallery Image'); ?>">
+                                <img src="<?php echo htmlspecialchars($image['file_url']); ?>" alt="<?php echo htmlspecialchars($image['title'] ?: 'Gallery Image'); ?>">
                                 <div class="gallery-overlay">
                                     <h5><?php echo htmlspecialchars($image['title'] ?: 'Untitled'); ?></h5>
                                     <?php if ($image['description']): ?>
                                         <p class="mb-2"><?php echo htmlspecialchars($image['description']); ?></p>
                                     <?php endif; ?>
                                     <small class="text-muted">
-                                        <i class="fas fa-user"></i> <?php echo htmlspecialchars($image['username']); ?> &bull;
+                                        <i class="fas fa-user"></i> <?php echo htmlspecialchars(($image['first_name'] ?? '') . ' ' . ($image['last_name'] ?? '') ?: 'Anonymous'); ?> &bull;
                                         <i class="fas fa-calendar"></i> <?php echo date('M j, Y', strtotime($image['created_at'])); ?>
                                     </small>
                                 </div>
