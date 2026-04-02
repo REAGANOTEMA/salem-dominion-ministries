@@ -66,6 +66,7 @@
                             <li><a href="sermons.php"><i class="fas fa-bible me-2"></i>Sermons</a></li>
                             <li><a href="news.php"><i class="fas fa-newspaper me-2"></i>News</a></li>
                             <li><a href="gallery.php"><i class="fas fa-images me-2"></i>Gallery</a></li>
+                            <li><a href="map.php"><i class="fas fa-map-marker-alt me-2"></i>Find Us</a></li>
                             <li><a href="contact.php"><i class="fas fa-envelope me-2"></i>Contact</a></li>
                         </ul>
                     </div>

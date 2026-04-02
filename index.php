@@ -871,6 +871,7 @@ if (isset($_SERVER['HTTP_IF_MODIFIED_SINCE'])) {
                     <li class="nav-item"><a class="nav-link" href="sermons.php">Sermons</a></li>
                     <li class="nav-item"><a class="nav-link" href="news.php">News</a></li>
                     <li class="nav-item"><a class="nav-link" href="gallery.php">Gallery</a></li>
+                    <li class="nav-item"><a class="nav-link" href="map.php">Find Us</a></li>
                     <li class="nav-item"><a class="nav-link" href="contact.php">Contact</a></li>
                 </ul>
                 <ul class="navbar-nav">

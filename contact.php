@@ -1,5 +1,7 @@
 ﻿<?php
-session_start();
+// Include session helper and start session safely
+require_once 'session_helper.php';
+secure_session_start();
 require_once 'db.php';
 
 $errors = [];
@@ -186,9 +188,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     <h5 class="card-title"><i class="fas fa-map-marker-alt text-primary"></i> Visit Us</h5>
                                     <p class="card-text">
                                         Salem Dominion Ministries<br>
-                                        [Church Address]<br>
-                                        [City, State, ZIP]
+                                        Main Street, Iganga Town, Uganda<br>
+                                        Near Iganga Market
                                     </p>
+                                    <div class="mt-3">
+                                        <a href="map.php" class="btn btn-primary btn-sm">
+                                            <i class="fas fa-map me-2"></i>View Map & Directions
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
 
