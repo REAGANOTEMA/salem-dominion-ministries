@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pastor Booking Confirmation</title>
+    <style>
+        body {
+            font-family: 'Montserrat', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        .email-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            padding: 30px;
+            text-align: center;
+            color: white;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 2rem;
+            font-family: 'Dancing Script', cursive;
+        }
+        .content {
+            padding: 40px 30px;
+        }
+        .confirmation-box {
+            background: linear-gradient(135deg, #d1ecf1, #bee5eb);
+            border-left: 4px solid #17a2b8;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .booking-details {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 30px 0;
+        }
+        .booking-details h3 {
+            color: #667eea;
+            margin-top: 0;
+        }
+        .detail-item {
+            display: flex;
+            align-items: center;
+            margin: 15px 0;
+        }
+        .detail-item i {
+            width: 30px;
+            color: #FFD700;
+            font-size: 1.2rem;
+        }
+        .action-buttons {
+            text-align: center;
+            margin: 30px 0;
+        }
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            margin: 10px;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        .btn-success {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+        }
+        .footer {
+            background: #1a1a2e;
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .bible-verse {
+            background: #f8f9fa;
+            border-left: 4px solid #FFD700;
+            padding: 20px;
+            margin: 30px 0;
+            font-style: italic;
+            color: #666;
+        }
+        .social-links {
+            margin: 20px 0;
+        }
+        .social-links a {
+            color: #FFD700;
+            text-decoration: none;
+            margin: 0 10px;
+            font-size: 1.2rem;
+        }
+        .preparation-section {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .google-meet-section {
+            background: #e8f5e8;
+            border-left: 4px solid #28a745;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🙏 Pastor Booking Confirmed</h1>
+            <p>Salem Dominion Ministries</p>
+        </div>
+
+        <!-- Content -->
+        <div class="content">
+            <!-- Confirmation Message -->
+            <div class="confirmation-box">
+                <h2>✅ Booking Confirmed!</h2>
+                <p>Dear {{name}},</p>
+                <p>Your pastoral counseling session has been successfully scheduled! Our pastor is looking forward to meeting with you and providing spiritual guidance and support.</p>
+            </div>
+
+            <!-- Booking Details -->
+            <div class="booking-details">
+                <h3>📅 Appointment Details</h3>
+                <div class="detail-item">
+                    <i class="fas fa-calendar"></i>
+                    <div>
+                        <strong>Date:</strong> {{booking_date}}
+                    </div>
+                </div>
+                <div class="detail-item">
+                    <i class="fas fa-clock"></i>
+                    <div>
+                        <strong>Time:</strong> {{booking_time}} (Duration: {{booking_duration}})
+                    </div>
+                </div>
+                <div class="detail-item">
+                    <i class="fas fa-video"></i>
+                    <div>
+                        <strong>Meeting Type:</strong> {{meeting_type}}
+                    </div>
+                </div>
+                <div class="detail-item">
+                    <i class="fas fa-tag"></i>
+                    <div>
+                        <strong>Subject:</strong> {{booking_subject}}
+                    </div>
+                </div>
+                <div class="detail-item">
+                    <i class="fas fa-phone"></i>
+                    <div>
+                        <strong>Contact:</strong> {{contact_phone}}
+                    </div>
+                </div>
+                <div class="detail-item">
+                    <i class="fas fa-envelope"></i>
+                    <div>
+                        <strong>Email:</strong> {{contact_email}}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Google Meet Information -->
+            <?php if ($meeting_type === 'Video Call'): ?>
+            <div class="google-meet-section">
+                <h4>🎥 Google Meet Information</h4>
+                <p>Your session will be conducted via Google Meet. You will receive the meeting link 24 hours before your appointment.</p>
+                <div style="background: white; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                    <p><strong>Meeting Link:</strong> Will be sent via email</p>
+                    <p><strong>Meeting ID:</strong> Will be provided 24 hours before</p>
+                    <p><strong>Password:</strong> Will be provided 24 hours before</p>
+                </div>
+                <p><strong>📱 Download Google Meet App:</strong></p>
+                <div style="display: flex; gap: 10px; margin-top: 10px;">
+                    <a href="#" class="btn btn-success" style="padding: 8px 20px; font-size: 0.9rem;">Android</a>
+                    <a href="#" class="btn btn-success" style="padding: 8px 20px; font-size: 0.9rem;">iOS</a>
+                    <a href="#" class="btn btn-success" style="padding: 8px 20px; font-size: 0.9rem;">Desktop</a>
+                </div>
+            </div>
+            <?php endif; ?>
+
+            <!-- Bible Verse -->
+            <div class="bible-verse">
+                <p>"The Lord is near to all who call upon Him, to all who call upon Him in truth."</p>
+                <p><strong>- Psalm 145:18</strong></p>
+            </div>
+
+            <!-- Preparation Section -->
+            <div class="preparation-section">
+                <h4>🙏 How to Prepare</h4>
+                <ul style="line-height: 1.8;">
+                    <li>🙏 Spend time in prayer before your session</li>
+                    <li>📝 Write down specific questions or concerns</li>
+                    <li>📖 Bring your Bible for scripture references</li>
+                    <li>🕐 Arrive 5 minutes early (or log in early for video calls)</li>
+                    <li>💻 For video calls: Ensure stable internet connection</li>
+                    <li>🤝 Be open and honest about your situation</li>
+                </ul>
+            </div>
+
+            <!-- What to Expect -->
+            <h3>🎯 What to Expect</h3>
+            <ul style="line-height: 1.8;">
+                <li>👂 A listening ear and compassionate heart</li>
+                <li>📖 Biblical guidance and wisdom</li>
+                <li>🙏 Prayer for your specific needs</li>
+                <li>💡 Practical advice for your situation</li>
+                <li>🤝 Confidential and safe environment</li>
+                <li>⏰ Respect for your time and privacy</li>
+            </ul>
+
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <a href="{{google_meet_link}}" class="btn btn-primary">Join Google Meet</a>
+                <a href="tel:+256753244480" class="btn btn-secondary">Contact Pastor</a>
+                <a href="{{site_url}}/pastor_booking.php" class="btn btn-success">Reschedule/Cancel</a>
+            </div>
+
+            <!-- Contact Information -->
+            <h3>📞 Need to Make Changes?</h3>
+            <p>If you need to reschedule or cancel your appointment, please contact us at least 24 hours in advance:</p>
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <p>📧 Email: {{church_email}}</p>
+                <p>📞 Phone: {{church_phone}}</p>
+                <p>💬 WhatsApp: +256753244480</p>
+                <p>📱 WhatsApp: +256772514889 (Technical Support)</p>
+            </div>
+
+            <!-- Cancellation Policy -->
+            <div style="background: #f8d7da; border-left: 4px solid #dc3545; padding: 15px; border-radius: 8px; margin: 20px 0;">
+                <h5 style="color: #721c24; margin-top: 0;">⚠️ Cancellation Policy</h5>
+                <p style="color: #721c24; margin-bottom: 0;">Please provide at least 24 hours notice for cancellations. This allows us to offer the slot to others who may be in need of pastoral care.</p>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <h3>Stay Connected</h3>
+            <div class="social-links">
+                <a href="#">📘 Facebook</a>
+                <a href="#">🐦 Twitter</a>
+                <a href="#">📷 Instagram</a>
+                <a href="#">📺 YouTube</a>
+                <a href="#">💬 WhatsApp</a>
+            </div>
+            
+            <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #444;">
+                <p style="font-size: 0.9rem; opacity: 0.8;">
+                    © {{current_year}} Salem Dominion Ministries. All rights reserved.
+                </p>
+                <p style="font-size: 0.8rem; opacity: 0.6; margin-top: 10px;">
+                    {{church_address}} | {{church_phone}}
+                </p>
+                <p style="font-size: 0.8rem; opacity: 0.6; margin-top: 5px;">
+                    Designed & Managed by Reagan Otema | +256772514889
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

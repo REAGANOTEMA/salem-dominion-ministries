@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Salem Dominion Ministries | Iganga Municipality, Uganda</title>
+  <meta name="description" content="Salem Dominion Ministries - A Christ-centered community in Iganga Municipality, Uganda. Join us for worship, fellowship, and spiritual growth." />
+  <meta name="author" content="Reagan Otema" />
+
+  <!-- Open Graph for social sharing -->
+  <meta property="og:title" content="Salem Dominion Ministries" />
+  <meta property="og:description" content="A Christ-centered community impacting generations spiritually, socially, and economically." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="/salem-dominion-ministries/icons/icon-512x512.svg" />
+  <meta property="og:url" content="https://salemdominionministries.org" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@SalemDominion" />
+  <meta name="twitter:title" content="Salem Dominion Ministries" />
+  <meta name="twitter:description" content="A Christ-centered community in Iganga Municipality, Uganda" />
+  <meta name="twitter:image" content="/salem-dominion-ministries/icons/icon-512x512.svg" />
+
+  <!-- Church Logo Icons -->
+  <link rel="icon" type="image/svg+xml" href="/salem-dominion-ministries/icons/icon-192x192.svg" />
+  <link rel="apple-touch-icon" href="/salem-dominion-ministries/icons/icon-192x192.svg" />
+  <link rel="shortcut icon" href="/salem-dominion-ministries/icons/icon-96x96.svg" />
+
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="/salem-dominion-ministries/manifest.json" />
+
+  <!-- Theme Color -->
+  <meta name="theme-color" content="#f59e0b" />
+  <meta name="msapplication-TileColor" content="#f59e0b" />
+  <meta name="msapplication-config" content="/salem-dominion-ministries/browserconfig.xml" />
+
+  <script type="module" crossorigin src="/salem-dominion-ministries/assets/index-Cs2pguWn.js"></script>
+  <link rel="modulepreload" crossorigin href="/salem-dominion-ministries/assets/vendor-BbzTrtx5.js">
+  <link rel="modulepreload" crossorigin href="/salem-dominion-ministries/assets/ui-B1xp3lVQ.js">
+  <link rel="stylesheet" crossorigin href="/salem-dominion-ministries/assets/index-ovDsou1c.css">
+</head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>

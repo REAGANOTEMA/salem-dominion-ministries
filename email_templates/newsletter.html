@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weekly Newsletter - Salem Dominion Ministries</title>
+    <style>
+        body {
+            font-family: 'Montserrat', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        .email-container {
+            max-width: 650px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        .header {
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            padding: 40px 30px;
+            text-align: center;
+            color: #1a1a2e;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            font-family: 'Dancing Script', cursive;
+        }
+        .header-subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            margin-top: 10px;
+        }
+        .content {
+            padding: 40px 30px;
+        }
+        .newsletter-date {
+            text-align: center;
+            color: #666;
+            font-style: italic;
+            margin-bottom: 30px;
+        }
+        .section {
+            margin-bottom: 40px;
+        }
+        .section h2 {
+            color: #1a1a2e;
+            border-bottom: 2px solid #FFD700;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        .featured-sermon {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            padding: 25px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .featured-sermon h3 {
+            color: #FFD700;
+            margin-top: 0;
+        }
+        .event-card {
+            background: #fff;
+            border: 1px solid #e9ecef;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+            transition: all 0.3s ease;
+        }
+        .event-card:hover {
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+        }
+        .event-date {
+            background: #FFD700;
+            color: #1a1a2e;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+        .bible-verse {
+            background: #f8f9fa;
+            border-left: 4px solid #FFD700;
+            padding: 20px;
+            margin: 30px 0;
+            font-style: italic;
+            color: #666;
+            text-align: center;
+        }
+        .prayer-points {
+            background: #e8f5e8;
+            border-left: 4px solid #28a745;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .prayer-points h4 {
+            color: #28a745;
+            margin-top: 0;
+        }
+        .action-buttons {
+            text-align: center;
+            margin: 30px 0;
+        }
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            margin: 10px;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            color: #1a1a2e;
+        }
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        .footer {
+            background: #1a1a2e;
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .social-links {
+            margin: 20px 0;
+        }
+        .social-links a {
+            color: #FFD700;
+            text-decoration: none;
+            margin: 0 10px;
+            font-size: 1.2rem;
+        }
+        .testimonial {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-style: italic;
+        }
+        .ministry-highlight {
+            display: flex;
+            align-items: center;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+        .ministry-icon {
+            font-size: 2rem;
+            color: #FFD700;
+            margin-right: 20px;
+            min-width: 60px;
+            text-align: center;
+        }
+        .divider {
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #FFD700, transparent);
+            margin: 30px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🕊️ Salem Dominion Ministries</h1>
+            <p class="header-subtitle">Weekly Newsletter</p>
+        </div>
+
+        <!-- Content -->
+        <div class="content">
+            <div class="newsletter-date">
+                {{current_date}} • {{newsletter_edition}}
+            </div>
+
+            <!-- Welcome Message -->
+            <div class="section">
+                <h2>📝 A Word from Our Pastor</h2>
+                <p>Dear Beloved Members,</p>
+                <p>{{pastoral_message}}</p>
+                <p>May this week be filled with God's blessings, wisdom, and guidance as we continue our journey of faith together.</p>
+                <p style="text-align: right; font-style: italic;">In His Grace,<br>Pastor {{pastor_name}}</p>
+            </div>
+
+            <!-- Featured Sermon -->
+            <div class="section">
+                <h2>📖 Featured Sermon</h2>
+                <div class="featured-sermon">
+                    <h3>{{sermon_title}}</h3>
+                    <p><strong>Scripture:</strong> {{sermon_verse}}</p>
+                    <p>{{sermon_description}}</p>
+                    <div style="text-align: center; margin-top: 20px;">
+                        <a href="{{sermon_link}}" class="btn btn-primary">Watch Full Sermon</a>
+                        <a href="{{sermon_audio_link}}" class="btn btn-secondary">Listen Audio</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bible Verse -->
+            <div class="bible-verse">
+                <h3>📚 This Week's Memory Verse</h3>
+                <p style="font-size: 1.2rem; color: #1a1a2e;">"{{weekly_verse_text}}"</p>
+                <p><strong>- {{weekly_verse_reference}}</strong></p>
+            </div>
+
+            <!-- Upcoming Events -->
+            <div class="section">
+                <h2>📅 Upcoming Events</h2>
+                {{upcoming_events}}
+            </div>
+
+            <!-- Ministry Highlights -->
+            <div class="section">
+                <h2>👥 Ministry Highlights</h2>
+                {{ministry_highlights}}
+            </div>
+
+            <!-- Prayer Points -->
+            <div class="section">
+                <h2>🙏 Prayer Points</h2>
+                <div class="prayer-points">
+                    <h4>Let's Pray Together</h4>
+                    {{prayer_points}}
+                </div>
+            </div>
+
+            <!-- Testimonial -->
+            <div class="section">
+                <h2>💬 Member Testimony</h2>
+                <div class="testimonial">
+                    <p>"{{member_testimony}}"</p>
+                    <p style="text-align: right; margin-top: 15px;"><strong>- {{testimony_member_name}}</strong></p>
+                </div>
+            </div>
+
+            <!-- Children's Ministry -->
+            <div class="section">
+                <h2>👶 Children's Ministry Corner</h2>
+                <div style="background: #e8f4f8; padding: 20px; border-radius: 10px;">
+                    <h3 style="color: #4169E1; margin-top: 0;">{{childrens_topic}}</h3>
+                    <p>{{childrens_content}}</p>
+                    <p><strong>Upcoming Children's Event:</strong> {{childrens_event}}</p>
+                    <p><strong>When:</strong> {{childrens_event_date}} at {{childrens_event_time}}</p>
+                </div>
+            </div>
+
+            <!-- Giving Information -->
+            <div class="section">
+                <h2>💝 Giving & Support</h2>
+                <p>Your generous support helps us continue our mission to spread God's love and serve our community.</p>
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 20px 0;">
+                    <h4>Ways to Give:</h4>
+                    <ul style="line-height: 1.8;">
+                        <li>💳 Online: {{giving_online_link}}</li>
+                        <li>📱 Mobile App: {{giving_app_info}}</li>
+                        <li>🏦 Bank Transfer: {{giving_bank_info}}</li>
+                        <li>💰 In Person: During services</li>
+                    </ul>
+                </div>
+                <p><strong>Scripture:</strong> "Give, and it will be given to you. A good measure, pressed down, shaken together and running over, will be poured into your lap." - Luke 6:38</p>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <a href="{{site_url}}" class="btn btn-primary">Visit Website</a>
+                <a href="{{site_url}}/events.php" class="btn btn-secondary">View Events</a>
+                <a href="{{giving_link}}" class="btn btn-primary">Give Online</a>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- Contact Information -->
+            <div style="text-align: center; margin: 30px 0;">
+                <h3>📞 Stay Connected</h3>
+                <p>📍 {{church_address}}</p>
+                <p>📞 {{church_phone}}</p>
+                <p>📧 {{church_email}}</p>
+                <p>🌐 {{site_url}}</p>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <h3>Follow Us</h3>
+            <div class="social-links">
+                <a href="#">📘 Facebook</a>
+                <a href="#">🐦 Twitter</a>
+                <a href="#">📷 Instagram</a>
+                <a href="#">📺 YouTube</a>
+                <a href="#">💬 WhatsApp</a>
+            </div>
+            
+            <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #444;">
+                <p style="font-size: 0.9rem; opacity: 0.8;">
+                    © {{current_year}} Salem Dominion Ministries. All rights reserved.
+                </p>
+                <p style="font-size: 0.8rem; opacity: 0.6; margin-top: 10px;">
+                    {{church_address}} | {{church_phone}}
+                </p>
+                <p style="font-size: 0.8rem; opacity: 0.6; margin-top: 5px;">
+                    Designed & Managed by Reagan Otema | +256772514889
+                </p>
+                <p style="font-size: 0.8rem; opacity: 0.6; margin-top: 5px;">
+                    You're receiving this newsletter because you subscribed on our website.
+                </p>
+                <p style="font-size: 0.8rem; opacity: 0.6; margin-top: 5px;">
+                    <a href="{{unsubscribe_link}}" style="color: #FFD700;">Unsubscribe</a> | 
+                    <a href="{{preferences_link}}" style="color: #FFD700;">Update Preferences</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

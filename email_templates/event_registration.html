@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Registration Confirmation</title>
+    <style>
+        body {
+            font-family: 'Montserrat', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        .email-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        .header {
+            background: linear-gradient(135deg, #4169E1, #9370DB);
+            padding: 30px;
+            text-align: center;
+            color: white;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 2rem;
+            font-family: 'Dancing Script', cursive;
+        }
+        .content {
+            padding: 40px 30px;
+        }
+        .confirmation-box {
+            background: linear-gradient(135deg, #d4edda, #c3e6cb);
+            border-left: 4px solid #28a745;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .event-details {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 30px 0;
+        }
+        .event-details h3 {
+            color: #4169E1;
+            margin-top: 0;
+        }
+        .detail-item {
+            display: flex;
+            align-items: center;
+            margin: 15px 0;
+        }
+        .detail-item i {
+            width: 30px;
+            color: #FFD700;
+            font-size: 1.2rem;
+        }
+        .action-buttons {
+            text-align: center;
+            margin: 30px 0;
+        }
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            margin: 10px;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #4169E1, #9370DB);
+            color: white;
+        }
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        .footer {
+            background: #1a1a2e;
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .bible-verse {
+            background: #f8f9fa;
+            border-left: 4px solid #FFD700;
+            padding: 20px;
+            margin: 30px 0;
+            font-style: italic;
+            color: #666;
+        }
+        .social-links {
+            margin: 20px 0;
+        }
+        .social-links a {
+            color: #FFD700;
+            text-decoration: none;
+            margin: 0 10px;
+            font-size: 1.2rem;
+        }
+        .reminder-section {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <!-- Header -->
+        <div class="header">
+            <h1>📅 Event Registration Confirmed</h1>
+            <p>Salem Dominion Ministries</p>
+        </div>
+
+        <!-- Content -->
+        <div class="content">
+            <!-- Confirmation Message -->
+            <div class="confirmation-box">
+                <h2>✅ Registration Successful!</h2>
+                <p>Dear {{name}},</p>
+                <p>Your registration for <strong>{{event_title}}</strong> has been confirmed! We're so excited to have you join us for this special event.</p>
+            </div>
+
+            <!-- Event Details -->
+            <div class="event-details">
+                <h3>📋 Event Information</h3>
+                <div class="detail-item">
+                    <i class="fas fa-calendar"></i>
+                    <div>
+                        <strong>Date:</strong> {{event_date}}
+                    </div>
+                </div>
+                <div class="detail-item">
+                    <i class="fas fa-clock"></i>
+                    <div>
+                        <strong>Time:</strong> {{event_time}}
+                    </div>
+                </div>
+                <div class="detail-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <div>
+                        <strong>Location:</strong> {{event_location}}
+                    </div>
+                </div>
+                <div class="detail-item">
+                    <i class="fas fa-users"></i>
+                    <div>
+                        <strong>Registered Attendees:</strong> {{attendee_count}}
+                    </div>
+                </div>
+                <?php if (!empty($special_requirements)): ?>
+                <div class="detail-item">
+                    <i class="fas fa-sticky-note"></i>
+                    <div>
+                        <strong>Special Requirements:</strong> {{special_requirements}}
+                    </div>
+                </div>
+                <?php endif; ?>
+            </div>
+
+            <!-- Bible Verse -->
+            <div class="bible-verse">
+                <p>"For where two or three are gathered together in My name, I am there in the midst of them."</p>
+                <p><strong>- Matthew 18:20</strong></p>
+            </div>
+
+            <!-- Reminder Section -->
+            <div class="reminder-section">
+                <h4>⏰ Reminders</h4>
+                <ul style="line-height: 1.8;">
+                    <li>Please arrive 15 minutes early for check-in</li>
+                    <li>Bring your registration confirmation (this email)</li>
+                    <li>Dress comfortably and modestly</li>
+                    <li>Feel free to bring friends and family!</li>
+                </ul>
+            </div>
+
+            <!-- What to Bring -->
+            <h3>🎒 What to Bring</h3>
+            <ul style="line-height: 1.8;">
+                <li>📖 Your Bible (if you have one)</li>
+                <li>✍️ A notebook and pen for notes</li>
+                <li>🙏 An open heart ready to receive from God</li>
+                <li>👥 Friends and family who would like to join</li>
+                <li>💧 A water bottle for refreshment</li>
+            </ul>
+
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <a href="{{site_url}}/events.php" class="btn btn-primary">View More Events</a>
+                <a href="{{site_url}}" class="btn btn-secondary">Visit Our Website</a>
+            </div>
+
+            <!-- Contact Information -->
+            <h3>📞 Need Help?</h3>
+            <p>If you have any questions about the event or need to make changes to your registration, please don't hesitate to contact us:</p>
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <p>📧 Email: {{church_email}}</p>
+                <p>📞 Phone: {{church_phone}}</p>
+                <p>💬 WhatsApp: +256753244480</p>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <h3>Stay Connected</h3>
+            <div class="social-links">
+                <a href="#">📘 Facebook</a>
+                <a href="#">🐦 Twitter</a>
+                <a href="#">📷 Instagram</a>
+                <a href="#">📺 YouTube</a>
+                <a href="#">💬 WhatsApp</a>
+            </div>
+            
+            <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #444;">
+                <p style="font-size: 0.9rem; opacity: 0.8;">
+                    © {{current_year}} Salem Dominion Ministries. All rights reserved.
+                </p>
+                <p style="font-size: 0.8rem; opacity: 0.6; margin-top: 10px;">
+                    {{church_address}} | {{church_phone}}
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

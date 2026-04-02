@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prayer Request Received - Salem Dominion Ministries</title>
+    <style>
+        body {
+            font-family: 'Montserrat', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        .email-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        .header {
+            background: linear-gradient(135deg, #9370DB, #4169E1);
+            padding: 40px 30px;
+            text-align: center;
+            color: white;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 2rem;
+            font-family: 'Dancing Script', cursive;
+        }
+        .content {
+            padding: 40px 30px;
+        }
+        .confirmation-box {
+            background: linear-gradient(135deg, #e8eaf6, #d4d5f0);
+            border-left: 4px solid #9370DB;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .prayer-details {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 30px 0;
+        }
+        .prayer-details h3 {
+            color: #9370DB;
+            margin-top: 0;
+        }
+        .detail-item {
+            display: flex;
+            align-items: flex-start;
+            margin: 15px 0;
+        }
+        .detail-item i {
+            width: 30px;
+            color: #FFD700;
+            font-size: 1.2rem;
+            margin-top: 3px;
+        }
+        .bible-verse {
+            background: #f8f9fa;
+            border-left: 4px solid #FFD700;
+            padding: 20px;
+            margin: 30px 0;
+            font-style: italic;
+            color: #666;
+            text-align: center;
+        }
+        .prayer-team {
+            background: #e8f5e8;
+            border-left: 4px solid #28a745;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .prayer-team h4 {
+            color: #28a745;
+            margin-top: 0;
+        }
+        .action-buttons {
+            text-align: center;
+            margin: 30px 0;
+        }
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            margin: 10px;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #9370DB, #4169E1);
+            color: white;
+        }
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        .footer {
+            background: #1a1a2e;
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .social-links {
+            margin: 20px 0;
+        }
+        .social-links a {
+            color: #FFD700;
+            text-decoration: none;
+            margin: 0 10px;
+            font-size: 1.2rem;
+        }
+        .prayer-types {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .prayer-type {
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+        }
+        .prayer-type-icon {
+            font-size: 2rem;
+            color: #9370DB;
+            margin-bottom: 10px;
+        }
+        .divider {
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #9370DB, transparent);
+            margin: 30px 0;
+        }
+        .urgency-notice {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .urgency-high {
+            background: #f8d7da;
+            border-left: 4px solid #dc3545;
+        }
+        .testimony {
+            background: #d1ecf1;
+            border-left: 4px solid #17a2b8;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🙏 Prayer Request Received</h1>
+            <p>Salem Dominion Ministries</p>
+        </div>
+
+        <!-- Content -->
+        <div class="content">
+            <!-- Confirmation Message -->
+            <div class="confirmation-box">
+                <h2>✅ Your Prayer Request Has Been Received</h2>
+                <p>Dear {{name}},</p>
+                <p>Thank you for entrusting us with your prayer request. Our prayer team has received your request and will be praying for you diligently. We believe in the power of prayer and trust that God will answer according to His perfect will and timing.</p>
+            </div>
+
+            <!-- Prayer Request Details -->
+            <div class="prayer-details">
+                <h3>📋 Your Prayer Request</h3>
+                <div class="detail-item">
+                    <i class="fas fa-user"></i>
+                    <div>
+                        <strong>Name:</strong> {{name}}
+                    </div>
+                </div>
+                <div class="detail-item">
+                    <i class="fas fa-envelope"></i>
+                    <div>
+                        <strong>Email:</strong> {{email}}
+                    </div>
+                </div>
+                <div class="detail-item">
+                    <i class="fas fa-phone"></i>
+                    <div>
+                        <strong>Phone:</strong> {{phone}}
+                    </div>
+                </div>
+                <div class="detail-item">
+                    <i class="fas fa-tag"></i>
+                    <div>
+                        <strong>Category:</strong> {{prayer_category}}
+                    </div>
+                </div>
+                <div class="detail-item">
+                    <i class="fas fa-clock"></i>
+                    <div>
+                        <strong>Submitted:</strong> {{submission_date}}
+                    </div>
+                </div>
+                <div class="detail-item">
+                    <i class="fas fa-heart"></i>
+                    <div>
+                        <strong>Prayer Request:</strong>
+                        <p style="margin-top: 10px; font-style: italic;">{{prayer_request}}</p>
+                    </div>
+                </div>
+                
+                <?php if ($urgency_level === 'High'): ?>
+                <div class="urgency-notice urgency-high">
+                    <h4 style="color: #721c24; margin-top: 15px;">⚠️ High Priority Request</h4>
+                    <p style="color: #721c24; margin-bottom: 0;">This prayer request has been marked as high priority and will receive immediate attention from our pastoral team.</p>
+                </div>
+                <?php endif; ?>
+            </div>
+
+            <!-- Bible Verse -->
+            <div class="bible-verse">
+                <h3>📖 God's Promise on Prayer</h3>
+                <p style="font-size: 1.1rem; color: #1a1a2e;">"The Lord is near to all who call upon Him, to all who call upon Him in truth. He will fulfill the desire of those who fear Him; He also will hear their cry and save them."</p>
+                <p><strong>- Psalm 145:18-19</strong></p>
+            </div>
+
+            <!-- Prayer Team Information -->
+            <div class="prayer-team">
+                <h4>👥 Our Prayer Team</h4>
+                <p>Your prayer request has been shared with our dedicated prayer team, which includes:</p>
+                <ul style="line-height: 1.8;">
+                    <li>👨‍⚕️ Our Senior Pastor and Ministry Staff</li>
+                    <li>👥 Trained Prayer Warriors from our congregation</li>
+                    <li>🙏 Intercessory Prayer Group Members</li>
+                    <li>📞 24/7 Prayer Chain Volunteers</li>
+                </ul>
+                <p><strong>📅 When We Pray:</strong></p>
+                <ul style="line-height: 1.8;">
+                    <li>Daily during our morning prayer time (6:00 AM)</li>
+                    <li>Wednesday evening prayer meeting (7:00 PM)</li>
+                    <li>Sunday morning intercession (8:00 AM)</li>
+                    <li>As needed for urgent requests</li>
+                </ul>
+            </div>
+
+            <!-- Prayer Types -->
+            <h3>🎯 Types of Prayer We'll Be Praying</h3>
+            <div class="prayer-types">
+                <div class="prayer-type">
+                    <div class="prayer-type-icon">🙏</div>
+                    <h4>Intercession</h4>
+                    <p>Standing in the gap and praying on your behalf</p>
+                </div>
+                <div class="prayer-type">
+                    <div class="prayer-type-icon">💪</div>
+                    <h4>Strength</h4>
+                    <p>Praying for God's strength in your situation</p>
+                </div>
+                <div class="prayer-type">
+                    <div class="prayer-type-icon">🕊️</div>
+                    <h4>Peace</h4>
+                    <p>Asking for God's peace to comfort you</p>
+                </div>
+                <div class="prayer-type">
+                    <div class="prayer-type-icon">✨</div>
+                    <h4>Guidance</h4>
+                    <p>Seeking God's wisdom and direction</p>
+                </div>
+            </div>
+
+            <!-- Testimony -->
+            <div class="testimony">
+                <h4>💫 A Word of Encouragement</h4>
+                <p>"Remember, prayer is not just asking God for things; it's about developing a relationship with Him. He hears every prayer, sees every tear, and understands every need. Trust in His perfect timing and His infinite love for you."</p>
+                <p style="text-align: right; margin-top: 15px;"><strong>- Our Prayer Team</strong></p>
+            </div>
+
+            <!-- Follow-up Options -->
+            <h3>📞 Need Additional Support?</h3>
+            <p>If you would like to speak with someone personally about your situation, our pastoral team is here to help:</p>
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <p><strong>📞 Pastor's Office:</strong> {{church_phone}}</p>
+                <p><strong>📧 Email:</strong> ministers@salemdominionministries.com</p>
+                <p><strong>💬 WhatsApp:</strong> +256753244480</p>
+                <p><strong>📱 Technical Support:</strong> +256772514889</p>
+            </div>
+
+            <!-- Update Your Request -->
+            <div style="background: #e3f2fd; border-left: 4px solid #2196f3; padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <h4 style="color: #2196f3; margin-top: 0;">📝 Update Your Request</h4>
+                <p>If your situation changes or you have updates to share, please don't hesitate to contact us. We'd love to hear how God is working in your life!</p>
+                <p><strong>Ways to update:</strong></p>
+                <ul style="line-height: 1.8;">
+                    <li>Reply to this email</li>
+                    <li>Call the church office</li>
+                    <li>Submit a new prayer request online</li>
+                    <li>Send us a message on WhatsApp</li>
+                </ul>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <a href="{{site_url}}/prayer.php" class="btn btn-primary">Submit Another Request</a>
+                <a href="{{site_url}}" class="btn btn-secondary">Visit Website</a>
+                <a href="tel:+256753244480" class="btn btn-primary">Call Pastor</a>
+            </div>
+
+            <!-- Privacy Notice -->
+            <div style="background: #f8f9fa; border: 1px solid #e9ecef; padding: 15px; border-radius: 10px; margin: 20px 0;">
+                <h4 style="color: #495057; margin-top: 0;">🔒 Privacy Notice</h4>
+                <p style="margin-bottom: 0;">Your prayer request is kept confidential within our prayer team. We respect your privacy and will only share your request with those committed to praying for you. If you prefer your request to remain anonymous to the wider team, please let us know.</p>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- Contact Information -->
+            <div style="text-align: center; margin: 30px 0;">
+                <h3>📞 Contact Prayer Team</h3>
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 20px 0;">
+                    <p>📧 Email: ministers@salemdominionministries.com</p>
+                    <p>📞 Phone: {{church_phone}}</p>
+                    <p>💬 WhatsApp: +256753244480</p>
+                    <p>📱 Technical Support: +256772514889</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <h3>Stay Connected</h3>
+            <div class="social-links">
+                <a href="#">📘 Facebook</a>
+                <a href="#">🐦 Twitter</a>
+                <a href="#">📷 Instagram</a>
+                <a href="#">📺 YouTube</a>
+                <a href="#">💬 WhatsApp</a>
+            </div>
+            
+            <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #444;">
+                <p style="font-size: 0.9rem; opacity: 0.8;">
+                    © {{current_year}} Salem Dominion Ministries. All rights reserved.
+                </p>
+                <p style="font-size: 0.8rem; opacity: 0.6; margin-top: 10px;">
+                    {{church_address}} | {{church_phone}}
+                </p>
+                <p style="font-size: 0.8rem; opacity: 0.6; margin-top: 5px;">
+                    Designed & Managed by Reagan Otema | +256772514889
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

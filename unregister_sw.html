@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Unregister Service Worker</title>
+    <script>
+        // Unregister all service workers
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.getRegistrations().then(function(registrations) {
+                for(let registration of registrations) {
+                    registration.unregister();
+                    console.log('Service Worker unregistered');
+                }
+            }).then(() => {
+                // Clear all caches
+                if ('caches' in window) {
+                    caches.keys().then(function(names) {
+                        for (let name of names) caches.delete(name);
+                    });
+                }
+            }).then(() => {
+                alert('Service Workers unregistered and caches cleared! Redirecting to home page...');
+                window.location.href = '/salem-dominion-ministries/';
+            });
+        } else {
+            alert('Service Workers not supported');
+        }
+    </script>
+</head>
+<body>
+    <p>Unregistering Service Workers and clearing caches...</p>
+</body>
+</html>
