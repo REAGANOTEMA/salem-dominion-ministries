@@ -304,3 +304,34 @@ Stack trace:
 [02-Apr-2026 12:07:36 UTC] Database Connection Test: SUCCESS
 [02-Apr-2026 12:07:36 UTC] Environment Info: {"environment":"development","debug_mode":true,"database_host":"localhost","database_name":"salem_dominion_ministries","database_user":"root","app_url":"http:\/\/localhost\/salem-dominion-ministries","mail_enabled":false,"server_name":"localhost","http_host":"localhost","document_root":"C:\/xampp\/htdocs"}
 [02-Apr-2026 12:08:22 UTC] Environment Info: {"environment":"development","debug_mode":true,"database_host":"localhost","database_name":"salem_dominion_ministries","database_user":"root","app_url":"http:\/\/localhost\/salem-dominion-ministries","mail_enabled":false,"server_name":"localhost","http_host":"localhost","document_root":"C:\/xampp\/htdocs"}
+[02-Apr-2026 12:10:49 UTC] Environment Info: {"environment":"development","debug_mode":true,"database_host":"localhost","database_name":"salem_dominion_ministries","database_user":"root","app_url":"http:\/\/localhost\/salem-dominion-ministries","mail_enabled":false,"server_name":"localhost","http_host":"localhost","document_root":"C:\/xampp\/htdocs"}
+[02-Apr-2026 12:11:17 UTC] Environment Info: {"environment":"development","debug_mode":true,"database_host":"localhost","database_name":"salem_dominion_ministries","database_user":"root","app_url":"http:\/\/localhost\/salem-dominion-ministries","mail_enabled":false,"server_name":"localhost","http_host":"localhost","document_root":"C:\/xampp\/htdocs"}
+[02-Apr-2026 12:11:17 UTC] PHP Fatal error:  Uncaught Error: Call to undefined method mysqli::selectOne() in C:\xampp\htdocs\salem-dominion-ministries\about.php:18
+Stack trace:
+#0 {main}
+  thrown in C:\xampp\htdocs\salem-dominion-ministries\about.php on line 18
+[02-Apr-2026 12:11:20 UTC] Environment Info: {"environment":"development","debug_mode":true,"database_host":"localhost","database_name":"salem_dominion_ministries","database_user":"root","app_url":"http:\/\/localhost\/salem-dominion-ministries","mail_enabled":false,"server_name":"localhost","http_host":"localhost","document_root":"C:\/xampp\/htdocs"}
+[02-Apr-2026 12:11:20 UTC] PHP Fatal error:  Uncaught Error: Call to undefined method mysqli::selectOne() in C:\xampp\htdocs\salem-dominion-ministries\about.php:18
+Stack trace:
+#0 {main}
+  thrown in C:\xampp\htdocs\salem-dominion-ministries\about.php on line 18
+[02-Apr-2026 12:11:26 UTC] Environment Info: {"environment":"development","debug_mode":true,"database_host":"localhost","database_name":"salem_dominion_ministries","database_user":"root","app_url":"http:\/\/localhost\/salem-dominion-ministries","mail_enabled":false,"server_name":"localhost","http_host":"localhost","document_root":"C:\/xampp\/htdocs"}
+[02-Apr-2026 12:11:26 UTC] PHP Warning:  Undefined array key "category" in C:\xampp\htdocs\salem-dominion-ministries\ministries.php on line 190
+[02-Apr-2026 12:11:26 UTC] PHP Warning:  Undefined array key "category" in C:\xampp\htdocs\salem-dominion-ministries\ministries.php on line 191
+[02-Apr-2026 12:11:26 UTC] PHP Warning:  Undefined array key "category" in C:\xampp\htdocs\salem-dominion-ministries\ministries.php on line 190
+[02-Apr-2026 12:11:26 UTC] PHP Warning:  Undefined array key "category" in C:\xampp\htdocs\salem-dominion-ministries\ministries.php on line 191
+[02-Apr-2026 12:11:26 UTC] PHP Warning:  Undefined array key "category" in C:\xampp\htdocs\salem-dominion-ministries\ministries.php on line 190
+[02-Apr-2026 12:11:26 UTC] PHP Warning:  Undefined array key "category" in C:\xampp\htdocs\salem-dominion-ministries\ministries.php on line 191
+[02-Apr-2026 12:11:26 UTC] PHP Warning:  Undefined array key "category" in C:\xampp\htdocs\salem-dominion-ministries\ministries.php on line 190
+[02-Apr-2026 12:11:26 UTC] PHP Warning:  Undefined array key "category" in C:\xampp\htdocs\salem-dominion-ministries\ministries.php on line 191
+[02-Apr-2026 12:11:26 UTC] PHP Warning:  Undefined array key "category" in C:\xampp\htdocs\salem-dominion-ministries\ministries.php on line 190
+[02-Apr-2026 12:11:26 UTC] PHP Warning:  Undefined array key "category" in C:\xampp\htdocs\salem-dominion-ministries\ministries.php on line 191
+[02-Apr-2026 12:11:26 UTC] Environment Info: {"environment":"development","debug_mode":true,"database_host":"localhost","database_name":"salem_dominion_ministries","database_user":"root","app_url":"http:\/\/localhost\/salem-dominion-ministries","mail_enabled":false,"server_name":"localhost","http_host":"localhost","document_root":"C:\/xampp\/htdocs"}
+[02-Apr-2026 12:11:26 UTC] Environment Info: {"environment":"development","debug_mode":true,"database_host":"localhost","database_name":"salem_dominion_ministries","database_user":"root","app_url":"http:\/\/localhost\/salem-dominion-ministries","mail_enabled":false,"server_name":"localhost","http_host":"localhost","document_root":"C:\/xampp\/htdocs"}
+[02-Apr-2026 12:11:26 UTC] Environment Info: {"environment":"development","debug_mode":true,"database_host":"localhost","database_name":"salem_dominion_ministries","database_user":"root","app_url":"http:\/\/localhost\/salem-dominion-ministries","mail_enabled":false,"server_name":"localhost","http_host":"localhost","document_root":"C:\/xampp\/htdocs"}
+[02-Apr-2026 12:11:53 UTC] Environment Info: {"environment":"development","debug_mode":true,"database_host":"localhost","database_name":"salem_dominion_ministries","database_user":"root","app_url":"http:\/\/localhost\/salem-dominion-ministries","mail_enabled":false,"server_name":"localhost","http_host":"localhost","document_root":"C:\/xampp\/htdocs"}
+[02-Apr-2026 12:12:43 UTC] Environment Info: {"environment":"development","debug_mode":true,"database_host":"localhost","database_name":"salem_dominion_ministries","database_user":"root","app_url":"http:\/\/localhost\/salem-dominion-ministries","mail_enabled":false,"server_name":"localhost","http_host":"localhost","document_root":"C:\/xampp\/htdocs"}
+[02-Apr-2026 12:12:43 UTC] PHP Fatal error:  Uncaught TypeError: count(): Argument #1 ($value) must be of type Countable|array, mysqli_result given in C:\xampp\htdocs\salem-dominion-ministries\events.php:635
+Stack trace:
+#0 {main}
+  thrown in C:\xampp\htdocs\salem-dominion-ministries\events.php on line 635
