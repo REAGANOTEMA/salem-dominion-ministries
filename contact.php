@@ -56,7 +56,7 @@ ob_end_clean();
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         .contact-hero {
-            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1423666639041-f56000c27a9a?ixlib=rb-4.0.3');
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('public/images/hero/hero-worship.jpg');
             background-size: cover;
             background-position: center;
             color: white;
@@ -111,8 +111,9 @@ ob_end_clean();
     <!-- Hero Section -->
     <section class="contact-hero">
         <div class="container text-center">
-            <h1 class="display-4 fw-bold mb-4">Contact Us</h1>
-            <p class="lead mb-4">We'd love to hear from you. Reach out with questions, prayer requests, or just to say hello.</p>
+            <h1 class="display-4 fw-bold mb-4">Contact Apostle Faty Musasizi</h1>
+            <p class="lead mb-4">"Come to me, all you who are weary and burdened, and I will give you rest." - Matthew 11:28</p>
+            <p class="mb-4">Reach out to Senior Pastor Apostle Faty Musasizi for prayer, counseling, or to learn more about our ministry.</p>
         </div>
     </section>
 
@@ -229,8 +230,9 @@ ob_end_clean();
                                 <div class="card-body">
                                     <h5 class="card-title"><i class="fas fa-phone text-info"></i> Get in Touch</h5>
                                     <p class="card-text">
-                                        <strong>Email:</strong> visit@salemdominionministries.com<br>
-                                        <strong>Phone:</strong> [Church Phone Number]
+                                        <strong>Email:</strong> apostle@salemdominionministries.com<br>
+                                        <strong>Phone:</strong> +256753244480<br>
+                                        <strong>Pastor:</strong> Apostle Faty Musasizi
                                     </p>
                                 </div>
                             </div>

@@ -95,7 +95,7 @@ ob_end_clean();
         .hero-section {
             height: 60vh;
             background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
-                        url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3') center/cover;
+                        url('public/images/hero/hero-worship.jpg');
             display: flex;
             align-items: center;
             justify-content: center;

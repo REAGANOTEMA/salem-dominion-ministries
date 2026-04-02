@@ -1,4 +1,12 @@
 ﻿<?php
+// Complete error suppression to prevent unwanted output
+error_reporting(0);
+ini_set('display_errors', 0);
+ini_set('log_errors', 0);
+
+// Buffer output to catch any accidental output
+ob_start();
+
 session_start();
 require_once 'db.php';
 
@@ -14,6 +22,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_view'])) {
     $db->query("UPDATE sermons SET views = views + 1 WHERE id = $sermon_id");
     exit;
 }
+
+// Clean any buffered output
+ob_end_clean();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -25,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_view'])) {
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         .sermons-hero {
-            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3');
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('public/images/hero/hero-worship.jpg');
             background-size: cover;
             background-position: center;
             color: white;
@@ -88,8 +99,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_view'])) {
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
-            <a class="navbar-brand" href="index.php">
-                <i class="fas fa-church"></i> Salem Dominion Ministries
+            <a class="navbar-brand heavenly-logo" href="index.php">
+                <img src="public/images/logo.png" alt="Salem Dominion Ministries" class="logo-img">
+                <span class="brand-text">Salem Dominion Ministries</span>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
@@ -121,8 +133,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_view'])) {
     <!-- Hero Section -->
     <section class="sermons-hero">
         <div class="container text-center">
-            <h1 class="display-4 fw-bold mb-4">Sermons</h1>
+            <h1 class="display-4 fw-bold mb-4">Sermons by Apostle Faty Musasizi</h1>
             <p class="lead mb-4">"All Scripture is God-breathed and is useful for teaching, rebuking, correcting and training in righteousness." - 2 Timothy 3:16</p>
+            <p class="mb-4">Listen to powerful teachings from Senior Pastor Apostle Faty Musasizi and our ministry team</p>
         </div>
     </section>
 

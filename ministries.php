@@ -30,7 +30,7 @@ ob_end_clean();
     <link href="assets/css/perfect_responsive.css" rel="stylesheet">
     <style>
         .ministries-hero {
-            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1520637836862-4d197d17c23a?ixlib=rb-4.0.3');
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('public/images/hero/hero-choir.jpg');
             background-size: cover;
             background-position: center;
             color: white;

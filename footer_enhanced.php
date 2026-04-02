@@ -140,7 +140,7 @@
                                 </div>
                                 <div class="contact-details">
                                     <h5>Email Address</h5>
-                                    <p>visit@salemdominionministries.com<br>info@salemdominionministries.com</p>
+                                    <p>apostle@salemdominionministries.com<br>info@salemdominionministries.com</p>
                                 </div>
                             </div>
                             
@@ -150,7 +150,7 @@
                                 </div>
                                 <div class="contact-details">
                                     <h5>Phone Numbers</h5>
-                                    <p>Office: +1 (555) 123-4567<br>Pastor: +1 (555) 987-6543</p>
+                                    <p>Office: +256753244480<br>Pastor: +256753244480</p>
                                 </div>
                             </div>
                             
@@ -258,14 +258,14 @@
 
 <!-- WhatsApp Floating Button -->
 <div class="whatsapp-float" id="whatsappFloat">
-    <a href="https://wa.me/256753244480" target="_blank" class="whatsapp-button" aria-label="Chat with Pastor on WhatsApp">
+    <a href="https://wa.me/256753244480" target="_blank" class="whatsapp-button" aria-label="Chat with Apostle Faty Musasizi on WhatsApp">
         <div class="whatsapp-icon">
             <i class="fab fa-whatsapp"></i>
         </div>
         <div class="whatsapp-tooltip">
             <div class="tooltip-content">
-                <h6>Chat with Pastor</h6>
-                <p>Need spiritual guidance? Talk to our pastor now!</p>
+                <h6>Chat with Apostle Faty Musasizi</h6>
+                <p>Need spiritual guidance? Talk to our Senior Pastor now!</p>
                 <small>+256 753 244 480</small>
             </div>
         </div>

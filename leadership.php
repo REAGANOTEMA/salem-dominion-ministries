@@ -580,7 +580,7 @@ secure_session_start();
                         </p>
                         <div class="pastor-contacts">
                             <p><i class="fas fa-envelope"></i> apostle@salemdominionministries.com</p>
-                            <p><i class="fas fa-phone"></i> +256 XXX XXX XXX</p>
+                            <p><i class="fas fa-phone"></i> +256753244480</p>
                         </div>
                         <div class="pastor-actions">
                             <button class="btn btn-primary" onclick="openPrayerModal()">

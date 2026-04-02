@@ -1,4 +1,12 @@
 <?php
+// Complete error suppression to prevent unwanted output
+error_reporting(0);
+ini_set('display_errors', 0);
+ini_set('log_errors', 0);
+
+// Buffer output to catch any accidental output
+ob_start();
+
 // Include session helper and start session safely
 require_once 'session_helper.php';
 secure_session_start();
@@ -46,6 +54,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['register_event'])) {
         }
     }
 }
+
+// Clean any buffered output
+ob_end_clean();
+?>
 
 // Helper functions
 function safe_html($string, $default = '') {
@@ -161,10 +173,9 @@ function format_event_date($date) {
 
         /* Events Header */
         .events-header {
-            background: var(--gradient-divine);
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('public/images/hero/hero-community.jpg');
             color: white;
             padding: 120px 0 80px;
-            text-align: center;
             position: relative;
             overflow: hidden;
         }
@@ -593,8 +604,9 @@ function format_event_date($date) {
     <!-- Events Header -->
     <header class="events-header">
         <div class="container">
-            <h1 class="events-title" data-aos="fade-up">Church Events</h1>
-            <p class="events-subtitle" data-aos="fade-up" data-aos-delay="100">Join us for worship, fellowship, and community activities</p>
+            <h1 class="events-title" data-aos="fade-up">Events with Apostle Faty Musasizi</h1>
+            <p class="events-subtitle" data-aos="fade-up" data-aos-delay="100">"For where two or three gather in my name, there am I with them." - Matthew 18:20</p>
+            <p class="lead" data-aos="fade-up" data-aos-delay="200">Join Senior Pastor Apostle Faty Musasizi and our church family for worship, fellowship, and community activities</p>
         </div>
     </header>
 
