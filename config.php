@@ -1,9 +1,9 @@
 &lt;?php
 // Database Configuration
 define('DB_HOST', 'localhost');
-define('DB_USER', 'salemdominionmin_dominion-ministries');
-define('DB_PASSWORD', '3zpnMk6T2REJjYGHGzBZ');
-define('DB_NAME', 'salemdominionmin_dominion-ministries');
+define('DB_USER', 'root');
+define('DB_PASSWORD', 'ReagaN23#');
+define('DB_NAME', 'salem_dominion_ministries');
 define('DB_CHARSET', 'utf8mb4');
 define('DB_PORT', 3306);
 

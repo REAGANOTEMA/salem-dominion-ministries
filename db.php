@@ -29,29 +29,37 @@ class Database {
     }
 
     public function query($sql, $params = []) {
+        // If no parameters, use direct query for compatibility
+        if (empty($params)) {
+            $result = $this->conn->query($sql);
+            if ($result === false) {
+                throw new Exception("Query failed: " . $this->conn->error);
+            }
+            return $result;
+        }
+        
+        // Use prepared statement for parameterized queries
         $stmt = $this->conn->prepare($sql);
         if ($stmt === false) {
             throw new Exception("Prepare failed: " . $this->conn->error);
         }
 
-        if (!empty($params)) {
-            $types = '';
-            foreach ($params as $param) {
-                if (is_int($param)) $types .= 'i';
-                elseif (is_float($param)) $types .= 'd';
-                elseif (is_string($param)) $types .= 's';
-                else $types .= 's';
-            }
-            $stmt->bind_param($types, ...$params);
+        $types = '';
+        foreach ($params as $param) {
+            if (is_int($param)) $types .= 'i';
+            elseif (is_float($param)) $types .= 'd';
+            elseif (is_string($param)) $types .= 's';
+            else $types .= 's';
         }
+        $stmt->bind_param($types, ...$params);
 
         $stmt->execute();
-        return $stmt;
+        return $stmt->get_result();
     }
 
     public function select($sql, $params = []) {
         $stmt = $this->query($sql, $params);
-        $result = $stmt->get_result();
+        $result = $stmt;
         $data = [];
         while ($row = $result->fetch_assoc()) {
             $data[] = $row;
