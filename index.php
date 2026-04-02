@@ -31,11 +31,18 @@ $gallery = $db->query("SELECT * FROM gallery WHERE status = 'published' AND is_f
             --primary-color: #2c3e50;
             --secondary-color: #e74c3c;
             --accent-color: #f39c12;
+            --heavenly-gold: #FFD700;
+            --angel-white: #F8F8FF;
+            --divine-blue: #4169E1;
+            --grace-purple: #9370DB;
             --light-color: #ecf0f1;
             --dark-color: #34495e;
             --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             --gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
             --gradient-church: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            --gradient-heavenly: linear-gradient(135deg, #FFD700 0%, #FFA500 50%, #FF6347 100%);
+            --gradient-angel: linear-gradient(135deg, #F8F8FF 0%, #E6E6FA 50%, #D8BFD8 100%);
+            --gradient-divine: linear-gradient(135deg, #4169E1 0%, #9370DB 50%, #FFD700 100%);
         }
 
         * {
@@ -49,11 +56,59 @@ $gallery = $db->query("SELECT * FROM gallery WHERE status = 'published' AND is_f
             line-height: 1.6;
             color: var(--dark-color);
             overflow-x: hidden;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y="50" font-size="100" fill="rgba(255,215,0,0.02)">✨</text></svg>') repeat;
+            pointer-events: none;
+            z-index: 1;
         }
 
         h1, h2, h3, h4, h5, h6 {
             font-family: 'Playfair Display', serif;
             font-weight: 700;
+        }
+
+        /* Floating Angels */
+        .floating-angel {
+            position: fixed;
+            font-size: 2rem;
+            color: var(--heavenly-gold);
+            opacity: 0.3;
+            pointer-events: none;
+            z-index: 2;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .angel-1 {
+            top: 20%;
+            left: 5%;
+            animation-delay: 0s;
+        }
+
+        .angel-2 {
+            top: 60%;
+            right: 5%;
+            animation-delay: 2s;
+        }
+
+        .angel-3 {
+            top: 40%;
+            left: 10%;
+            animation-delay: 4s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-30px) rotate(10deg); }
         }
 
         /* Navigation */
@@ -63,13 +118,15 @@ $gallery = $db->query("SELECT * FROM gallery WHERE status = 'published' AND is_f
             box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
             transition: all 0.3s ease;
             padding: 1rem 0;
+            position: relative;
+            z-index: 1000;
         }
 
         .navbar-brand {
             font-family: 'Dancing Script', cursive;
             font-size: 2rem;
             font-weight: 700;
-            background: var(--gradient-church);
+            background: var(--gradient-divine);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -84,7 +141,7 @@ $gallery = $db->query("SELECT * FROM gallery WHERE status = 'published' AND is_f
         }
 
         .navbar-nav .nav-link:hover {
-            color: var(--secondary-color) !important;
+            color: var(--heavenly-gold) !important;
             transform: translateY(-2px);
         }
 
@@ -95,7 +152,7 @@ $gallery = $db->query("SELECT * FROM gallery WHERE status = 'published' AND is_f
             left: 50%;
             width: 0;
             height: 2px;
-            background: var(--gradient-secondary);
+            background: var(--gradient-heavenly);
             transition: all 0.3s ease;
             transform: translateX(-50%);
         }
@@ -107,7 +164,7 @@ $gallery = $db->query("SELECT * FROM gallery WHERE status = 'published' AND is_f
         /* Hero Section */
         .hero-section {
             height: 100vh;
-            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
                         url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3') center/cover;
             display: flex;
             align-items: center;
@@ -125,14 +182,36 @@ $gallery = $db->query("SELECT * FROM gallery WHERE status = 'published' AND is_f
             left: 0;
             right: 0;
             bottom: 0;
-            background: var(--gradient-church);
-            opacity: 0.3;
+            background: var(--gradient-divine);
+            opacity: 0.4;
             animation: gradientShift 10s ease infinite;
         }
 
         @keyframes gradientShift {
-            0%, 100% { opacity: 0.3; }
-            50% { opacity: 0.5; }
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 0.6; }
+        }
+
+        .hero-angel {
+            position: absolute;
+            font-size: 4rem;
+            color: rgba(255, 255, 255, 0.3);
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        .angel-left {
+            top: 20%;
+            left: 10%;
+        }
+
+        .angel-right {
+            top: 20%;
+            right: 10%;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.3; }
+            50% { transform: scale(1.1); opacity: 0.5; }
         }
 
         .hero-content {
@@ -148,6 +227,10 @@ $gallery = $db->query("SELECT * FROM gallery WHERE status = 'published' AND is_f
             margin-bottom: 1.5rem;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
             animation: fadeInUp 1s ease;
+            background: linear-gradient(45deg, #FFD700, #FFFFFF);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .hero-subtitle {
@@ -155,6 +238,7 @@ $gallery = $db->query("SELECT * FROM gallery WHERE status = 'published' AND is_f
             margin-bottom: 2rem;
             font-weight: 300;
             animation: fadeInUp 1s ease 0.2s both;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
         }
 
         @keyframes fadeInUp {
@@ -183,29 +267,31 @@ $gallery = $db->query("SELECT * FROM gallery WHERE status = 'published' AND is_f
         }
 
         .btn-primary-hero {
-            background: var(--gradient-primary);
+            background: var(--gradient-heavenly);
             color: white;
+            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.3);
         }
 
         .btn-outline-hero {
             background: transparent;
             color: white;
-            border: 2px solid white;
+            border: 2px solid var(--heavenly-gold);
         }
 
         .btn-hero:hover {
             transform: translateY(-3px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.4);
         }
 
         /* Section Styles */
         .section {
             padding: 100px 0;
             position: relative;
+            z-index: 2;
         }
 
         .section-alt {
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            background: var(--gradient-angel);
         }
 
         .section-title {
@@ -213,10 +299,21 @@ $gallery = $db->query("SELECT * FROM gallery WHERE status = 'published' AND is_f
             font-weight: 900;
             text-align: center;
             margin-bottom: 1rem;
-            background: var(--gradient-church);
+            background: var(--gradient-divine);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            position: relative;
+        }
+
+        .section-title::before {
+            content: '✨';
+            position: absolute;
+            top: -20px;
+            right: 20px;
+            font-size: 1.5rem;
+            color: var(--heavenly-gold);
+            opacity: 0.6;
         }
 
         .section-subtitle {
@@ -238,11 +335,22 @@ $gallery = $db->query("SELECT * FROM gallery WHERE status = 'published' AND is_f
             transition: all 0.3s ease;
             height: 100%;
             background: white;
+            position: relative;
+        }
+
+        .card-custom::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-heavenly);
         }
 
         .card-custom:hover {
             transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 20px 40px rgba(255, 215, 0, 0.2);
         }
 
         .card-custom .card-img-top {
@@ -276,17 +384,30 @@ $gallery = $db->query("SELECT * FROM gallery WHERE status = 'published' AND is_f
             transition: all 0.3s ease;
             border: 2px solid transparent;
             background-clip: padding-box;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-card::before {
+            content: '🕊️';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 1.5rem;
+            opacity: 0.3;
         }
 
         .service-card:hover {
-            border-color: var(--accent-color);
+            border-color: var(--heavenly-gold);
             transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(255, 215, 0, 0.2);
         }
 
         .service-icon {
             font-size: 3rem;
-            color: var(--accent-color);
+            color: var(--heavenly-gold);
             margin-bottom: 1rem;
+            animation: pulse 2s infinite;
         }
 
         /* Ministries */
@@ -306,12 +427,12 @@ $gallery = $db->query("SELECT * FROM gallery WHERE status = 'published' AND is_f
             left: 0;
             right: 0;
             height: 5px;
-            background: var(--gradient-church);
+            background: var(--gradient-heavenly);
         }
 
         .ministry-card:hover {
             transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 20px 40px rgba(255, 215, 0, 0.2);
         }
 
         /* Events */
@@ -324,7 +445,7 @@ $gallery = $db->query("SELECT * FROM gallery WHERE status = 'published' AND is_f
         }
 
         .event-date {
-            background: var(--gradient-primary);
+            background: var(--gradient-heavenly);
             color: white;
             padding: 1rem;
             text-align: center;
@@ -333,7 +454,7 @@ $gallery = $db->query("SELECT * FROM gallery WHERE status = 'published' AND is_f
 
         .event-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 15px 35px rgba(255, 215, 0, 0.2);
         }
 
         /* Gallery */
@@ -363,7 +484,7 @@ $gallery = $db->query("SELECT * FROM gallery WHERE status = 'published' AND is_f
             left: 0;
             right: 0;
             bottom: 0;
-            background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.7));
+            background: linear-gradient(to bottom, transparent, rgba(255, 215, 0, 0.7));
             display: flex;
             align-items: flex-end;
             padding: 1rem;
@@ -382,22 +503,33 @@ $gallery = $db->query("SELECT * FROM gallery WHERE status = 'published' AND is_f
             padding: 2rem;
             box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
             transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .sermon-card::before {
+            content: '📖';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 1.5rem;
+            opacity: 0.3;
         }
 
         .sermon-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 15px 35px rgba(255, 215, 0, 0.2);
         }
 
         .sermon-verse {
             font-style: italic;
-            color: var(--accent-color);
+            color: var(--heavenly-gold);
             margin-bottom: 1rem;
         }
 
         /* Pastor Booking CTA */
         .booking-cta {
-            background: var(--gradient-church);
+            background: var(--gradient-divine);
             color: white;
             padding: 4rem 0;
             text-align: center;
@@ -426,10 +558,12 @@ $gallery = $db->query("SELECT * FROM gallery WHERE status = 'published' AND is_f
             background: var(--primary-color);
             color: white;
             padding: 3rem 0 1rem;
+            position: relative;
+            z-index: 2;
         }
 
         .footer-widget h5 {
-            color: var(--accent-color);
+            color: var(--heavenly-gold);
             margin-bottom: 1.5rem;
             font-weight: 700;
         }
@@ -450,7 +584,7 @@ $gallery = $db->query("SELECT * FROM gallery WHERE status = 'published' AND is_f
         }
 
         .footer-widget ul li a:hover {
-            color: var(--accent-color);
+            color: var(--heavenly-gold);
         }
 
         .social-links {
@@ -472,16 +606,18 @@ $gallery = $db->query("SELECT * FROM gallery WHERE status = 'published' AND is_f
         }
 
         .social-links a:hover {
-            background: var(--accent-color);
+            background: var(--heavenly-gold);
             transform: translateY(-3px);
         }
 
         /* Mobile App Banner */
         .app-banner {
-            background: var(--gradient-secondary);
+            background: var(--gradient-heavenly);
             color: white;
             padding: 2rem 0;
             text-align: center;
+            position: relative;
+            z-index: 2;
         }
 
         .app-buttons {
@@ -528,6 +664,10 @@ $gallery = $db->query("SELECT * FROM gallery WHERE status = 'published' AND is_f
             .section {
                 padding: 60px 0;
             }
+            
+            .floating-angel {
+                display: none;
+            }
         }
 
         /* Loading Animation */
@@ -556,7 +696,7 @@ $gallery = $db->query("SELECT * FROM gallery WHERE status = 'published' AND is_f
 
         .loader-icon {
             font-size: 3rem;
-            color: var(--accent-color);
+            color: var(--heavenly-gold);
             animation: spin 2s linear infinite;
         }
 
@@ -564,35 +704,19 @@ $gallery = $db->query("SELECT * FROM gallery WHERE status = 'published' AND is_f
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-
-        /* Floating Elements */
-        .floating {
-            animation: floating 3s ease-in-out infinite;
-        }
-
-        @keyframes floating {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
-        }
-
-        /* Pulse Animation */
-        .pulse {
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
     </style>
 </head>
 <body>
+    <!-- Floating Angels -->
+    <div class="floating-angel angel-1">🕊️</div>
+    <div class="floating-angel angel-2">✨</div>
+    <div class="floating-angel angel-3">👼</div>
+
     <!-- Loader -->
     <div class="loader" id="loader">
         <div class="loader-content">
-            <i class="fas fa-church loader-icon"></i>
-            <p class="mt-3">Loading Salem Dominion Ministries...</p>
+            <i class="fas fa-dove loader-icon"></i>
+            <p class="mt-3">Loading God's blessings...</p>
         </div>
     </div>
 
@@ -631,6 +755,8 @@ $gallery = $db->query("SELECT * FROM gallery WHERE status = 'published' AND is_f
 
     <!-- Hero Section -->
     <section class="hero-section">
+        <div class="hero-angel angel-left">👼</div>
+        <div class="hero-angel angel-right">🕊️</div>
         <div class="hero-content">
             <h1 class="hero-title">Welcome to Salem Dominion Ministries</h1>
             <p class="hero-subtitle">Experience God's love, grow in faith, and serve our community together</p>
@@ -918,6 +1044,7 @@ $gallery = $db->query("SELECT * FROM gallery WHERE status = 'published' AND is_f
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="assets/js/heavenly_sounds.js"></script>
     <script>
         // Initialize AOS
         AOS.init({
@@ -930,7 +1057,7 @@ $gallery = $db->query("SELECT * FROM gallery WHERE status = 'published' AND is_f
         window.addEventListener('load', function() {
             setTimeout(function() {
                 document.getElementById('loader').classList.add('hidden');
-            }, 1000);
+            }, 1500);
         });
 
         // Navbar scroll effect
@@ -972,7 +1099,6 @@ $gallery = $db->query("SELECT * FROM gallery WHERE status = 'published' AND is_f
                     });
                 });
             } else {
-                // Fallback to app store
                 alert('App installation is not available on this device. Please visit our app store page.');
             }
         }
@@ -984,13 +1110,40 @@ $gallery = $db->query("SELECT * FROM gallery WHERE status = 'published' AND is_f
                 .catch(error => console.log('SW registration failed'));
         }
 
-        // Floating animation for hero elements
-        setInterval(() => {
-            const floatingElements = document.querySelectorAll('.floating');
-            floatingElements.forEach(el => {
-                el.style.animationDelay = Math.random() * 3 + 's';
+        // Add heavenly interactions
+        document.addEventListener('DOMContentLoaded', () => {
+            // Welcome message after page load
+            setTimeout(() => {
+                if (window.heavenlyGuidance) {
+                    window.heavenlyGuidance.showWelcomeMessage();
+                }
+            }, 4000);
+            
+            // Periodic angelic presence
+            setInterval(() => {
+                if (window.heavenlyGuidance && Math.random() > 0.95) {
+                    window.heavenlyGuidance.showAngelGuidance();
+                }
+            }, 45000); // Every 45 seconds
+            
+            // Heavenly hover effects
+            document.querySelectorAll('.btn-hero, .card-custom, .service-card').forEach(element => {
+                element.addEventListener('mouseenter', () => {
+                    if (window.heavenlyGuidance && Math.random() > 0.9) {
+                        window.heavenlyGuidance.playGentleChime();
+                    }
+                });
             });
-        }, 5000);
+        });
+
+        // Floating angel animation
+        document.querySelectorAll('.floating-angel').forEach((angel, index) => {
+            setInterval(() => {
+                const randomX = Math.random() * 20 - 10;
+                const randomY = Math.random() * 20 - 10;
+                angel.style.transform = `translate(${randomX}px, ${randomY}px)`;
+            }, 3000 + (index * 1000));
+        });
     </script>
 </body>
 </html>
