@@ -1,4 +1,4 @@
-&lt;?php
+﻿<?php
 require_once 'db.php';
 
 $sql = "
@@ -45,4 +45,4 @@ try {
 } catch (Exception $e) {
     echo "Exception: " . $e->getMessage();
 }
-?&gt;
+?>

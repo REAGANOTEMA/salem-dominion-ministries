@@ -1,4 +1,4 @@
-&lt;?php
+﻿<?php
 session_start();
 require_once 'db.php';
 
@@ -19,12 +19,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_SESSION['user_id']) && isse
             $filepath = $upload_dir . $filename;
 
             if (move_uploaded_file($file['tmp_name'], $filepath)) {
-                $stmt = $db-&gt;prepare("INSERT INTO gallery (user_id, image_path, title, description) VALUES (?, ?, ?, ?)");
+                $stmt = $db->prepare("INSERT INTO gallery (user_id, image_path, title, description) VALUES (?, ?, ?, ?)");
                 $title = trim($_POST['title'] ?? '');
                 $description = trim($_POST['description'] ?? '');
-                $stmt-&gt;bind_param('isss', $user_id, $filepath, $title, $description);
-                $stmt-&gt;execute();
-                $stmt-&gt;close();
+                $stmt->bind_param('isss', $user_id, $filepath, $title, $description);
+                $stmt->execute();
+                $stmt->close();
                 $upload_success = 'Image uploaded successfully!';
             } else {
                 $upload_error = 'Failed to upload image.';
@@ -38,17 +38,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_SESSION['user_id']) && isse
 }
 
 // Get gallery images
-$gallery_images = $db-&gt;query("SELECT g.*, u.username, u.avatar FROM gallery g LEFT JOIN users u ON g.user_id = u.id ORDER BY g.created_at DESC");
-?&gt;
-&lt;!DOCTYPE html&gt;
-&lt;html lang="en"&gt;
-&lt;head&gt;
-    &lt;meta charset="UTF-8"&gt;
-    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
-    &lt;title&gt;Gallery - Salem Dominion Ministries&lt;/title&gt;
-    &lt;link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"&gt;
-    &lt;link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"&gt;
-    &lt;style&gt;
+$gallery_images = $db->query("SELECT g.*, u.username, u.avatar FROM gallery g LEFT JOIN users u ON g.user_id = u.id ORDER BY g.created_at DESC");
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery - Salem Dominion Ministries</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
         .gallery-hero {
             background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1511578314322-379afb476865?ixlib=rb-4.0.3');
             background-size: cover;
@@ -94,169 +94,169 @@ $gallery_images = $db-&gt;query("SELECT g.*, u.username, u.avatar FROM gallery g
             border: none;
             border-radius: 15px;
         }
-    &lt;/style&gt;
-&lt;/head&gt;
-&lt;body&gt;
-    &lt;!-- Navigation --&gt;
-    &lt;nav class="navbar navbar-expand-lg navbar-dark bg-dark"&gt;
-        &lt;div class="container"&gt;
-            &lt;a class="navbar-brand" href="index.php"&gt;
-                &lt;i class="fas fa-church"&gt;&lt;/i&gt; Salem Dominion Ministries
-            &lt;/a&gt;
-            &lt;button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"&gt;
-                &lt;span class="navbar-toggler-icon"&gt;&lt;/span&gt;
-            &lt;/button&gt;
-            &lt;div class="collapse navbar-collapse" id="navbarNav"&gt;
-                &lt;ul class="navbar-nav me-auto"&gt;
-                    &lt;li class="nav-item"&gt;&lt;a class="nav-link" href="index.php"&gt;Home&lt;/a&gt;&lt;/li&gt;
-                    &lt;li class="nav-item"&gt;&lt;a class="nav-link" href="about.php"&gt;About&lt;/a&gt;&lt;/li&gt;
-                    &lt;li class="nav-item"&gt;&lt;a class="nav-link" href="ministries.php"&gt;Ministries&lt;/a&gt;&lt;/li&gt;
-                    &lt;li class="nav-item"&gt;&lt;a class="nav-link" href="events.php"&gt;Events&lt;/a&gt;&lt;/li&gt;
-                    &lt;li class="nav-item"&gt;&lt;a class="nav-link" href="sermons.php"&gt;Sermons&lt;/a&gt;&lt;/li&gt;
-                    &lt;li class="nav-item"&gt;&lt;a class="nav-link" href="news.php"&gt;News&lt;/a&gt;&lt;/li&gt;
-                    &lt;li class="nav-item"&gt;&lt;a class="nav-link active" href="gallery.php"&gt;Gallery&lt;/a&gt;&lt;/li&gt;
-                    &lt;li class="nav-item"&gt;&lt;a class="nav-link" href="contact.php"&gt;Contact&lt;/a&gt;&lt;/li&gt;
-                &lt;/ul&gt;
-                &lt;ul class="navbar-nav"&gt;
-                    &lt;?php if (isset($_SESSION['user_id'])): ?&gt;
-                        &lt;li class="nav-item"&gt;&lt;a class="nav-link" href="dashboard.php"&gt;Dashboard&lt;/a&gt;&lt;/li&gt;
-                        &lt;li class="nav-item"&gt;&lt;a class="nav-link" href="logout.php"&gt;Logout&lt;/a&gt;&lt;/li&gt;
-                    &lt;?php else: ?&gt;
-                        &lt;li class="nav-item"&gt;&lt;a class="nav-link" href="login.php"&gt;Login&lt;/a&gt;&lt;/li&gt;
-                        &lt;li class="nav-item"&gt;&lt;a class="nav-link" href="register.php"&gt;Register&lt;/a&gt;&lt;/li&gt;
-                    &lt;?php endif; ?&gt;
-                &lt;/ul&gt;
-            &lt;/div&gt;
-        &lt;/div&gt;
-    &lt;/nav&gt;
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="index.php">
+                <i class="fas fa-church"></i> Salem Dominion Ministries
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link" href="index.php">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="about.php">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="ministries.php">Ministries</a></li>
+                    <li class="nav-item"><a class="nav-link" href="events.php">Events</a></li>
+                    <li class="nav-item"><a class="nav-link" href="sermons.php">Sermons</a></li>
+                    <li class="nav-item"><a class="nav-link" href="news.php">News</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="gallery.php">Gallery</a></li>
+                    <li class="nav-item"><a class="nav-link" href="contact.php">Contact</a></li>
+                </ul>
+                <ul class="navbar-nav">
+                    <?php if (isset($_SESSION['user_id'])): ?>
+                        <li class="nav-item"><a class="nav-link" href="dashboard.php">Dashboard</a></li>
+                        <li class="nav-item"><a class="nav-link" href="logout.php">Logout</a></li>
+                    <?php else: ?>
+                        <li class="nav-item"><a class="nav-link" href="login.php">Login</a></li>
+                        <li class="nav-item"><a class="nav-link" href="register.php">Register</a></li>
+                    <?php endif; ?>
+                </ul>
+            </div>
+        </div>
+    </nav>
 
-    &lt;!-- Hero Section --&gt;
-    &lt;section class="gallery-hero"&gt;
-        &lt;div class="container text-center"&gt;
-            &lt;h1 class="display-4 fw-bold mb-4"&gt;Photo Gallery&lt;/h1&gt;
-            &lt;p class="lead mb-4"&gt;Capturing moments of worship, fellowship, and community service.&lt;/p&gt;
-        &lt;/div&gt;
-    &lt;/section&gt;
+    <!-- Hero Section -->
+    <section class="gallery-hero">
+        <div class="container text-center">
+            <h1 class="display-4 fw-bold mb-4">Photo Gallery</h1>
+            <p class="lead mb-4">Capturing moments of worship, fellowship, and community service.</p>
+        </div>
+    </section>
 
-    &lt;!-- Gallery Content --&gt;
-    &lt;section class="py-5"&gt;
-        &lt;div class="container"&gt;
-            &lt;!-- Upload Section for Members --&gt;
-            &lt;?php if (isset($_SESSION['user_id'])): ?&gt;
-                &lt;div class="row mb-5"&gt;
-                    &lt;div class="col-lg-6 mx-auto"&gt;
-                        &lt;div class="card upload-card"&gt;
-                            &lt;div class="card-body p-4"&gt;
-                                &lt;h4 class="card-title mb-4"&gt;&lt;i class="fas fa-camera text-primary"&gt;&lt;/i&gt; Share Your Photos&lt;/h4&gt;
+    <!-- Gallery Content -->
+    <section class="py-5">
+        <div class="container">
+            <!-- Upload Section for Members -->
+            <?php if (isset($_SESSION['user_id'])): ?>
+                <div class="row mb-5">
+                    <div class="col-lg-6 mx-auto">
+                        <div class="card upload-card">
+                            <div class="card-body p-4">
+                                <h4 class="card-title mb-4"><i class="fas fa-camera text-primary"></i> Share Your Photos</h4>
 
-                                &lt;?php if (isset($upload_success)): ?&gt;
-                                    &lt;div class="alert alert-success"&gt;&lt;?php echo htmlspecialchars($upload_success); ?&gt;&lt;/div&gt;
-                                &lt;?php endif; ?&gt;
+                                <?php if (isset($upload_success)): ?>
+                                    <div class="alert alert-success"><?php echo htmlspecialchars($upload_success); ?></div>
+                                <?php endif; ?>
 
-                                &lt;?php if (isset($upload_error)): ?&gt;
-                                    &lt;div class="alert alert-danger"&gt;&lt;?php echo htmlspecialchars($upload_error); ?&gt;&lt;/div&gt;
-                                &lt;?php endif; ?&gt;
+                                <?php if (isset($upload_error)): ?>
+                                    <div class="alert alert-danger"><?php echo htmlspecialchars($upload_error); ?></div>
+                                <?php endif; ?>
 
-                                &lt;form method="POST" enctype="multipart/form-data"&gt;
-                                    &lt;div class="mb-3"&gt;
-                                        &lt;label for="title" class="form-label"&gt;Photo Title&lt;/label&gt;
-                                        &lt;input type="text" class="form-control" id="title" name="title" placeholder="Optional title for your photo"&gt;
-                                    &lt;/div&gt;
-                                    &lt;div class="mb-3"&gt;
-                                        &lt;label for="description" class="form-label"&gt;Description&lt;/label&gt;
-                                        &lt;textarea class="form-control" id="description" name="description" rows="2" placeholder="Optional description"&gt;&lt;/textarea&gt;
-                                    &lt;/div&gt;
-                                    &lt;div class="mb-3"&gt;
-                                        &lt;label for="gallery_image" class="form-label"&gt;Select Image&lt;/label&gt;
-                                        &lt;input type="file" class="form-control" id="gallery_image" name="gallery_image" accept="image/*" required&gt;
-                                        &lt;div class="form-text"&gt;Supported formats: JPEG, PNG, GIF, WebP. Max size: 5MB.&lt;/div&gt;
-                                    &lt;/div&gt;
-                                    &lt;button type="submit" class="btn btn-primary"&gt;
-                                        &lt;i class="fas fa-upload"&gt;&lt;/i&gt; Upload Photo
-                                    &lt;/button&gt;
-                                &lt;/form&gt;
-                            &lt;/div&gt;
-                        &lt;/div&gt;
-                    &lt;/div&gt;
-                &lt;/div&gt;
-            &lt;?php endif; ?&gt;
+                                <form method="POST" enctype="multipart/form-data">
+                                    <div class="mb-3">
+                                        <label for="title" class="form-label">Photo Title</label>
+                                        <input type="text" class="form-control" id="title" name="title" placeholder="Optional title for your photo">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="description" class="form-label">Description</label>
+                                        <textarea class="form-control" id="description" name="description" rows="2" placeholder="Optional description"></textarea>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="gallery_image" class="form-label">Select Image</label>
+                                        <input type="file" class="form-control" id="gallery_image" name="gallery_image" accept="image/*" required>
+                                        <div class="form-text">Supported formats: JPEG, PNG, GIF, WebP. Max size: 5MB.</div>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-upload"></i> Upload Photo
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <?php endif; ?>
 
-            &lt;!-- Gallery Grid --&gt;
-            &lt;div class="row g-4"&gt;
-                &lt;?php if ($gallery_images-&gt;num_rows &gt; 0): ?&gt;
-                    &lt;?php while ($image = $gallery_images-&gt;fetch_assoc()): ?&gt;
-                        &lt;div class="col-lg-4 col-md-6"&gt;
-                            &lt;div class="gallery-item"&gt;
-                                &lt;img src="&lt;?php echo htmlspecialchars($image['image_path']); ?&gt;" alt="&lt;?php echo htmlspecialchars($image['title'] ?: 'Gallery Image'); ?&gt;"&gt;
-                                &lt;div class="gallery-overlay"&gt;
-                                    &lt;h5&gt;&lt;?php echo htmlspecialchars($image['title'] ?: 'Untitled'); ?&gt;&lt;/h5&gt;
-                                    &lt;?php if ($image['description']): ?&gt;
-                                        &lt;p class="mb-2"&gt;&lt;?php echo htmlspecialchars($image['description']); ?&gt;&lt;/p&gt;
-                                    &lt;?php endif; ?&gt;
-                                    &lt;small class="text-muted"&gt;
-                                        &lt;i class="fas fa-user"&gt;&lt;/i&gt; &lt;?php echo htmlspecialchars($image['username']); ?&gt; &amp;bull;
-                                        &lt;i class="fas fa-calendar"&gt;&lt;/i&gt; &lt;?php echo date('M j, Y', strtotime($image['created_at'])); ?&gt;
-                                    &lt;/small&gt;
-                                &lt;/div&gt;
-                            &lt;/div&gt;
-                        &lt;/div&gt;
-                    &lt;?php endwhile; ?&gt;
-                &lt;?php else: ?&gt;
-                    &lt;div class="col-12 text-center py-5"&gt;
-                        &lt;i class="fas fa-images fa-3x text-muted mb-3"&gt;&lt;/i&gt;
-                        &lt;h4 class="text-muted"&gt;No photos yet&lt;/h4&gt;
-                        &lt;p class="text-muted"&gt;Be the first to share a photo from our church activities!&lt;/p&gt;
-                        &lt;?php if (!isset($_SESSION['user_id'])): ?&gt;
-                            &lt;a href="login.php" class="btn btn-primary"&gt;Login to Upload&lt;/a&gt;
-                        &lt;?php endif; ?&gt;
-                    &lt;/div&gt;
-                &lt;?php endif; ?&gt;
-            &lt;/div&gt;
-        &lt;/div&gt;
-    &lt;/section&gt;
+            <!-- Gallery Grid -->
+            <div class="row g-4">
+                <?php if ($gallery_images->num_rows > 0): ?>
+                    <?php while ($image = $gallery_images->fetch_assoc()): ?>
+                        <div class="col-lg-4 col-md-6">
+                            <div class="gallery-item">
+                                <img src="<?php echo htmlspecialchars($image['image_path']); ?>" alt="<?php echo htmlspecialchars($image['title'] ?: 'Gallery Image'); ?>">
+                                <div class="gallery-overlay">
+                                    <h5><?php echo htmlspecialchars($image['title'] ?: 'Untitled'); ?></h5>
+                                    <?php if ($image['description']): ?>
+                                        <p class="mb-2"><?php echo htmlspecialchars($image['description']); ?></p>
+                                    <?php endif; ?>
+                                    <small class="text-muted">
+                                        <i class="fas fa-user"></i> <?php echo htmlspecialchars($image['username']); ?> &bull;
+                                        <i class="fas fa-calendar"></i> <?php echo date('M j, Y', strtotime($image['created_at'])); ?>
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endwhile; ?>
+                <?php else: ?>
+                    <div class="col-12 text-center py-5">
+                        <i class="fas fa-images fa-3x text-muted mb-3"></i>
+                        <h4 class="text-muted">No photos yet</h4>
+                        <p class="text-muted">Be the first to share a photo from our church activities!</p>
+                        <?php if (!isset($_SESSION['user_id'])): ?>
+                            <a href="login.php" class="btn btn-primary">Login to Upload</a>
+                        <?php endif; ?>
+                    </div>
+                <?php endif; ?>
+            </div>
+        </div>
+    </section>
 
-    &lt;!-- Footer --&gt;
-    &lt;footer class="bg-dark text-light py-4"&gt;
-        &lt;div class="container"&gt;
-            &lt;div class="row"&gt;
-                &lt;div class="col-md-4"&gt;
-                    &lt;h5&gt;Salem Dominion Ministries&lt;/h5&gt;
-                    &lt;p&gt;Serving our community with faith, hope, and love.&lt;/p&gt;
-                &lt;/div&gt;
-                &lt;div class="col-md-4"&gt;
-                    &lt;h5&gt;Quick Links&lt;/h5&gt;
-                    &lt;ul class="list-unstyled"&gt;
-                        &lt;li&gt;&lt;a href="index.php" class="text-light"&gt;Home&lt;/a&gt;&lt;/li&gt;
-                        &lt;li&gt;&lt;a href="about.php" class="text-light"&gt;About Us&lt;/a&gt;&lt;/li&gt;
-                        &lt;li&gt;&lt;a href="donate.php" class="text-light"&gt;Donate&lt;/a&gt;&lt;/li&gt;
-                    &lt;/ul&gt;
-                &lt;/div&gt;
-                &lt;div class="col-md-4"&gt;
-                    &lt;h5&gt;Contact Info&lt;/h5&gt;
-                    &lt;p&gt;&lt;i class="fas fa-envelope"&gt;&lt;/i&gt; visit@salemdominionministries.com&lt;/p&gt;
-                    &lt;p&gt;&lt;i class="fas fa-phone"&gt;&lt;/i&gt; Contact us for service times&lt;/p&gt;
-                &lt;/div&gt;
-            &lt;/div&gt;
-            &lt;hr&gt;
-            &lt;p class="text-center mb-0"&gt;&amp;copy; 2026 Salem Dominion Ministries. All rights reserved.&lt;/p&gt;
-        &lt;/div&gt;
-    &lt;/footer&gt;
+    <!-- Footer -->
+    <footer class="bg-dark text-light py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5>Salem Dominion Ministries</h5>
+                    <p>Serving our community with faith, hope, and love.</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="index.php" class="text-light">Home</a></li>
+                        <li><a href="about.php" class="text-light">About Us</a></li>
+                        <li><a href="donate.php" class="text-light">Donate</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5>Contact Info</h5>
+                    <p><i class="fas fa-envelope"></i> visit@salemdominionministries.com</p>
+                    <p><i class="fas fa-phone"></i> Contact us for service times</p>
+                </div>
+            </div>
+            <hr>
+            <p class="text-center mb-0">&copy; 2026 Salem Dominion Ministries. All rights reserved.</p>
+        </div>
+    </footer>
 
-    &lt;!-- Image Modal --&gt;
-    &lt;div class="modal fade" id="imageModal" tabindex="-1"&gt;
-        &lt;div class="modal-dialog modal-lg"&gt;
-            &lt;div class="modal-content"&gt;
-                &lt;div class="modal-body p-0"&gt;
-                    &lt;img id="modalImage" src="" class="img-fluid w-100" alt=""&gt;
-                &lt;/div&gt;
-            &lt;/div&gt;
-        &lt;/div&gt;
-    &lt;/div&gt;
+    <!-- Image Modal -->
+    <div class="modal fade" id="imageModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-body p-0">
+                    <img id="modalImage" src="" class="img-fluid w-100" alt="">
+                </div>
+            </div>
+        </div>
+    </div>
 
-    &lt;script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"&gt;&lt;/script&gt;
-    &lt;script&gt;
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
         // Make gallery images clickable to open in modal
-        document.querySelectorAll('.gallery-item img').forEach(img =&gt; {
+        document.querySelectorAll('.gallery-item img').forEach(img => {
             img.addEventListener('click', function() {
                 const modalImage = document.getElementById('modalImage');
                 modalImage.src = this.src;
@@ -264,6 +264,6 @@ $gallery_images = $db-&gt;query("SELECT g.*, u.username, u.avatar FROM gallery g
                 new bootstrap.Modal(document.getElementById('imageModal')).show();
             });
         });
-    &lt;/script&gt;
-&lt;/body&gt;
-&lt;/html&gt;
+    </script>
+</body>
+</html>

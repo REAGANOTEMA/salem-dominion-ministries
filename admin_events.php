@@ -1,4 +1,4 @@
-&lt;?php
+﻿<?php
 session_start();
 require_once 'db.php';
 
@@ -29,9 +29,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $message = 'Title, date, and location are required.';
                 $message_type = 'error';
             } else {
-                $stmt = $db-&gt;prepare("INSERT INTO events (title, description, event_date, event_time, location, max_attendees, registration_deadline, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, NOW())");
-                $stmt-&gt;bind_param('sssssis', $title, $description, $event_date, $event_time, $location, $max_attendees, $registration_deadline);
-                if ($stmt-&gt;execute()) {
+                $stmt = $db->prepare("INSERT INTO events (title, description, event_date, event_time, location, max_attendees, registration_deadline, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, NOW())");
+                $stmt->bind_param('sssssis', $title, $description, $event_date, $event_time, $location, $max_attendees, $registration_deadline);
+                if ($stmt->execute()) {
                     $message = 'Event created successfully.';
                     $message_type = 'success';
                 } else {
@@ -53,9 +53,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $message = 'Title, date, and location are required.';
                 $message_type = 'error';
             } else {
-                $stmt = $db-&gt;prepare("UPDATE events SET title = ?, description = ?, event_date = ?, event_time = ?, location = ?, max_attendees = ?, registration_deadline = ? WHERE id = ?");
-                $stmt-&gt;bind_param('sssssisi', $title, $description, $event_date, $event_time, $location, $max_attendees, $registration_deadline, $id);
-                if ($stmt-&gt;execute()) {
+                $stmt = $db->prepare("UPDATE events SET title = ?, description = ?, event_date = ?, event_time = ?, location = ?, max_attendees = ?, registration_deadline = ? WHERE id = ?");
+                $stmt->bind_param('sssssisi', $title, $description, $event_date, $event_time, $location, $max_attendees, $registration_deadline, $id);
+                if ($stmt->execute()) {
                     $message = 'Event updated successfully.';
                     $message_type = 'success';
                 } else {
@@ -66,11 +66,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } elseif ($action === 'delete_event') {
             $id = intval($_POST['event_id']);
             // First delete registrations
-            $db-&gt;query("DELETE FROM event_registrations WHERE event_id = $id");
+            $db->query("DELETE FROM event_registrations WHERE event_id = $id");
             // Then delete event
-            $stmt = $db-&gt;prepare("DELETE FROM events WHERE id = ?");
-            $stmt-&gt;bind_param('i', $id);
-            if ($stmt-&gt;execute()) {
+            $stmt = $db->prepare("DELETE FROM events WHERE id = ?");
+            $stmt->bind_param('i', $id);
+            if ($stmt->execute()) {
                 $message = 'Event deleted successfully.';
                 $message_type = 'success';
             } else {
@@ -79,9 +79,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         } elseif ($action === 'remove_registration') {
             $registration_id = intval($_POST['registration_id']);
-            $stmt = $db-&gt;prepare("DELETE FROM event_registrations WHERE id = ?");
-            $stmt-&gt;bind_param('i', $registration_id);
-            if ($stmt-&gt;execute()) {
+            $stmt = $db->prepare("DELETE FROM event_registrations WHERE id = ?");
+            $stmt->bind_param('i', $registration_id);
+            if ($stmt->execute()) {
                 $message = 'Registration removed successfully.';
                 $message_type = 'success';
             } else {
@@ -93,7 +93,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 // Get all events with registration counts
-$events_result = $db-&gt;query("
+$events_result = $db->query("
     SELECT e.*,
            COUNT(er.id) as registered_count
     FROM events e
@@ -101,16 +101,16 @@ $events_result = $db-&gt;query("
     GROUP BY e.id
     ORDER BY e.event_date ASC
 ");
-?&gt;
-&lt;!DOCTYPE html&gt;
-&lt;html lang="en"&gt;
-&lt;head&gt;
-    &lt;meta charset="UTF-8"&gt;
-    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
-    &lt;title&gt;Event Management - Salem Dominion Ministries&lt;/title&gt;
-    &lt;link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"&gt;
-    &lt;link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"&gt;
-    &lt;style&gt;
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Management - Salem Dominion Ministries</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
         .sidebar {
             min-height: calc(100vh - 76px);
             background: #343a40;
@@ -142,283 +142,283 @@ $events_result = $db-&gt;query("
             max-height: 300px;
             overflow-y: auto;
         }
-    &lt;/style&gt;
-&lt;/head&gt;
-&lt;body&gt;
-    &lt;!-- Navigation --&gt;
-    &lt;nav class="navbar navbar-expand-lg navbar-dark bg-dark"&gt;
-        &lt;div class="container"&gt;
-            &lt;a class="navbar-brand" href="index.php"&gt;
-                &lt;i class="fas fa-church"&gt;&lt;/i&gt; Salem Dominion Ministries
-            &lt;/a&gt;
-            &lt;button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"&gt;
-                &lt;span class="navbar-toggler-icon"&gt;&lt;/span&gt;
-            &lt;/button&gt;
-            &lt;div class="collapse navbar-collapse" id="navbarNav"&gt;
-                &lt;ul class="navbar-nav me-auto"&gt;
-                    &lt;li class="nav-item"&gt;&lt;a class="nav-link" href="index.php"&gt;Home&lt;/a&gt;&lt;/li&gt;
-                    &lt;li class="nav-item"&gt;&lt;a class="nav-link" href="about.php"&gt;About&lt;/a&gt;&lt;/li&gt;
-                    &lt;li class="nav-item"&gt;&lt;a class="nav-link" href="ministries.php"&gt;Ministries&lt;/a&gt;&lt;/li&gt;
-                    &lt;li class="nav-item"&gt;&lt;a class="nav-link" href="events.php"&gt;Events&lt;/a&gt;&lt;/li&gt;
-                    &lt;li class="nav-item"&gt;&lt;a class="nav-link" href="sermons.php"&gt;Sermons&lt;/a&gt;&lt;/li&gt;
-                    &lt;li class="nav-item"&gt;&lt;a class="nav-link" href="news.php"&gt;News&lt;/a&gt;&lt;/li&gt;
-                    &lt;li class="nav-item"&gt;&lt;a class="nav-link" href="gallery.php"&gt;Gallery&lt;/a&gt;&lt;/li&gt;
-                    &lt;li class="nav-item"&gt;&lt;a class="nav-link" href="contact.php"&gt;Contact&lt;/a&gt;&lt;/li&gt;
-                &lt;/ul&gt;
-                &lt;ul class="navbar-nav"&gt;
-                    &lt;li class="nav-item"&gt;&lt;a class="nav-link" href="dashboard.php"&gt;Dashboard&lt;/a&gt;&lt;/li&gt;
-                    &lt;li class="nav-item"&gt;&lt;a class="nav-link" href="logout.php"&gt;Logout&lt;/a&gt;&lt;/li&gt;
-                &lt;/ul&gt;
-            &lt;/div&gt;
-        &lt;/div&gt;
-    &lt;/nav&gt;
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="index.php">
+                <i class="fas fa-church"></i> Salem Dominion Ministries
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link" href="index.php">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="about.php">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="ministries.php">Ministries</a></li>
+                    <li class="nav-item"><a class="nav-link" href="events.php">Events</a></li>
+                    <li class="nav-item"><a class="nav-link" href="sermons.php">Sermons</a></li>
+                    <li class="nav-item"><a class="nav-link" href="news.php">News</a></li>
+                    <li class="nav-item"><a class="nav-link" href="gallery.php">Gallery</a></li>
+                    <li class="nav-item"><a class="nav-link" href="contact.php">Contact</a></li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link" href="dashboard.php">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="logout.php">Logout</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
 
-    &lt;div class="container-fluid"&gt;
-        &lt;div class="row"&gt;
-            &lt;!-- Sidebar --&gt;
-            &lt;div class="col-md-3 col-lg-2 px-0"&gt;
-                &lt;div class="sidebar p-3"&gt;
-                    &lt;h6 class="text-white-50 mb-3"&gt;ADMIN PANEL&lt;/h6&gt;
-                    &lt;nav class="nav flex-column"&gt;
-                        &lt;a class="nav-link" href="admin_dashboard.php"&gt;
-                            &lt;i class="fas fa-tachometer-alt"&gt;&lt;/i&gt; Dashboard
-                        &lt;/a&gt;
-                        &lt;a class="nav-link" href="admin_users.php"&gt;
-                            &lt;i class="fas fa-users"&gt;&lt;/i&gt; Users
-                        &lt;/a&gt;
-                        &lt;a class="nav-link" href="admin_news.php"&gt;
-                            &lt;i class="fas fa-newspaper"&gt;&lt;/i&gt; News
-                        &lt;/a&gt;
-                        &lt;a class="nav-link active" href="admin_events.php"&gt;
-                            &lt;i class="fas fa-calendar"&gt;&lt;/i&gt; Events
-                        &lt;/a&gt;
-                        &lt;a class="nav-link" href="admin_sermons.php"&gt;
-                            &lt;i class="fas fa-microphone"&gt;&lt;/i&gt; Sermons
-                        &lt;/a&gt;
-                        &lt;a class="nav-link" href="admin_ministries.php"&gt;
-                            &lt;i class="fas fa-praying-hands"&gt;&lt;/i&gt; Ministries
-                        &lt;/a&gt;
-                        &lt;a class="nav-link" href="admin_gallery.php"&gt;
-                            &lt;i class="fas fa-images"&gt;&lt;/i&gt; Gallery
-                        &lt;/a&gt;
-                        &lt;a class="nav-link" href="admin_donations.php"&gt;
-                            &lt;i class="fas fa-hand-holding-heart"&gt;&lt;/i&gt; Donations
-                        &lt;/a&gt;
-                        &lt;a class="nav-link" href="admin_prayer_requests.php"&gt;
-                            &lt;i class="fas fa-pray"&gt;&lt;/i&gt; Prayer Requests
-                        &lt;/a&gt;
-                    &lt;/nav&gt;
-                &lt;/div&gt;
-            &lt;/div&gt;
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3 col-lg-2 px-0">
+                <div class="sidebar p-3">
+                    <h6 class="text-white-50 mb-3">ADMIN PANEL</h6>
+                    <nav class="nav flex-column">
+                        <a class="nav-link" href="admin_dashboard.php">
+                            <i class="fas fa-tachometer-alt"></i> Dashboard
+                        </a>
+                        <a class="nav-link" href="admin_users.php">
+                            <i class="fas fa-users"></i> Users
+                        </a>
+                        <a class="nav-link" href="admin_news.php">
+                            <i class="fas fa-newspaper"></i> News
+                        </a>
+                        <a class="nav-link active" href="admin_events.php">
+                            <i class="fas fa-calendar"></i> Events
+                        </a>
+                        <a class="nav-link" href="admin_sermons.php">
+                            <i class="fas fa-microphone"></i> Sermons
+                        </a>
+                        <a class="nav-link" href="admin_ministries.php">
+                            <i class="fas fa-praying-hands"></i> Ministries
+                        </a>
+                        <a class="nav-link" href="admin_gallery.php">
+                            <i class="fas fa-images"></i> Gallery
+                        </a>
+                        <a class="nav-link" href="admin_donations.php">
+                            <i class="fas fa-hand-holding-heart"></i> Donations
+                        </a>
+                        <a class="nav-link" href="admin_prayer_requests.php">
+                            <i class="fas fa-pray"></i> Prayer Requests
+                        </a>
+                    </nav>
+                </div>
+            </div>
 
-            &lt;!-- Main Content --&gt;
-            &lt;div class="col-md-9 col-lg-10 px-4 py-4"&gt;
-                &lt;div class="d-flex justify-content-between align-items-center mb-4"&gt;
-                    &lt;h2&gt;&lt;i class="fas fa-calendar text-primary"&gt;&lt;/i&gt; Event Management&lt;/h2&gt;
-                    &lt;button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createEventModal"&gt;
-                        &lt;i class="fas fa-plus"&gt;&lt;/i&gt; Create Event
-                    &lt;/button&gt;
-                &lt;/div&gt;
+            <!-- Main Content -->
+            <div class="col-md-9 col-lg-10 px-4 py-4">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2><i class="fas fa-calendar text-primary"></i> Event Management</h2>
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createEventModal">
+                        <i class="fas fa-plus"></i> Create Event
+                    </button>
+                </div>
 
-                &lt;?php if ($message): ?&gt;
-                    &lt;div class="alert alert-&lt;?php echo $message_type === 'success' ? 'success' : 'danger'; ?&gt; alert-dismissible fade show" role="alert"&gt;
-                        &lt;?php echo htmlspecialchars($message); ?&gt;
-                        &lt;button type="button" class="btn-close" data-bs-dismiss="alert"&gt;&lt;/button&gt;
-                    &lt;/div&gt;
-                &lt;?php endif; ?&gt;
+                <?php if ($message): ?>
+                    <div class="alert alert-<?php echo $message_type === 'success' ? 'success' : 'danger'; ?> alert-dismissible fade show" role="alert">
+                        <?php echo htmlspecialchars($message); ?>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                <?php endif; ?>
 
-                &lt;!-- Events List --&gt;
-                &lt;div class="row"&gt;
-                    &lt;?php if ($events_result-&gt;num_rows &gt; 0): ?&gt;
-                        &lt;?php while ($event = $events_result-&gt;fetch_assoc()): ?&gt;
-                            &lt;div class="col-lg-6 mb-4"&gt;
-                                &lt;div class="card event-card h-100"&gt;
-                                    &lt;div class="card-body"&gt;
-                                        &lt;div class="d-flex justify-content-between align-items-start mb-2"&gt;
-                                            &lt;h5 class="card-title mb-0"&gt;&lt;?php echo htmlspecialchars($event['title']); ?&gt;&lt;/h5&gt;
-                                            &lt;div class="btn-group" role="group"&gt;
-                                                &lt;button class="btn btn-outline-primary btn-sm" onclick="editEvent(&lt;?php echo $event['id']; ?&gt;, '&lt;?php echo htmlspecialchars(addslashes($event['title'])); ?&gt;', '&lt;?php echo htmlspecialchars(addslashes($event['description'])); ?&gt;', '&lt;?php echo $event['event_date']; ?&gt;', '&lt;?php echo $event['event_time']; ?&gt;', '&lt;?php echo htmlspecialchars(addslashes($event['location'])); ?&gt;', &lt;?php echo $event['max_attendees']; ?&gt;, '&lt;?php echo $event['registration_deadline']; ?&gt;')"&gt;
-                                                    &lt;i class="fas fa-edit"&gt;&lt;/i&gt;
-                                                &lt;/button&gt;
-                                                &lt;button class="btn btn-outline-info btn-sm" onclick="viewRegistrations(&lt;?php echo $event['id']; ?&gt;, '&lt;?php echo htmlspecialchars(addslashes($event['title'])); ?&gt;')"&gt;
-                                                    &lt;i class="fas fa-users"&gt;&lt;/i&gt;
-                                                &lt;/button&gt;
-                                                &lt;form method="post" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this event? This will also remove all registrations.')"&gt;
-                                                    &lt;input type="hidden" name="action" value="delete_event"&gt;
-                                                    &lt;input type="hidden" name="event_id" value="&lt;?php echo $event['id']; ?&gt;"&gt;
-                                                    &lt;button type="submit" class="btn btn-outline-danger btn-sm"&gt;
-                                                        &lt;i class="fas fa-trash"&gt;&lt;/i&gt;
-                                                    &lt;/button&gt;
-                                                &lt;/form&gt;
-                                            &lt;/div&gt;
-                                        &lt;/div&gt;
-                                        &lt;p class="card-text text-muted"&gt;&lt;?php echo htmlspecialchars(substr($event['description'], 0, 100)) . (strlen($event['description']) &gt; 100 ? '...' : ''); ?&gt;&lt;/p&gt;
-                                        &lt;div class="row text-muted small"&gt;
-                                            &lt;div class="col-6"&gt;
-                                                &lt;i class="fas fa-calendar"&gt;&lt;/i&gt; &lt;?php echo date('M j, Y', strtotime($event['event_date'])); ?&gt;&lt;br&gt;
-                                                &lt;i class="fas fa-clock"&gt;&lt;/i&gt; &lt;?php echo $event['event_time'] ?: 'TBD'; ?&gt;
-                                            &lt;/div&gt;
-                                            &lt;div class="col-6"&gt;
-                                                &lt;i class="fas fa-map-marker-alt"&gt;&lt;/i&gt; &lt;?php echo htmlspecialchars($event['location']); ?&gt;&lt;br&gt;
-                                                &lt;i class="fas fa-users"&gt;&lt;/i&gt; &lt;?php echo $event['registered_count']; ?&gt;/&lt;?php echo $event['max_attendees'] ?: '∞'; ?&gt; registered
-                                            &lt;/div&gt;
-                                        &lt;/div&gt;
-                                        &lt;?php if ($event['registration_deadline']): ?&gt;
-                                            &lt;div class="mt-2"&gt;
-                                                &lt;small class="text-muted"&gt;
-                                                    Registration deadline: &lt;?php echo date('M j, Y', strtotime($event['registration_deadline'])); ?&gt;
-                                                &lt;/small&gt;
-                                            &lt;/div&gt;
-                                        &lt;?php endif; ?&gt;
-                                    &lt;/div&gt;
-                                &lt;/div&gt;
-                            &lt;/div&gt;
-                        &lt;?php endwhile; ?&gt;
-                    &lt;?php else: ?&gt;
-                        &lt;div class="col-12"&gt;
-                            &lt;div class="text-center py-5"&gt;
-                                &lt;i class="fas fa-calendar fa-3x text-muted mb-3"&gt;&lt;/i&gt;
-                                &lt;h4 class="text-muted"&gt;No Events Yet&lt;/h4&gt;
-                                &lt;p class="text-muted"&gt;Create your first event to get started.&lt;/p&gt;
-                            &lt;/div&gt;
-                        &lt;/div&gt;
-                    &lt;?php endif; ?&gt;
-                &lt;/div&gt;
-            &lt;/div&gt;
-        &lt;/div&gt;
-    &lt;/div&gt;
+                <!-- Events List -->
+                <div class="row">
+                    <?php if ($events_result->num_rows > 0): ?>
+                        <?php while ($event = $events_result->fetch_assoc()): ?>
+                            <div class="col-lg-6 mb-4">
+                                <div class="card event-card h-100">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-start mb-2">
+                                            <h5 class="card-title mb-0"><?php echo htmlspecialchars($event['title']); ?></h5>
+                                            <div class="btn-group" role="group">
+                                                <button class="btn btn-outline-primary btn-sm" onclick="editEvent(<?php echo $event['id']; ?>, '<?php echo htmlspecialchars(addslashes($event['title'])); ?>', '<?php echo htmlspecialchars(addslashes($event['description'])); ?>', '<?php echo $event['event_date']; ?>', '<?php echo $event['event_time']; ?>', '<?php echo htmlspecialchars(addslashes($event['location'])); ?>', <?php echo $event['max_attendees']; ?>, '<?php echo $event['registration_deadline']; ?>')">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                                <button class="btn btn-outline-info btn-sm" onclick="viewRegistrations(<?php echo $event['id']; ?>, '<?php echo htmlspecialchars(addslashes($event['title'])); ?>')">
+                                                    <i class="fas fa-users"></i>
+                                                </button>
+                                                <form method="post" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this event? This will also remove all registrations.')">
+                                                    <input type="hidden" name="action" value="delete_event">
+                                                    <input type="hidden" name="event_id" value="<?php echo $event['id']; ?>">
+                                                    <button type="submit" class="btn btn-outline-danger btn-sm">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                        <p class="card-text text-muted"><?php echo htmlspecialchars(substr($event['description'], 0, 100)) . (strlen($event['description']) > 100 ? '...' : ''); ?></p>
+                                        <div class="row text-muted small">
+                                            <div class="col-6">
+                                                <i class="fas fa-calendar"></i> <?php echo date('M j, Y', strtotime($event['event_date'])); ?><br>
+                                                <i class="fas fa-clock"></i> <?php echo $event['event_time'] ?: 'TBD'; ?>
+                                            </div>
+                                            <div class="col-6">
+                                                <i class="fas fa-map-marker-alt"></i> <?php echo htmlspecialchars($event['location']); ?><br>
+                                                <i class="fas fa-users"></i> <?php echo $event['registered_count']; ?>/<?php echo $event['max_attendees'] ?: 'âˆž'; ?> registered
+                                            </div>
+                                        </div>
+                                        <?php if ($event['registration_deadline']): ?>
+                                            <div class="mt-2">
+                                                <small class="text-muted">
+                                                    Registration deadline: <?php echo date('M j, Y', strtotime($event['registration_deadline'])); ?>
+                                                </small>
+                                            </div>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php endwhile; ?>
+                    <?php else: ?>
+                        <div class="col-12">
+                            <div class="text-center py-5">
+                                <i class="fas fa-calendar fa-3x text-muted mb-3"></i>
+                                <h4 class="text-muted">No Events Yet</h4>
+                                <p class="text-muted">Create your first event to get started.</p>
+                            </div>
+                        </div>
+                    <?php endif; ?>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    &lt;!-- Create Event Modal --&gt;
-    &lt;div class="modal fade" id="createEventModal" tabindex="-1"&gt;
-        &lt;div class="modal-dialog modal-lg"&gt;
-            &lt;div class="modal-content"&gt;
-                &lt;div class="modal-header"&gt;
-                    &lt;h5 class="modal-title"&gt;&lt;i class="fas fa-plus"&gt;&lt;/i&gt; Create Event&lt;/h5&gt;
-                    &lt;button type="button" class="btn-close" data-bs-dismiss="modal"&gt;&lt;/button&gt;
-                &lt;/div&gt;
-                &lt;form method="post"&gt;
-                    &lt;div class="modal-body"&gt;
-                        &lt;input type="hidden" name="action" value="create_event"&gt;
-                        &lt;div class="row"&gt;
-                            &lt;div class="col-md-8 mb-3"&gt;
-                                &lt;label for="title" class="form-label"&gt;Event Title *&lt;/label&gt;
-                                &lt;input type="text" class="form-control" id="title" name="title" required&gt;
-                            &lt;/div&gt;
-                            &lt;div class="col-md-4 mb-3"&gt;
-                                &lt;label for="max_attendees" class="form-label"&gt;Max Attendees&lt;/label&gt;
-                                &lt;input type="number" class="form-control" id="max_attendees" name="max_attendees" placeholder="Unlimited"&gt;
-                            &lt;/div&gt;
-                        &lt;/div&gt;
-                        &lt;div class="mb-3"&gt;
-                            &lt;label for="description" class="form-label"&gt;Description&lt;/label&gt;
-                            &lt;textarea class="form-control" id="description" name="description" rows="3"&gt;&lt;/textarea&gt;
-                        &lt;/div&gt;
-                        &lt;div class="row"&gt;
-                            &lt;div class="col-md-6 mb-3"&gt;
-                                &lt;label for="event_date" class="form-label"&gt;Event Date *&lt;/label&gt;
-                                &lt;input type="date" class="form-control" id="event_date" name="event_date" required&gt;
-                            &lt;/div&gt;
-                            &lt;div class="col-md-6 mb-3"&gt;
-                                &lt;label for="event_time" class="form-label"&gt;Event Time&lt;/label&gt;
-                                &lt;input type="time" class="form-control" id="event_time" name="event_time"&gt;
-                            &lt;/div&gt;
-                        &lt;/div&gt;
-                        &lt;div class="row"&gt;
-                            &lt;div class="col-md-6 mb-3"&gt;
-                                &lt;label for="location" class="form-label"&gt;Location *&lt;/label&gt;
-                                &lt;input type="text" class="form-control" id="location" name="location" required&gt;
-                            &lt;/div&gt;
-                            &lt;div class="col-md-6 mb-3"&gt;
-                                &lt;label for="registration_deadline" class="form-label"&gt;Registration Deadline&lt;/label&gt;
-                                &lt;input type="date" class="form-control" id="registration_deadline" name="registration_deadline"&gt;
-                            &lt;/div&gt;
-                        &lt;/div&gt;
-                    &lt;/div&gt;
-                    &lt;div class="modal-footer"&gt;
-                        &lt;button type="button" class="btn btn-secondary" data-bs-dismiss="modal"&gt;Cancel&lt;/button&gt;
-                        &lt;button type="submit" class="btn btn-primary"&gt;&lt;i class="fas fa-save"&gt;&lt;/i&gt; Create Event&lt;/button&gt;
-                    &lt;/div&gt;
-                &lt;/form&gt;
-            &lt;/div&gt;
-        &lt;/div&gt;
-    &lt;/div&gt;
+    <!-- Create Event Modal -->
+    <div class="modal fade" id="createEventModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="fas fa-plus"></i> Create Event</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <form method="post">
+                    <div class="modal-body">
+                        <input type="hidden" name="action" value="create_event">
+                        <div class="row">
+                            <div class="col-md-8 mb-3">
+                                <label for="title" class="form-label">Event Title *</label>
+                                <input type="text" class="form-control" id="title" name="title" required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="max_attendees" class="form-label">Max Attendees</label>
+                                <input type="number" class="form-control" id="max_attendees" name="max_attendees" placeholder="Unlimited">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Description</label>
+                            <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="event_date" class="form-label">Event Date *</label>
+                                <input type="date" class="form-control" id="event_date" name="event_date" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="event_time" class="form-label">Event Time</label>
+                                <input type="time" class="form-control" id="event_time" name="event_time">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="location" class="form-label">Location *</label>
+                                <input type="text" class="form-control" id="location" name="location" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="registration_deadline" class="form-label">Registration Deadline</label>
+                                <input type="date" class="form-control" id="registration_deadline" name="registration_deadline">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Create Event</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
-    &lt;!-- Edit Event Modal --&gt;
-    &lt;div class="modal fade" id="editEventModal" tabindex="-1"&gt;
-        &lt;div class="modal-dialog modal-lg"&gt;
-            &lt;div class="modal-content"&gt;
-                &lt;div class="modal-header"&gt;
-                    &lt;h5 class="modal-title"&gt;&lt;i class="fas fa-edit"&gt;&lt;/i&gt; Edit Event&lt;/h5&gt;
-                    &lt;button type="button" class="btn-close" data-bs-dismiss="modal"&gt;&lt;/button&gt;
-                &lt;/div&gt;
-                &lt;form method="post"&gt;
-                    &lt;div class="modal-body"&gt;
-                        &lt;input type="hidden" name="action" value="update_event"&gt;
-                        &lt;input type="hidden" name="event_id" id="edit_event_id"&gt;
-                        &lt;div class="row"&gt;
-                            &lt;div class="col-md-8 mb-3"&gt;
-                                &lt;label for="edit_title" class="form-label"&gt;Event Title *&lt;/label&gt;
-                                &lt;input type="text" class="form-control" id="edit_title" name="title" required&gt;
-                            &lt;/div&gt;
-                            &lt;div class="col-md-4 mb-3"&gt;
-                                &lt;label for="edit_max_attendees" class="form-label"&gt;Max Attendees&lt;/label&gt;
-                                &lt;input type="number" class="form-control" id="edit_max_attendees" name="max_attendees" placeholder="Unlimited"&gt;
-                            &lt;/div&gt;
-                        &lt;/div&gt;
-                        &lt;div class="mb-3"&gt;
-                            &lt;label for="edit_description" class="form-label"&gt;Description&lt;/label&gt;
-                            &lt;textarea class="form-control" id="edit_description" name="description" rows="3"&gt;&lt;/textarea&gt;
-                        &lt;/div&gt;
-                        &lt;div class="row"&gt;
-                            &lt;div class="col-md-6 mb-3"&gt;
-                                &lt;label for="edit_event_date" class="form-label"&gt;Event Date *&lt;/label&gt;
-                                &lt;input type="date" class="form-control" id="edit_event_date" name="event_date" required&gt;
-                            &lt;/div&gt;
-                            &lt;div class="col-md-6 mb-3"&gt;
-                                &lt;label for="edit_event_time" class="form-label"&gt;Event Time&lt;/label&gt;
-                                &lt;input type="time" class="form-control" id="edit_event_time" name="event_time"&gt;
-                            &lt;/div&gt;
-                        &lt;/div&gt;
-                        &lt;div class="row"&gt;
-                            &lt;div class="col-md-6 mb-3"&gt;
-                                &lt;label for="edit_location" class="form-label"&gt;Location *&lt;/label&gt;
-                                &lt;input type="text" class="form-control" id="edit_location" name="location" required&gt;
-                            &lt;/div&gt;
-                            &lt;div class="col-md-6 mb-3"&gt;
-                                &lt;label for="edit_registration_deadline" class="form-label"&gt;Registration Deadline&lt;/label&gt;
-                                &lt;input type="date" class="form-control" id="edit_registration_deadline" name="registration_deadline"&gt;
-                            &lt;/div&gt;
-                        &lt;/div&gt;
-                    &lt;/div&gt;
-                    &lt;div class="modal-footer"&gt;
-                        &lt;button type="button" class="btn btn-secondary" data-bs-dismiss="modal"&gt;Cancel&lt;/button&gt;
-                        &lt;button type="submit" class="btn btn-primary"&gt;&lt;i class="fas fa-save"&gt;&lt;/i&gt; Update Event&lt;/button&gt;
-                    &lt;/div&gt;
-                &lt;/form&gt;
-            &lt;/div&gt;
-        &lt;/div&gt;
-    &lt;/div&gt;
+    <!-- Edit Event Modal -->
+    <div class="modal fade" id="editEventModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="fas fa-edit"></i> Edit Event</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <form method="post">
+                    <div class="modal-body">
+                        <input type="hidden" name="action" value="update_event">
+                        <input type="hidden" name="event_id" id="edit_event_id">
+                        <div class="row">
+                            <div class="col-md-8 mb-3">
+                                <label for="edit_title" class="form-label">Event Title *</label>
+                                <input type="text" class="form-control" id="edit_title" name="title" required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="edit_max_attendees" class="form-label">Max Attendees</label>
+                                <input type="number" class="form-control" id="edit_max_attendees" name="max_attendees" placeholder="Unlimited">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="edit_description" class="form-label">Description</label>
+                            <textarea class="form-control" id="edit_description" name="description" rows="3"></textarea>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="edit_event_date" class="form-label">Event Date *</label>
+                                <input type="date" class="form-control" id="edit_event_date" name="event_date" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="edit_event_time" class="form-label">Event Time</label>
+                                <input type="time" class="form-control" id="edit_event_time" name="event_time">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="edit_location" class="form-label">Location *</label>
+                                <input type="text" class="form-control" id="edit_location" name="location" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="edit_registration_deadline" class="form-label">Registration Deadline</label>
+                                <input type="date" class="form-control" id="edit_registration_deadline" name="registration_deadline">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Update Event</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
-    &lt;!-- Registrations Modal --&gt;
-    &lt;div class="modal fade" id="registrationsModal" tabindex="-1"&gt;
-        &lt;div class="modal-dialog modal-lg"&gt;
-            &lt;div class="modal-content"&gt;
-                &lt;div class="modal-header"&gt;
-                    &lt;h5 class="modal-title"&gt;&lt;i class="fas fa-users"&gt;&lt;/i&gt; Event Registrations&lt;/h5&gt;
-                    &lt;button type="button" class="btn-close" data-bs-dismiss="modal"&gt;&lt;/button&gt;
-                &lt;/div&gt;
-                &lt;div class="modal-body"&gt;
-                    &lt;h6 id="eventTitle"&gt;&lt;/h6&gt;
-                    &lt;div id="registrationsList" class="registration-list"&gt;
-                        &lt;!-- Registrations will be loaded here --&gt;
-                    &lt;/div&gt;
-                &lt;/div&gt;
-            &lt;/div&gt;
-        &lt;/div&gt;
-    &lt;/div&gt;
+    <!-- Registrations Modal -->
+    <div class="modal fade" id="registrationsModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="fas fa-users"></i> Event Registrations</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <h6 id="eventTitle"></h6>
+                    <div id="registrationsList" class="registration-list">
+                        <!-- Registrations will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    &lt;script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"&gt;&lt;/script&gt;
-    &lt;script&gt;
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
         function editEvent(id, title, description, eventDate, eventTime, location, maxAttendees, registrationDeadline) {
             document.getElementById('edit_event_id').value = id;
             document.getElementById('edit_title').value = title;
@@ -436,9 +436,9 @@ $events_result = $db-&gt;query("
             document.getElementById('eventTitle').textContent = eventTitle;
             
             // Load registrations via AJAX
-            fetch('admin_events.php?action=get_registrations&amp;event_id=' + eventId)
-                .then(response =&gt; response.text())
-                .then(data =&gt; {
+            fetch('admin_events.php?action=get_registrations&event_id=' + eventId)
+                .then(response => response.text())
+                .then(data => {
                     document.getElementById('registrationsList').innerHTML = data;
                 });
             
@@ -452,9 +452,9 @@ $events_result = $db-&gt;query("
             
             if (eventId) {
                 // This would be handled by PHP, but for now we'll show a placeholder
-                document.write('&lt;div class="text-center py-3"&gt;&lt;i class="fas fa-spinner fa-spin"&gt;&lt;/i&gt; Loading registrations...&lt;/div&gt;');
+                document.write('<div class="text-center py-3"><i class="fas fa-spinner fa-spin"></i> Loading registrations...</div>');
             }
         }
-    &lt;/script&gt;
-&lt;/body&gt;
-&lt;/html&gt;
+    </script>
+</body>
+</html>

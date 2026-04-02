@@ -1,4 +1,4 @@
-&lt;?php
+﻿<?php
 session_start();
 require_once 'db.php';
 
@@ -10,34 +10,34 @@ if (!$id) {
 }
 
 // Get news article
-$stmt = $db-&gt;prepare("SELECT n.*, u.username FROM news n LEFT JOIN users u ON n.author_id = u.id WHERE n.id = ?");
-$stmt-&gt;bind_param('i', $id);
-$stmt-&gt;execute();
-$result = $stmt-&gt;get_result();
+$stmt = $db->prepare("SELECT n.*, u.username FROM news n LEFT JOIN users u ON n.author_id = u.id WHERE n.id = ?");
+$stmt->bind_param('i', $id);
+$stmt->execute();
+$result = $stmt->get_result();
 
-if ($result-&gt;num_rows === 0) {
+if ($result->num_rows === 0) {
     header('Location: news.php');
     exit;
 }
 
-$news = $result-&gt;fetch_assoc();
+$news = $result->fetch_assoc();
 
 // Update view count
-$db-&gt;query("UPDATE news SET views = views + 1 WHERE id = $id");
+$db->query("UPDATE news SET views = views + 1 WHERE id = $id");
 
 // Get related news (same category, excluding current)
-$related_news = $db-&gt;query("SELECT id, title, excerpt, created_at FROM news WHERE category = '{$news['category']}' AND id != $id ORDER BY created_at DESC LIMIT 3");
-?&gt;
-&lt;!DOCTYPE html&gt;
-&lt;html lang="en"&gt;
-&lt;head&gt;
-    &lt;meta charset="UTF-8"&gt;
-    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
-    &lt;title&gt;&lt;?php echo htmlspecialchars($news['title']); ?&gt; - Salem Dominion Ministries&lt;/title&gt;
-    &lt;meta name="description" content="&lt;?php echo htmlspecialchars($news['excerpt'] ?: substr(strip_tags($news['content']), 0, 160)); ?&gt;"&gt;
-    &lt;link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"&gt;
-    &lt;link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"&gt;
-    &lt;style&gt;
+$related_news = $db->query("SELECT id, title, excerpt, created_at FROM news WHERE category = '{$news['category']}' AND id != $id ORDER BY created_at DESC LIMIT 3");
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><?php echo htmlspecialchars($news['title']); ?> - Salem Dominion Ministries</title>
+    <meta name="description" content="<?php echo htmlspecialchars($news['excerpt'] ?: substr(strip_tags($news['content']), 0, 160)); ?>">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
         .navbar-brand {
             font-weight: bold;
             font-size: 1.5rem;
@@ -69,171 +69,171 @@ $related_news = $db-&gt;query("SELECT id, title, excerpt, created_at FROM news W
             margin-right: 10px;
             margin-bottom: 10px;
         }
-    &lt;/style&gt;
-&lt;/head&gt;
-&lt;body&gt;
-    &lt;!-- Navigation --&gt;
-    &lt;nav class="navbar navbar-expand-lg navbar-dark bg-dark"&gt;
-        &lt;div class="container"&gt;
-            &lt;a class="navbar-brand" href="index.php"&gt;
-                &lt;i class="fas fa-church"&gt;&lt;/i&gt; Salem Dominion Ministries
-            &lt;/a&gt;
-            &lt;button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"&gt;
-                &lt;span class="navbar-toggler-icon"&gt;&lt;/span&gt;
-            &lt;/button&gt;
-            &lt;div class="collapse navbar-collapse" id="navbarNav"&gt;
-                &lt;ul class="navbar-nav me-auto"&gt;
-                    &lt;li class="nav-item"&gt;&lt;a class="nav-link" href="index.php"&gt;Home&lt;/a&gt;&lt;/li&gt;
-                    &lt;li class="nav-item"&gt;&lt;a class="nav-link" href="about.php"&gt;About&lt;/a&gt;&lt;/li&gt;
-                    &lt;li class="nav-item"&gt;&lt;a class="nav-link" href="ministries.php"&gt;Ministries&lt;/a&gt;&lt;/li&gt;
-                    &lt;li class="nav-item"&gt;&lt;a class="nav-link" href="events.php"&gt;Events&lt;/a&gt;&lt;/li&gt;
-                    &lt;li class="nav-item"&gt;&lt;a class="nav-link" href="sermons.php"&gt;Sermons&lt;/a&gt;&lt;/li&gt;
-                    &lt;li class="nav-item"&gt;&lt;a class="nav-link active" href="news.php"&gt;News&lt;/a&gt;&lt;/li&gt;
-                    &lt;li class="nav-item"&gt;&lt;a class="nav-link" href="gallery.php"&gt;Gallery&lt;/a&gt;&lt;/li&gt;
-                    &lt;li class="nav-item"&gt;&lt;a class="nav-link" href="contact.php"&gt;Contact&lt;/a&gt;&lt;/li&gt;
-                &lt;/ul&gt;
-                &lt;ul class="navbar-nav"&gt;
-                    &lt;?php if (isset($_SESSION['user_id'])): ?&gt;
-                        &lt;li class="nav-item"&gt;&lt;a class="nav-link" href="dashboard.php"&gt;Dashboard&lt;/a&gt;&lt;/li&gt;
-                        &lt;li class="nav-item"&gt;&lt;a class="nav-link" href="logout.php"&gt;Logout&lt;/a&gt;&lt;/li&gt;
-                    &lt;?php else: ?&gt;
-                        &lt;li class="nav-item"&gt;&lt;a class="nav-link" href="login.php"&gt;Login&lt;/a&gt;&lt;/li&gt;
-                        &lt;li class="nav-item"&gt;&lt;a class="nav-link" href="register.php"&gt;Register&lt;/a&gt;&lt;/li&gt;
-                    &lt;?php endif; ?&gt;
-                &lt;/ul&gt;
-            &lt;/div&gt;
-        &lt;/div&gt;
-    &lt;/nav&gt;
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="index.php">
+                <i class="fas fa-church"></i> Salem Dominion Ministries
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link" href="index.php">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="about.php">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="ministries.php">Ministries</a></li>
+                    <li class="nav-item"><a class="nav-link" href="events.php">Events</a></li>
+                    <li class="nav-item"><a class="nav-link" href="sermons.php">Sermons</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="news.php">News</a></li>
+                    <li class="nav-item"><a class="nav-link" href="gallery.php">Gallery</a></li>
+                    <li class="nav-item"><a class="nav-link" href="contact.php">Contact</a></li>
+                </ul>
+                <ul class="navbar-nav">
+                    <?php if (isset($_SESSION['user_id'])): ?>
+                        <li class="nav-item"><a class="nav-link" href="dashboard.php">Dashboard</a></li>
+                        <li class="nav-item"><a class="nav-link" href="logout.php">Logout</a></li>
+                    <?php else: ?>
+                        <li class="nav-item"><a class="nav-link" href="login.php">Login</a></li>
+                        <li class="nav-item"><a class="nav-link" href="register.php">Register</a></li>
+                    <?php endif; ?>
+                </ul>
+            </div>
+        </div>
+    </nav>
 
-    &lt;!-- Article Header --&gt;
-    &lt;section class="article-header"&gt;
-        &lt;div class="container"&gt;
-            &lt;div class="row"&gt;
-                &lt;div class="col-lg-8 mx-auto text-center"&gt;
-                    &lt;span class="badge bg-primary mb-3"&gt;&lt;?php echo ucfirst(htmlspecialchars($news['category'])); ?&gt;&lt;/span&gt;
-                    &lt;h1 class="display-5 fw-bold mb-4"&gt;&lt;?php echo htmlspecialchars($news['title']); ?&gt;&lt;/h1&gt;
-                    &lt;?php if ($news['excerpt']): ?&gt;
-                        &lt;p class="lead"&gt;&lt;?php echo htmlspecialchars($news['excerpt']); ?&gt;&lt;/p&gt;
-                    &lt;?php endif; ?&gt;
-                &lt;/div&gt;
-            &lt;/div&gt;
-        &lt;/div&gt;
-    &lt;/section&gt;
+    <!-- Article Header -->
+    <section class="article-header">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mx-auto text-center">
+                    <span class="badge bg-primary mb-3"><?php echo ucfirst(htmlspecialchars($news['category'])); ?></span>
+                    <h1 class="display-5 fw-bold mb-4"><?php echo htmlspecialchars($news['title']); ?></h1>
+                    <?php if ($news['excerpt']): ?>
+                        <p class="lead"><?php echo htmlspecialchars($news['excerpt']); ?></p>
+                    <?php endif; ?>
+                </div>
+            </div>
+        </div>
+    </section>
 
-    &lt;!-- Article Content --&gt;
-    &lt;section class="py-5"&gt;
-        &lt;div class="container"&gt;
-            &lt;div class="row"&gt;
-                &lt;div class="col-lg-8 mx-auto"&gt;
-                    &lt;div class="card article-content"&gt;
-                        &lt;div class="card-body p-5"&gt;
-                            &lt;!-- Article Meta --&gt;
-                            &lt;div class="article-meta"&gt;
-                                &lt;div class="row align-items-center"&gt;
-                                    &lt;div class="col-md-6"&gt;
-                                        &lt;small class="text-muted"&gt;
-                                            &lt;i class="fas fa-user"&gt;&lt;/i&gt; By &lt;?php echo htmlspecialchars($news['username'] ?: 'Church Staff'); ?&gt;&lt;br&gt;
-                                            &lt;i class="fas fa-calendar"&gt;&lt;/i&gt; &lt;?php echo date('F j, Y \a\t g:i A', strtotime($news['created_at'])); ?&gt;
-                                        &lt;/small&gt;
-                                    &lt;/div&gt;
-                                    &lt;div class="col-md-6 text-end"&gt;
-                                        &lt;small class="text-muted"&gt;
-                                            &lt;i class="fas fa-eye"&gt;&lt;/i&gt; &lt;?php echo $news['views']; ?&gt; views
-                                        &lt;/small&gt;
-                                    &lt;/div&gt;
-                                &lt;/div&gt;
-                            &lt;/div&gt;
+    <!-- Article Content -->
+    <section class="py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mx-auto">
+                    <div class="card article-content">
+                        <div class="card-body p-5">
+                            <!-- Article Meta -->
+                            <div class="article-meta">
+                                <div class="row align-items-center">
+                                    <div class="col-md-6">
+                                        <small class="text-muted">
+                                            <i class="fas fa-user"></i> By <?php echo htmlspecialchars($news['username'] ?: 'Church Staff'); ?><br>
+                                            <i class="fas fa-calendar"></i> <?php echo date('F j, Y \a\t g:i A', strtotime($news['created_at'])); ?>
+                                        </small>
+                                    </div>
+                                    <div class="col-md-6 text-end">
+                                        <small class="text-muted">
+                                            <i class="fas fa-eye"></i> <?php echo $news['views']; ?> views
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
 
-                            &lt;!-- Article Body --&gt;
-                            &lt;div class="article-body"&gt;
-                                &lt;?php echo nl2br(htmlspecialchars($news['content'])); ?&gt;
-                            &lt;/div&gt;
+                            <!-- Article Body -->
+                            <div class="article-body">
+                                <?php echo nl2br(htmlspecialchars($news['content'])); ?>
+                            </div>
 
-                            &lt;!-- Share Buttons --&gt;
-                            &lt;div class="share-buttons mt-4 pt-4 border-top"&gt;
-                                &lt;h6 class="mb-3"&gt;&lt;i class="fas fa-share-alt"&gt;&lt;/i&gt; Share this article&lt;/h6&gt;
-                                &lt;a href="https://www.facebook.com/sharer/sharer.php?u=&lt;?php echo urlencode('http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']); ?&gt;" target="_blank" class="btn btn-outline-primary"&gt;
-                                    &lt;i class="fab fa-facebook-f"&gt;&lt;/i&gt; Facebook
-                                &lt;/a&gt;
-                                &lt;a href="https://twitter.com/intent/tweet?url=&lt;?php echo urlencode('http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']); ?&gt;&amp;text=&lt;?php echo urlencode($news['title']); ?&gt;" target="_blank" class="btn btn-outline-info"&gt;
-                                    &lt;i class="fab fa-twitter"&gt;&lt;/i&gt; Twitter
-                                &lt;/a&gt;
-                                &lt;a href="https://wa.me/?text=&lt;?php echo urlencode($news['title'] . ' - ' . 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']); ?&gt;" target="_blank" class="btn btn-outline-success"&gt;
-                                    &lt;i class="fab fa-whatsapp"&gt;&lt;/i&gt; WhatsApp
-                                &lt;/a&gt;
-                                &lt;button onclick="navigator.share({title: '&lt;?php echo htmlspecialchars($news['title']); ?&gt;', url: window.location.href})" class="btn btn-outline-secondary"&gt;
-                                    &lt;i class="fas fa-share"&gt;&lt;/i&gt; Share
-                                &lt;/button&gt;
-                            &lt;/div&gt;
-                        &lt;/div&gt;
-                    &lt;/div&gt;
+                            <!-- Share Buttons -->
+                            <div class="share-buttons mt-4 pt-4 border-top">
+                                <h6 class="mb-3"><i class="fas fa-share-alt"></i> Share this article</h6>
+                                <a href="https://www.facebook.com/sharer/sharer.php?u=<?php echo urlencode('http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']); ?>" target="_blank" class="btn btn-outline-primary">
+                                    <i class="fab fa-facebook-f"></i> Facebook
+                                </a>
+                                <a href="https://twitter.com/intent/tweet?url=<?php echo urlencode('http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']); ?>&text=<?php echo urlencode($news['title']); ?>" target="_blank" class="btn btn-outline-info">
+                                    <i class="fab fa-twitter"></i> Twitter
+                                </a>
+                                <a href="https://wa.me/?text=<?php echo urlencode($news['title'] . ' - ' . 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']); ?>" target="_blank" class="btn btn-outline-success">
+                                    <i class="fab fa-whatsapp"></i> WhatsApp
+                                </a>
+                                <button onclick="navigator.share({title: '<?php echo htmlspecialchars($news['title']); ?>', url: window.location.href})" class="btn btn-outline-secondary">
+                                    <i class="fas fa-share"></i> Share
+                                </button>
+                            </div>
+                        </div>
+                    </div>
 
-                    &lt;!-- Related Articles --&gt;
-                    &lt;?php if ($related_news-&gt;num_rows &gt; 0): ?&gt;
-                        &lt;div class="mt-5"&gt;
-                            &lt;h4 class="mb-4"&gt;&lt;i class="fas fa-newspaper text-primary"&gt;&lt;/i&gt; Related Articles&lt;/h4&gt;
-                            &lt;div class="row g-3"&gt;
-                                &lt;?php while ($related = $related_news-&gt;fetch_assoc()): ?&gt;
-                                    &lt;div class="col-md-4"&gt;
-                                        &lt;div class="card related-article h-100"&gt;
-                                            &lt;div class="card-body"&gt;
-                                                &lt;h6 class="card-title"&gt;
-                                                    &lt;a href="news_article.php?id=&lt;?php echo $related['id']; ?&gt;" class="text-decoration-none"&gt;
-                                                        &lt;?php echo htmlspecialchars($related['title']); ?&gt;
-                                                    &lt;/a&gt;
-                                                &lt;/h6&gt;
-                                                &lt;p class="card-text small text-muted"&gt;
-                                                    &lt;?php echo htmlspecialchars(substr($related['excerpt'] ?: strip_tags($related['content']), 0, 80) . '...'); ?&gt;
-                                                &lt;/p&gt;
-                                                &lt;small class="text-muted"&gt;
-                                                    &lt;i class="fas fa-calendar"&gt;&lt;/i&gt; &lt;?php echo date('M j, Y', strtotime($related['created_at'])); ?&gt;
-                                                &lt;/small&gt;
-                                            &lt;/div&gt;
-                                        &lt;/div&gt;
-                                    &lt;/div&gt;
-                                &lt;?php endwhile; ?&gt;
-                            &lt;/div&gt;
-                        &lt;/div&gt;
-                    &lt;?php endif; ?&gt;
+                    <!-- Related Articles -->
+                    <?php if ($related_news->num_rows > 0): ?>
+                        <div class="mt-5">
+                            <h4 class="mb-4"><i class="fas fa-newspaper text-primary"></i> Related Articles</h4>
+                            <div class="row g-3">
+                                <?php while ($related = $related_news->fetch_assoc()): ?>
+                                    <div class="col-md-4">
+                                        <div class="card related-article h-100">
+                                            <div class="card-body">
+                                                <h6 class="card-title">
+                                                    <a href="news_article.php?id=<?php echo $related['id']; ?>" class="text-decoration-none">
+                                                        <?php echo htmlspecialchars($related['title']); ?>
+                                                    </a>
+                                                </h6>
+                                                <p class="card-text small text-muted">
+                                                    <?php echo htmlspecialchars(substr($related['excerpt'] ?: strip_tags($related['content']), 0, 80) . '...'); ?>
+                                                </p>
+                                                <small class="text-muted">
+                                                    <i class="fas fa-calendar"></i> <?php echo date('M j, Y', strtotime($related['created_at'])); ?>
+                                                </small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <?php endwhile; ?>
+                            </div>
+                        </div>
+                    <?php endif; ?>
 
-                    &lt;!-- Back to News --&gt;
-                    &lt;div class="text-center mt-4"&gt;
-                        &lt;a href="news.php" class="btn btn-outline-primary"&gt;
-                            &lt;i class="fas fa-arrow-left"&gt;&lt;/i&gt; Back to News
-                        &lt;/a&gt;
-                    &lt;/div&gt;
-                &lt;/div&gt;
-            &lt;/div&gt;
-        &lt;/div&gt;
-    &lt;/section&gt;
+                    <!-- Back to News -->
+                    <div class="text-center mt-4">
+                        <a href="news.php" class="btn btn-outline-primary">
+                            <i class="fas fa-arrow-left"></i> Back to News
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-    &lt;!-- Footer --&gt;
-    &lt;footer class="bg-dark text-light py-4"&gt;
-        &lt;div class="container"&gt;
-            &lt;div class="row"&gt;
-                &lt;div class="col-md-4"&gt;
-                    &lt;h5&gt;Salem Dominion Ministries&lt;/h5&gt;
-                    &lt;p&gt;Serving our community with faith, hope, and love.&lt;/p&gt;
-                &lt;/div&gt;
-                &lt;div class="col-md-4"&gt;
-                    &lt;h5&gt;Quick Links&lt;/h5&gt;
-                    &lt;ul class="list-unstyled"&gt;
-                        &lt;li&gt;&lt;a href="index.php" class="text-light"&gt;Home&lt;/a&gt;&lt;/li&gt;
-                        &lt;li&gt;&lt;a href="about.php" class="text-light"&gt;About Us&lt;/a&gt;&lt;/li&gt;
-                        &lt;li&gt;&lt;a href="donate.php" class="text-light"&gt;Donate&lt;/a&gt;&lt;/li&gt;
-                    &lt;/ul&gt;
-                &lt;/div&gt;
-                &lt;div class="col-md-4"&gt;
-                    &lt;h5&gt;Contact Info&lt;/h5&gt;
-                    &lt;p&gt;&lt;i class="fas fa-envelope"&gt;&lt;/i&gt; visit@salemdominionministries.com&lt;/p&gt;
-                    &lt;p&gt;&lt;i class="fas fa-phone"&gt;&lt;/i&gt; Contact us for service times&lt;/p&gt;
-                &lt;/div&gt;
-            &lt;/div&gt;
-            &lt;hr&gt;
-            &lt;p class="text-center mb-0"&gt;&amp;copy; 2026 Salem Dominion Ministries. All rights reserved.&lt;/p&gt;
-        &lt;/div&gt;
-    &lt;/footer&gt;
+    <!-- Footer -->
+    <footer class="bg-dark text-light py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5>Salem Dominion Ministries</h5>
+                    <p>Serving our community with faith, hope, and love.</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="index.php" class="text-light">Home</a></li>
+                        <li><a href="about.php" class="text-light">About Us</a></li>
+                        <li><a href="donate.php" class="text-light">Donate</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5>Contact Info</h5>
+                    <p><i class="fas fa-envelope"></i> visit@salemdominionministries.com</p>
+                    <p><i class="fas fa-phone"></i> Contact us for service times</p>
+                </div>
+            </div>
+            <hr>
+            <p class="text-center mb-0">&copy; 2026 Salem Dominion Ministries. All rights reserved.</p>
+        </div>
+    </footer>
 
-    &lt;script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"&gt;&lt;/script&gt;
-&lt;/body&gt;
-&lt;/html&gt;
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

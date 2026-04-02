@@ -1,4 +1,4 @@
-&lt;?php
+﻿<?php
 // Database Configuration
 define('DB_HOST', 'localhost');
 define('DB_USER', 'root');
@@ -37,4 +37,4 @@ foreach ($dirs as $dir) {
         mkdir($dir, 0755, true);
     }
 }
-?&gt;
+?>

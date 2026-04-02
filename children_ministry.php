@@ -1,22 +1,22 @@
-&lt;?php
+﻿<?php
 session_start();
 require_once 'db.php';
 
 // Get children ministry events
-$children_events = $db-&gt;query("SELECT * FROM events WHERE category = 'children' AND event_date &gt;= CURDATE() ORDER BY event_date LIMIT 5");
+$children_events = $db->query("SELECT * FROM events WHERE category = 'children' AND event_date >= CURDATE() ORDER BY event_date LIMIT 5");
 
 // Get children ministry news
-$children_news = $db-&gt;query("SELECT * FROM news WHERE category = 'children' ORDER BY created_at DESC LIMIT 3");
-?&gt;
-&lt;!DOCTYPE html&gt;
-&lt;html lang="en"&gt;
-&lt;head&gt;
-    &lt;meta charset="UTF-8"&gt;
-    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
-    &lt;title&gt;Children Ministry - Salem Dominion Ministries&lt;/title&gt;
-    &lt;link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"&gt;
-    &lt;link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"&gt;
-    &lt;style&gt;
+$children_news = $db->query("SELECT * FROM news WHERE category = 'children' ORDER BY created_at DESC LIMIT 3");
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Children Ministry - Salem Dominion Ministries</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
         .children-hero {
             background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1544717297-fa95b6ee9643?ixlib=rb-4.0.3');
             background-size: cover;
@@ -56,281 +56,281 @@ $children_news = $db-&gt;query("SELECT * FROM news WHERE category = 'children' O
         .fun-element:nth-child(2) { top: 20%; right: 15%; color: #4ecdc4; }
         .fun-element:nth-child(3) { bottom: 15%; left: 20%; color: #ffd93d; }
         .fun-element:nth-child(4) { bottom: 10%; right: 10%; color: #a8e6cf; }
-    &lt;/style&gt;
-&lt;/head&gt;
-&lt;body&gt;
-    &lt;!-- Navigation --&gt;
-    &lt;nav class="navbar navbar-expand-lg navbar-dark bg-dark"&gt;
-        &lt;div class="container"&gt;
-            &lt;a class="navbar-brand" href="index.php"&gt;
-                &lt;i class="fas fa-church"&gt;&lt;/i&gt; Salem Dominion Ministries
-            &lt;/a&gt;
-            &lt;button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"&gt;
-                &lt;span class="navbar-toggler-icon"&gt;&lt;/span&gt;
-            &lt;/button&gt;
-            &lt;div class="collapse navbar-collapse" id="navbarNav"&gt;
-                &lt;ul class="navbar-nav me-auto"&gt;
-                    &lt;li class="nav-item"&gt;&lt;a class="nav-link" href="index.php"&gt;Home&lt;/a&gt;&lt;/li&gt;
-                    &lt;li class="nav-item"&gt;&lt;a class="nav-link" href="about.php"&gt;About&lt;/a&gt;&lt;/li&gt;
-                    &lt;li class="nav-item"&gt;&lt;a class="nav-link" href="ministries.php"&gt;Ministries&lt;/a&gt;&lt;/li&gt;
-                    &lt;li class="nav-item"&gt;&lt;a class="nav-link" href="events.php"&gt;Events&lt;/a&gt;&lt;/li&gt;
-                    &lt;li class="nav-item"&gt;&lt;a class="nav-link" href="sermons.php"&gt;Sermons&lt;/a&gt;&lt;/li&gt;
-                    &lt;li class="nav-item"&gt;&lt;a class="nav-link" href="news.php"&gt;News&lt;/a&gt;&lt;/li&gt;
-                    &lt;li class="nav-item"&gt;&lt;a class="nav-link" href="gallery.php"&gt;Gallery&lt;/a&gt;&lt;/li&gt;
-                    &lt;li class="nav-item"&gt;&lt;a class="nav-link" href="contact.php"&gt;Contact&lt;/a&gt;&lt;/li&gt;
-                &lt;/ul&gt;
-                &lt;ul class="navbar-nav"&gt;
-                    &lt;?php if (isset($_SESSION['user_id'])): ?&gt;
-                        &lt;li class="nav-item"&gt;&lt;a class="nav-link" href="dashboard.php"&gt;Dashboard&lt;/a&gt;&lt;/li&gt;
-                        &lt;li class="nav-item"&gt;&lt;a class="nav-link" href="logout.php"&gt;Logout&lt;/a&gt;&lt;/li&gt;
-                    &lt;?php else: ?&gt;
-                        &lt;li class="nav-item"&gt;&lt;a class="nav-link" href="login.php"&gt;Login&lt;/a&gt;&lt;/li&gt;
-                        &lt;li class="nav-item"&gt;&lt;a class="nav-link" href="register.php"&gt;Register&lt;/a&gt;&lt;/li&gt;
-                    &lt;?php endif; ?&gt;
-                &lt;/ul&gt;
-            &lt;/div&gt;
-        &lt;/div&gt;
-    &lt;/nav&gt;
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="index.php">
+                <i class="fas fa-church"></i> Salem Dominion Ministries
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link" href="index.php">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="about.php">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="ministries.php">Ministries</a></li>
+                    <li class="nav-item"><a class="nav-link" href="events.php">Events</a></li>
+                    <li class="nav-item"><a class="nav-link" href="sermons.php">Sermons</a></li>
+                    <li class="nav-item"><a class="nav-link" href="news.php">News</a></li>
+                    <li class="nav-item"><a class="nav-link" href="gallery.php">Gallery</a></li>
+                    <li class="nav-item"><a class="nav-link" href="contact.php">Contact</a></li>
+                </ul>
+                <ul class="navbar-nav">
+                    <?php if (isset($_SESSION['user_id'])): ?>
+                        <li class="nav-item"><a class="nav-link" href="dashboard.php">Dashboard</a></li>
+                        <li class="nav-item"><a class="nav-link" href="logout.php">Logout</a></li>
+                    <?php else: ?>
+                        <li class="nav-item"><a class="nav-link" href="login.php">Login</a></li>
+                        <li class="nav-item"><a class="nav-link" href="register.php">Register</a></li>
+                    <?php endif; ?>
+                </ul>
+            </div>
+        </div>
+    </nav>
 
-    &lt;!-- Hero Section --&gt;
-    &lt;section class="children-hero"&gt;
-        &lt;div class="container text-center position-relative"&gt;
-            &lt;i class="fas fa-child fun-element"&gt;&lt;/i&gt;
-            &lt;i class="fas fa-heart fun-element"&gt;&lt;/i&gt;
-            &lt;i class="fas fa-star fun-element"&gt;&lt;/i&gt;
-            &lt;i class="fas fa-smile fun-element"&gt;&lt;/i&gt;
-            &lt;h1 class="display-4 fw-bold mb-4"&gt;Children Ministry&lt;/h1&gt;
-            &lt;p class="lead mb-4"&gt;"Let the little children come to me, and do not hinder them, for the kingdom of heaven belongs to such as these." - Matthew 19:14&lt;/p&gt;
-        &lt;/div&gt;
-    &lt;/section&gt;
+    <!-- Hero Section -->
+    <section class="children-hero">
+        <div class="container text-center position-relative">
+            <i class="fas fa-child fun-element"></i>
+            <i class="fas fa-heart fun-element"></i>
+            <i class="fas fa-star fun-element"></i>
+            <i class="fas fa-smile fun-element"></i>
+            <h1 class="display-4 fw-bold mb-4">Children Ministry</h1>
+            <p class="lead mb-4">"Let the little children come to me, and do not hinder them, for the kingdom of heaven belongs to such as these." - Matthew 19:14</p>
+        </div>
+    </section>
 
-    &lt;!-- Ministry Overview --&gt;
-    &lt;section class="py-5 bg-light"&gt;
-        &lt;div class="container"&gt;
-            &lt;div class="row"&gt;
-                &lt;div class="col-lg-8 mx-auto text-center"&gt;
-                    &lt;h2 class="mb-4"&gt;Welcome to Our Children Ministry&lt;/h2&gt;
-                    &lt;p class="lead mb-4"&gt;
+    <!-- Ministry Overview -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mx-auto text-center">
+                    <h2 class="mb-4">Welcome to Our Children Ministry</h2>
+                    <p class="lead mb-4">
                         At Salem Dominion Ministries, we believe that children are the future of our church and community.
                         Our Children Ministry is dedicated to nurturing young hearts with God's love, teaching biblical
                         truths in fun and engaging ways, and helping children grow in their relationship with Jesus Christ.
-                    &lt;/p&gt;
-                &lt;/div&gt;
-            &lt;/div&gt;
+                    </p>
+                </div>
+            </div>
 
-            &lt;!-- Age Groups --&gt;
-            &lt;div class="row g-4 mb-5"&gt;
-                &lt;div class="col-md-6 col-lg-3"&gt;
-                    &lt;div class="card age-group-card text-center h-100"&gt;
-                        &lt;div class="card-body d-flex flex-column"&gt;
-                            &lt;i class="fas fa-baby fa-3x mb-3"&gt;&lt;/i&gt;
-                            &lt;h5 class="card-title"&gt;Nursery&lt;/h5&gt;
-                            &lt;p class="card-text"&gt;Ages 0-2&lt;/p&gt;
-                            &lt;p class="card-text flex-grow-1"&gt;Caring environment for our youngest members with loving supervision and age-appropriate activities.&lt;/p&gt;
-                        &lt;/div&gt;
-                    &lt;/div&gt;
-                &lt;/div&gt;
-                &lt;div class="col-md-6 col-lg-3"&gt;
-                    &lt;div class="card age-group-card text-center h-100"&gt;
-                        &lt;div class="card-body d-flex flex-column"&gt;
-                            &lt;i class="fas fa-child fa-3x mb-3"&gt;&lt;/i&gt;
-                            &lt;h5 class="card-title"&gt;Toddlers&lt;/h5&gt;
-                            &lt;p class="card-text"&gt;Ages 3-5&lt;/p&gt;
-                            &lt;p class="card-text flex-grow-1"&gt;Fun learning experiences, songs, stories, and crafts that introduce children to God's love.&lt;/p&gt;
-                        &lt;/div&gt;
-                    &lt;/div&gt;
-                &lt;/div&gt;
-                &lt;div class="col-md-6 col-lg-3"&gt;
-                    &lt;div class="card age-group-card text-center h-100"&gt;
-                        &lt;div class="card-body d-flex flex-column"&gt;
-                            &lt;i class="fas fa-school fa-3x mb-3"&gt;&lt;/i&gt;
-                            &lt;h5 class="card-title"&gt;Elementary&lt;/h5&gt;
-                            &lt;p class="card-text"&gt;Ages 6-11&lt;/p&gt;
-                            &lt;p class="card-text flex-grow-1"&gt;Biblical teaching, memory verses, worship, and activities that help children grow spiritually.&lt;/p&gt;
-                        &lt;/div&gt;
-                    &lt;/div&gt;
-                &lt;/div&gt;
-                &lt;div class="col-md-6 col-lg-3"&gt;
-                    &lt;div class="card age-group-card text-center h-100"&gt;
-                        &lt;div class="card-body d-flex flex-column"&gt;
-                            &lt;i class="fas fa-users fa-3x mb-3"&gt;&lt;/i&gt;
-                            &lt;h5 class="card-title"&gt;Pre-Teens&lt;/h5&gt;
-                            &lt;p class="card-text"&gt;Ages 12-14&lt;/p&gt;
-                            &lt;p class="card-text flex-grow-1"&gt;Preparing for youth ministry with deeper biblical study, leadership development, and service opportunities.&lt;/p&gt;
-                        &lt;/div&gt;
-                    &lt;/div&gt;
-                &lt;/div&gt;
-            &lt;/div&gt;
-        &lt;/div&gt;
-    &lt;/section&gt;
+            <!-- Age Groups -->
+            <div class="row g-4 mb-5">
+                <div class="col-md-6 col-lg-3">
+                    <div class="card age-group-card text-center h-100">
+                        <div class="card-body d-flex flex-column">
+                            <i class="fas fa-baby fa-3x mb-3"></i>
+                            <h5 class="card-title">Nursery</h5>
+                            <p class="card-text">Ages 0-2</p>
+                            <p class="card-text flex-grow-1">Caring environment for our youngest members with loving supervision and age-appropriate activities.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="card age-group-card text-center h-100">
+                        <div class="card-body d-flex flex-column">
+                            <i class="fas fa-child fa-3x mb-3"></i>
+                            <h5 class="card-title">Toddlers</h5>
+                            <p class="card-text">Ages 3-5</p>
+                            <p class="card-text flex-grow-1">Fun learning experiences, songs, stories, and crafts that introduce children to God's love.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="card age-group-card text-center h-100">
+                        <div class="card-body d-flex flex-column">
+                            <i class="fas fa-school fa-3x mb-3"></i>
+                            <h5 class="card-title">Elementary</h5>
+                            <p class="card-text">Ages 6-11</p>
+                            <p class="card-text flex-grow-1">Biblical teaching, memory verses, worship, and activities that help children grow spiritually.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="card age-group-card text-center h-100">
+                        <div class="card-body d-flex flex-column">
+                            <i class="fas fa-users fa-3x mb-3"></i>
+                            <h5 class="card-title">Pre-Teens</h5>
+                            <p class="card-text">Ages 12-14</p>
+                            <p class="card-text flex-grow-1">Preparing for youth ministry with deeper biblical study, leadership development, and service opportunities.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-    &lt;!-- Activities & Programs --&gt;
-    &lt;section class="py-5"&gt;
-        &lt;div class="container"&gt;
-            &lt;h2 class="text-center mb-5"&gt;Our Programs &amp; Activities&lt;/h2&gt;
-            &lt;div class="row g-4"&gt;
-                &lt;div class="col-lg-4"&gt;
-                    &lt;div class="card activity-card h-100"&gt;
-                        &lt;div class="card-body text-center"&gt;
-                            &lt;i class="fas fa-bible fa-3x text-primary mb-3"&gt;&lt;/i&gt;
-                            &lt;h5 class="card-title"&gt;Sunday School&lt;/h5&gt;
-                            &lt;p class="card-text"&gt;Weekly Bible lessons, stories, and activities designed specifically for each age group during our Sunday morning service.&lt;/p&gt;
-                        &lt;/div&gt;
-                    &lt;/div&gt;
-                &lt;/div&gt;
-                &lt;div class="col-lg-4"&gt;
-                    &lt;div class="card activity-card h-100"&gt;
-                        &lt;div class="card-body text-center"&gt;
-                            &lt;i class="fas fa-music fa-3x text-success mb-3"&gt;&lt;/i&gt;
-                            &lt;h5 class="card-title"&gt;Children's Choir&lt;/h5&gt;
-                            &lt;p class="card-text"&gt;Learning worship songs, hymns, and developing musical talents while praising God together as a group.&lt;/p&gt;
-                        &lt;/div&gt;
-                    &lt;/div&gt;
-                &lt;/div&gt;
-                &lt;div class="col-lg-4"&gt;
-                    &lt;div class="card activity-card h-100"&gt;
-                        &lt;div class="card-body text-center"&gt;
-                            &lt;i class="fas fa-hands-helping fa-3x text-warning mb-3"&gt;&lt;/i&gt;
-                            &lt;h5 class="card-title"&gt;Community Service&lt;/h5&gt;
-                            &lt;p class="card-text"&gt;Teaching children the importance of serving others through food drives, visiting nursing homes, and helping those in need.&lt;/p&gt;
-                        &lt;/div&gt;
-                    &lt;/div&gt;
-                &lt;/div&gt;
-                &lt;div class="col-lg-4"&gt;
-                    &lt;div class="card activity-card h-100"&gt;
-                        &lt;div class="card-body text-center"&gt;
-                            &lt;i class="fas fa-praying-hands fa-3x text-info mb-3"&gt;&lt;/i&gt;
-                            &lt;h5 class="card-title"&gt;Prayer Time&lt;/h5&gt;
-                            &lt;p class="card-text"&gt;Dedicated time for children to learn about prayer, share prayer requests, and experience the power of talking to God.&lt;/p&gt;
-                        &lt;/div&gt;
-                    &lt;/div&gt;
-                &lt;/div&gt;
-                &lt;div class="col-lg-4"&gt;
-                    &lt;div class="card activity-card h-100"&gt;
-                        &lt;div class="card-body text-center"&gt;
-                            &lt;i class="fas fa-palette fa-3x text-danger mb-3"&gt;&lt;/i&gt;
-                            &lt;h5 class="card-title"&gt;Crafts &amp; Arts&lt;/h5&gt;
-                            &lt;p class="card-text"&gt;Creative activities that reinforce Bible lessons and help children express their faith through art and crafts.&lt;/p&gt;
-                        &lt;/div&gt;
-                    &lt;/div&gt;
-                &lt;/div&gt;
-                &lt;div class="col-lg-4"&gt;
-                    &lt;div class="card activity-card h-100"&gt;
-                        &lt;div class="card-body text-center"&gt;
-                            &lt;i class="fas fa-running fa-3x text-secondary mb-3"&gt;&lt;/i&gt;
-                            &lt;h5 class="card-title"&gt;Games &amp; Sports&lt;/h5&gt;
-                            &lt;p class="card-text"&gt;Physical activities and games that promote teamwork, healthy living, and having fun while learning about God.&lt;/p&gt;
-                        &lt;/div&gt;
-                    &lt;/div&gt;
-                &lt;/div&gt;
-            &lt;/div&gt;
-        &lt;/div&gt;
-    &lt;/section&gt;
+    <!-- Activities & Programs -->
+    <section class="py-5">
+        <div class="container">
+            <h2 class="text-center mb-5">Our Programs & Activities</h2>
+            <div class="row g-4">
+                <div class="col-lg-4">
+                    <div class="card activity-card h-100">
+                        <div class="card-body text-center">
+                            <i class="fas fa-bible fa-3x text-primary mb-3"></i>
+                            <h5 class="card-title">Sunday School</h5>
+                            <p class="card-text">Weekly Bible lessons, stories, and activities designed specifically for each age group during our Sunday morning service.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="card activity-card h-100">
+                        <div class="card-body text-center">
+                            <i class="fas fa-music fa-3x text-success mb-3"></i>
+                            <h5 class="card-title">Children's Choir</h5>
+                            <p class="card-text">Learning worship songs, hymns, and developing musical talents while praising God together as a group.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="card activity-card h-100">
+                        <div class="card-body text-center">
+                            <i class="fas fa-hands-helping fa-3x text-warning mb-3"></i>
+                            <h5 class="card-title">Community Service</h5>
+                            <p class="card-text">Teaching children the importance of serving others through food drives, visiting nursing homes, and helping those in need.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="card activity-card h-100">
+                        <div class="card-body text-center">
+                            <i class="fas fa-praying-hands fa-3x text-info mb-3"></i>
+                            <h5 class="card-title">Prayer Time</h5>
+                            <p class="card-text">Dedicated time for children to learn about prayer, share prayer requests, and experience the power of talking to God.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="card activity-card h-100">
+                        <div class="card-body text-center">
+                            <i class="fas fa-palette fa-3x text-danger mb-3"></i>
+                            <h5 class="card-title">Crafts & Arts</h5>
+                            <p class="card-text">Creative activities that reinforce Bible lessons and help children express their faith through art and crafts.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="card activity-card h-100">
+                        <div class="card-body text-center">
+                            <i class="fas fa-running fa-3x text-secondary mb-3"></i>
+                            <h5 class="card-title">Games & Sports</h5>
+                            <p class="card-text">Physical activities and games that promote teamwork, healthy living, and having fun while learning about God.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-    &lt;!-- Upcoming Events & News --&gt;
-    &lt;section class="py-5 bg-light"&gt;
-        &lt;div class="container"&gt;
-            &lt;div class="row"&gt;
-                &lt;!-- Upcoming Events --&gt;
-                &lt;div class="col-lg-6 mb-4"&gt;
-                    &lt;div class="card children-card"&gt;
-                        &lt;div class="card-body"&gt;
-                            &lt;h4 class="card-title mb-4"&gt;&lt;i class="fas fa-calendar-alt text-primary"&gt;&lt;/i&gt; Upcoming Children's Events&lt;/h4&gt;
-                            &lt;?php if ($children_events-&gt;num_rows &gt; 0): ?&gt;
-                                &lt;div class="list-group list-group-flush"&gt;
-                                    &lt;?php while ($event = $children_events-&gt;fetch_assoc()): ?&gt;
-                                        &lt;a href="events.php" class="list-group-item list-group-item-action"&gt;
-                                            &lt;div class="d-flex w-100 justify-content-between"&gt;
-                                                &lt;h6 class="mb-1"&gt;&lt;?php echo htmlspecialchars($event['title']); ?&gt;&lt;/h6&gt;
-                                                &lt;small&gt;&lt;?php echo date('M j, Y', strtotime($event['event_date'])); ?&gt;&lt;/small&gt;
-                                            &lt;/div&gt;
-                                            &lt;p class="mb-1"&gt;&lt;?php echo htmlspecialchars(substr($event['description'], 0, 100)); ?&gt;...&lt;/p&gt;
-                                        &lt;/a&gt;
-                                    &lt;?php endwhile; ?&gt;
-                                &lt;/div&gt;
-                            &lt;?php else: ?&gt;
-                                &lt;p class="text-muted"&gt;No upcoming children's events scheduled.&lt;/p&gt;
-                            &lt;?php endif; ?&gt;
-                        &lt;/div&gt;
-                    &lt;/div&gt;
-                &lt;/div&gt;
+    <!-- Upcoming Events & News -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <div class="row">
+                <!-- Upcoming Events -->
+                <div class="col-lg-6 mb-4">
+                    <div class="card children-card">
+                        <div class="card-body">
+                            <h4 class="card-title mb-4"><i class="fas fa-calendar-alt text-primary"></i> Upcoming Children's Events</h4>
+                            <?php if ($children_events->num_rows > 0): ?>
+                                <div class="list-group list-group-flush">
+                                    <?php while ($event = $children_events->fetch_assoc()): ?>
+                                        <a href="events.php" class="list-group-item list-group-item-action">
+                                            <div class="d-flex w-100 justify-content-between">
+                                                <h6 class="mb-1"><?php echo htmlspecialchars($event['title']); ?></h6>
+                                                <small><?php echo date('M j, Y', strtotime($event['event_date'])); ?></small>
+                                            </div>
+                                            <p class="mb-1"><?php echo htmlspecialchars(substr($event['description'], 0, 100)); ?>...</p>
+                                        </a>
+                                    <?php endwhile; ?>
+                                </div>
+                            <?php else: ?>
+                                <p class="text-muted">No upcoming children's events scheduled.</p>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                </div>
 
-                &lt;!-- Latest News --&gt;
-                &lt;div class="col-lg-6 mb-4"&gt;
-                    &lt;div class="card children-card"&gt;
-                        &lt;div class="card-body"&gt;
-                            &lt;h4 class="card-title mb-4"&gt;&lt;i class="fas fa-newspaper text-success"&gt;&lt;/i&gt; Children's Ministry News&lt;/h4&gt;
-                            &lt;?php if ($children_news-&gt;num_rows &gt; 0): ?&gt;
-                                &lt;div class="row g-3"&gt;
-                                    &lt;?php while ($news = $children_news-&gt;fetch_assoc()): ?&gt;
-                                        &lt;div class="col-12"&gt;
-                                            &lt;div class="card border-0 bg-white"&gt;
-                                                &lt;div class="card-body p-0"&gt;
-                                                    &lt;h6&gt;&lt;a href="news.php" class="text-decoration-none"&gt;&lt;?php echo htmlspecialchars($news['title']); ?&gt;&lt;/a&gt;&lt;/h6&gt;
-                                                    &lt;p class="text-muted small mb-1"&gt;&lt;?php echo date('M j, Y', strtotime($news['created_at'])); ?&gt;&lt;/p&gt;
-                                                    &lt;p class="mb-0"&gt;&lt;?php echo htmlspecialchars(substr($news['content'], 0, 120)); ?&gt;...&lt;/p&gt;
-                                                &lt;/div&gt;
-                                            &lt;/div&gt;
-                                        &lt;/div&gt;
-                                    &lt;?php endwhile; ?&gt;
-                                &lt;/div&gt;
-                            &lt;?php else: ?&gt;
-                                &lt;p class="text-muted"&gt;No recent news from the children's ministry.&lt;/p&gt;
-                            &lt;?php endif; ?&gt;
-                        &lt;/div&gt;
-                    &lt;/div&gt;
-                &lt;/div&gt;
-            &lt;/div&gt;
-        &lt;/div&gt;
-    &lt;/section&gt;
+                <!-- Latest News -->
+                <div class="col-lg-6 mb-4">
+                    <div class="card children-card">
+                        <div class="card-body">
+                            <h4 class="card-title mb-4"><i class="fas fa-newspaper text-success"></i> Children's Ministry News</h4>
+                            <?php if ($children_news->num_rows > 0): ?>
+                                <div class="row g-3">
+                                    <?php while ($news = $children_news->fetch_assoc()): ?>
+                                        <div class="col-12">
+                                            <div class="card border-0 bg-white">
+                                                <div class="card-body p-0">
+                                                    <h6><a href="news.php" class="text-decoration-none"><?php echo htmlspecialchars($news['title']); ?></a></h6>
+                                                    <p class="text-muted small mb-1"><?php echo date('M j, Y', strtotime($news['created_at'])); ?></p>
+                                                    <p class="mb-0"><?php echo htmlspecialchars(substr($news['content'], 0, 120)); ?>...</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <?php endwhile; ?>
+                                </div>
+                            <?php else: ?>
+                                <p class="text-muted">No recent news from the children's ministry.</p>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-    &lt;!-- Call to Action --&gt;
-    &lt;section class="py-5 bg-primary text-white"&gt;
-        &lt;div class="container text-center"&gt;
-            &lt;h2 class="mb-4"&gt;Get Your Children Involved!&lt;/h2&gt;
-            &lt;p class="lead mb-4"&gt;We'd love to welcome your children to our ministry. Contact us to learn more about how they can join in the fun and grow in their faith.&lt;/p&gt;
-            &lt;div class="row justify-content-center"&gt;
-                &lt;div class="col-md-4 mb-3"&gt;
-                    &lt;a href="contact.php" class="btn btn-light btn-lg w-100"&gt;
-                        &lt;i class="fas fa-envelope"&gt;&lt;/i&gt; Contact Us
-                    &lt;/a&gt;
-                &lt;/div&gt;
-                &lt;div class="col-md-4 mb-3"&gt;
-                    &lt;a href="register.php" class="btn btn-outline-light btn-lg w-100"&gt;
-                        &lt;i class="fas fa-user-plus"&gt;&lt;/i&gt; Register Family
-                    &lt;/a&gt;
-                &lt;/div&gt;
-            &lt;/div&gt;
-        &lt;/div&gt;
-    &lt;/section&gt;
+    <!-- Call to Action -->
+    <section class="py-5 bg-primary text-white">
+        <div class="container text-center">
+            <h2 class="mb-4">Get Your Children Involved!</h2>
+            <p class="lead mb-4">We'd love to welcome your children to our ministry. Contact us to learn more about how they can join in the fun and grow in their faith.</p>
+            <div class="row justify-content-center">
+                <div class="col-md-4 mb-3">
+                    <a href="contact.php" class="btn btn-light btn-lg w-100">
+                        <i class="fas fa-envelope"></i> Contact Us
+                    </a>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <a href="register.php" class="btn btn-outline-light btn-lg w-100">
+                        <i class="fas fa-user-plus"></i> Register Family
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
 
-    &lt;!-- Footer --&gt;
-    &lt;footer class="bg-dark text-light py-4"&gt;
-        &lt;div class="container"&gt;
-            &lt;div class="row"&gt;
-                &lt;div class="col-md-4"&gt;
-                    &lt;h5&gt;Salem Dominion Ministries&lt;/h5&gt;
-                    &lt;p&gt;Serving our community with faith, hope, and love.&lt;/p&gt;
-                &lt;/div&gt;
-                &lt;div class="col-md-4"&gt;
-                    &lt;h5&gt;Quick Links&lt;/h5&gt;
-                    &lt;ul class="list-unstyled"&gt;
-                        &lt;li&gt;&lt;a href="index.php" class="text-light"&gt;Home&lt;/a&gt;&lt;/li&gt;
-                        &lt;li&gt;&lt;a href="about.php" class="text-light"&gt;About Us&lt;/a&gt;&lt;/li&gt;
-                        &lt;li&gt;&lt;a href="donate.php" class="text-light"&gt;Donate&lt;/a&gt;&lt;/li&gt;
-                    &lt;/ul&gt;
-                &lt;/div&gt;
-                &lt;div class="col-md-4"&gt;
-                    &lt;h5&gt;Contact Info&lt;/h5&gt;
-                    &lt;p&gt;&lt;i class="fas fa-envelope"&gt;&lt;/i&gt; visit@salemdominionministries.com&lt;/p&gt;
-                    &lt;p&gt;&lt;i class="fas fa-phone"&gt;&lt;/i&gt; Contact us for service times&lt;/p&gt;
-                &lt;/div&gt;
-            &lt;/div&gt;
-            &lt;hr&gt;
-            &lt;p class="text-center mb-0"&gt;&amp;copy; 2026 Salem Dominion Ministries. All rights reserved.&lt;/p&gt;
-        &lt;/div&gt;
-    &lt;/footer&gt;
+    <!-- Footer -->
+    <footer class="bg-dark text-light py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5>Salem Dominion Ministries</h5>
+                    <p>Serving our community with faith, hope, and love.</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="index.php" class="text-light">Home</a></li>
+                        <li><a href="about.php" class="text-light">About Us</a></li>
+                        <li><a href="donate.php" class="text-light">Donate</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5>Contact Info</h5>
+                    <p><i class="fas fa-envelope"></i> visit@salemdominionministries.com</p>
+                    <p><i class="fas fa-phone"></i> Contact us for service times</p>
+                </div>
+            </div>
+            <hr>
+            <p class="text-center mb-0">&copy; 2026 Salem Dominion Ministries. All rights reserved.</p>
+        </div>
+    </footer>
 
-    &lt;script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"&gt;&lt;/script&gt;
-&lt;/body&gt;
-&lt;/html&gt;
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

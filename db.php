@@ -1,4 +1,4 @@
-&lt;?php
+﻿<?php
 require_once 'config.php';
 
 class Database {
@@ -96,4 +96,4 @@ class Database {
 }
 
 $db = Database::getInstance()->getConnection();
-?&gt;
+?>

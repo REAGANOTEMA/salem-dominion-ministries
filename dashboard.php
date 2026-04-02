@@ -1,4 +1,4 @@
-&lt;?php
+﻿<?php
 session_start();
 require_once 'db.php';
 
@@ -9,7 +9,7 @@ if (!isset($_SESSION['user_id'])) {
 
 // Get user info
 $user_id = $_SESSION['user_id'];
-$user = $db-&gt;query("SELECT * FROM users WHERE id = $user_id")-&gt;fetch_assoc();
+$user = $db->query("SELECT * FROM users WHERE id = $user_id")->fetch_assoc();
 
 if (!$user) {
     session_destroy();
@@ -30,4 +30,4 @@ switch ($user['role']) {
         header('Location: member_dashboard.php');
         exit;
 }
-?&gt;
+?>

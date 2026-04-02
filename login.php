@@ -1,4 +1,4 @@
-&lt;?php
+﻿<?php
 session_start();
 require_once 'db.php';
 
@@ -19,13 +19,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $errors[] = 'Please enter a valid email address.';
     } else {
-        $stmt = $db-&gt;prepare("SELECT id, first_name, last_name, password_hash, role, is_active FROM users WHERE email = ?");
-        $stmt-&gt;bind_param('s', $email);
-        $stmt-&gt;execute();
-        $result = $stmt-&gt;get_result();
+        $stmt = $db->prepare("SELECT id, first_name, last_name, password_hash, role, is_active FROM users WHERE email = ?");
+        $stmt->bind_param('s', $email);
+        $stmt->execute();
+        $result = $stmt->get_result();
 
-        if ($result-&gt;num_rows === 1) {
-            $user = $result-&gt;fetch_assoc();
+        if ($result->num_rows === 1) {
+            $user = $result->fetch_assoc();
 
             if (!$user['is_active']) {
                 $errors[] = 'Your account is not active. Please contact an administrator.';
@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $_SESSION['user_role'] = $user['role'];
 
                 // Update last login
-                $db-&gt;query("UPDATE users SET last_login = NOW() WHERE id = " . $user['id']);
+                $db->query("UPDATE users SET last_login = NOW() WHERE id = " . $user['id']);
 
                 header('Location: dashboard.php');
                 exit;
@@ -45,19 +45,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             $errors[] = 'Invalid email or password.';
         }
-        $stmt-&gt;close();
+        $stmt->close();
     }
 }
-?&gt;
-&lt;!DOCTYPE html&gt;
-&lt;html lang="en"&gt;
-&lt;head&gt;
-    &lt;meta charset="UTF-8"&gt;
-    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
-    &lt;title&gt;Login - Salem Dominion Ministries&lt;/title&gt;
-    &lt;link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"&gt;
-    &lt;link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"&gt;
-    &lt;style&gt;
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Salem Dominion Ministries</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
         .login-container {
             min-height: 100vh;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -82,63 +82,63 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         .login-body {
             padding: 2rem;
         }
-    &lt;/style&gt;
-&lt;/head&gt;
-&lt;body&gt;
-    &lt;div class="login-container"&gt;
-        &lt;div class="login-card"&gt;
-            &lt;div class="login-header"&gt;
-                &lt;i class="fas fa-church fa-3x mb-3"&gt;&lt;/i&gt;
-                &lt;h3&gt;Salem Dominion Ministries&lt;/h3&gt;
-                &lt;p&gt;Welcome Back&lt;/p&gt;
-            &lt;/div&gt;
-            &lt;div class="login-body"&gt;
-                &lt;?php if (!empty($errors)): ?&gt;
-                    &lt;div class="alert alert-danger"&gt;
-                        &lt;ul class="mb-0"&gt;
-                            &lt;?php foreach ($errors as $error): ?&gt;
-                                &lt;li&gt;&lt;?php echo htmlspecialchars($error); ?&gt;&lt;/li&gt;
-                            &lt;?php endforeach; ?&gt;
-                        &lt;/ul&gt;
-                    &lt;/div&gt;
-                &lt;?php endif; ?&gt;
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <i class="fas fa-church fa-3x mb-3"></i>
+                <h3>Salem Dominion Ministries</h3>
+                <p>Welcome Back</p>
+            </div>
+            <div class="login-body">
+                <?php if (!empty($errors)): ?>
+                    <div class="alert alert-danger">
+                        <ul class="mb-0">
+                            <?php foreach ($errors as $error): ?>
+                                <li><?php echo htmlspecialchars($error); ?></li>
+                            <?php endforeach; ?>
+                        </ul>
+                    </div>
+                <?php endif; ?>
 
-                &lt;?php if ($success): ?&gt;
-                    &lt;div class="alert alert-success"&gt;
-                        &lt;?php echo htmlspecialchars($success); ?&gt;
-                    &lt;/div&gt;
-                &lt;?php endif; ?&gt;
+                <?php if ($success): ?>
+                    <div class="alert alert-success">
+                        <?php echo htmlspecialchars($success); ?>
+                    </div>
+                <?php endif; ?>
 
-                &lt;form method="POST" action=""&gt;
-                    &lt;div class="mb-3"&gt;
-                        &lt;label for="email" class="form-label"&gt;&lt;i class="fas fa-envelope"&gt;&lt;/i&gt; Email Address&lt;/label&gt;
-                        &lt;input type="email" class="form-control" id="email" name="email" required
-                               value="&lt;?php echo htmlspecialchars($_POST['email'] ?? ''); ?&gt;"&gt;
-                    &lt;/div&gt;
-                    &lt;div class="mb-3"&gt;
-                        &lt;label for="password" class="form-label"&gt;&lt;i class="fas fa-lock"&gt;&lt;/i&gt; Password&lt;/label&gt;
-                        &lt;input type="password" class="form-control" id="password" name="password" required&gt;
-                    &lt;/div&gt;
-                    &lt;div class="d-grid"&gt;
-                        &lt;button type="submit" class="btn btn-primary btn-lg"&gt;
-                            &lt;i class="fas fa-sign-in-alt"&gt;&lt;/i&gt; Login
-                        &lt;/button&gt;
-                    &lt;/div&gt;
-                &lt;/form&gt;
+                <form method="POST" action="">
+                    <div class="mb-3">
+                        <label for="email" class="form-label"><i class="fas fa-envelope"></i> Email Address</label>
+                        <input type="email" class="form-control" id="email" name="email" required
+                               value="<?php echo htmlspecialchars($_POST['email'] ?? ''); ?>">
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label"><i class="fas fa-lock"></i> Password</label>
+                        <input type="password" class="form-control" id="password" name="password" required>
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="fas fa-sign-in-alt"></i> Login
+                        </button>
+                    </div>
+                </form>
 
-                &lt;div class="text-center mt-3"&gt;
-                    &lt;a href="forgot_password.php" class="text-decoration-none"&gt;Forgot Password?&lt;/a&gt;
-                &lt;/div&gt;
+                <div class="text-center mt-3">
+                    <a href="forgot_password.php" class="text-decoration-none">Forgot Password?</a>
+                </div>
 
-                &lt;hr&gt;
+                <hr>
 
-                &lt;div class="text-center"&gt;
-                    &lt;p class="mb-0"&gt;Don't have an account? &lt;a href="register.php" class="text-decoration-none"&gt;Register here&lt;/a&gt;&lt;/p&gt;
-                &lt;/div&gt;
-            &lt;/div&gt;
-        &lt;/div&gt;
-    &lt;/div&gt;
+                <div class="text-center">
+                    <p class="mb-0">Don't have an account? <a href="register.php" class="text-decoration-none">Register here</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    &lt;script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"&gt;&lt;/script&gt;
-&lt;/body&gt;
-&lt;/html&gt;
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
