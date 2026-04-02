@@ -7,28 +7,58 @@ ini_set('log_errors', 0);
 // Buffer output to catch any accidental output
 ob_start();
 
-// Handle contact form submission
-$success_message = '';
-$error_message = '';
+// Include session helper and start session safely
+require_once 'session_helper.php';
+secure_session_start();
+require_once 'db.php';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $name = trim($_POST['name'] ?? '');
-    $email = trim($_POST['email'] ?? '');
-    $phone = trim($_POST['phone'] ?? '');
-    $subject = trim($_POST['subject'] ?? '');
-    $message = trim($_POST['message'] ?? '');
+// Get gallery images with error handling
+try {
+    $gallery_images = $db->query("SELECT g.*, u.first_name, u.last_name FROM gallery g LEFT JOIN users u ON g.uploaded_by = u.id WHERE g.status = 'published' ORDER BY g.created_at DESC");
+    $total_images = $db->selectOne("SELECT COUNT(*) as count FROM gallery WHERE status = 'published'")['count'] ?? 0;
+} catch (Exception $e) {
+    $gallery_images = [];
+    $total_images = 0;
+}
 
-    if (empty($name) || empty($email) || empty($subject) || empty($message)) {
-        $error_message = 'Please fill in all required fields.';
-    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $error_message = 'Please enter a valid email address.';
+// Handle image upload for members
+$upload_success = '';
+$upload_error = '';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_SESSION['user_id']) && isset($_FILES['gallery_image'])) {
+    $user_id = $_SESSION['user_id'];
+    $file = $_FILES['gallery_image'];
+
+    if ($file['error'] === UPLOAD_ERR_OK) {
+        $allowed_types = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+        if (in_array($file['type'], $allowed_types)) {
+            $upload_dir = 'uploads/gallery/';
+            if (!is_dir($upload_dir)) {
+                mkdir($upload_dir, 0755, true);
+            }
+
+            $filename = uniqid() . '_' . basename($file['name']);
+            $filepath = $upload_dir . $filename;
+
+            if (move_uploaded_file($file['tmp_name'], $filepath)) {
+                $stmt = $db->prepare("INSERT INTO gallery (uploaded_by, file_url, title, description, file_type, status) VALUES (?, ?, ?, ?, 'image', 'published')");
+                $title = trim($_POST['title'] ?? '');
+                $description = trim($_POST['description'] ?? '');
+                $stmt->bind_param('isss', $user_id, $filepath, $title, $description);
+                $stmt->execute();
+                $stmt->close();
+                $upload_success = 'Image uploaded successfully!';
+                
+                // Refresh gallery data
+                $gallery_images = $db->query("SELECT g.*, u.first_name, u.last_name FROM gallery g LEFT JOIN users u ON g.uploaded_by = u.id WHERE g.status = 'published' ORDER BY g.created_at DESC");
+            } else {
+                $upload_error = 'Failed to upload image.';
+            }
+        } else {
+            $upload_error = 'Invalid file type. Only JPEG, PNG, GIF, and WebP are allowed.';
+        }
     } else {
-        // Here you would typically send an email or save to database
-        // For now, we'll just show success message
-        $success_message = 'Thank you for contacting us! We will get back to you soon.';
-        
-        // Clear form
-        $_POST = [];
+        $upload_error = 'Upload error occurred.';
     }
 }
 
@@ -40,8 +70,8 @@ ob_end_clean();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Contact Salem Dominion Ministries - Get in touch with us for prayer, information, or partnership">
-    <title>Contact Us - Salem Dominion Ministries</title>
+    <meta name="description" content="Gallery - Salem Dominion Ministries - View our church events, services, and community photos">
+    <title>Gallery - Salem Dominion Ministries</title>
     
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -377,120 +407,96 @@ ob_end_clean();
             font-weight: 300;
         }
 
-        /* Contact Cards */
-        .contact-grid {
+        /* Gallery Grid */
+        .gallery-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 3rem;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
             margin-top: 4rem;
         }
 
-        .contact-card {
+        .gallery-item {
             background: var(--snow-white);
-            border-radius: 30px;
-            padding: 3rem;
+            border-radius: 25px;
+            overflow: hidden;
             box-shadow: var(--shadow-soft);
             border: 1px solid rgba(125, 211, 252, 0.2);
             transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
-            overflow: hidden;
-            text-align: center;
+            cursor: pointer;
         }
 
-        .contact-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: var(--gradient-divine);
-        }
-
-        .contact-card:hover {
+        .gallery-item:hover {
             transform: translateY(-15px);
             box-shadow: var(--shadow-divine);
         }
 
-        .contact-icon {
-            width: 80px;
-            height: 80px;
-            background: var(--gradient-divine);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--midnight-blue);
-            font-size: 2rem;
-            margin: 0 auto 2rem;
-            box-shadow: 0 15px 35px rgba(251, 191, 36, 0.3);
+        .gallery-image {
+            position: relative;
+            height: 300px;
+            overflow: hidden;
+        }
+
+        .gallery-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
             transition: all 0.5s ease;
         }
 
-        .contact-card:hover .contact-icon {
-            transform: scale(1.1) rotate(15deg);
-            box-shadow: 0 20px 45px rgba(251, 191, 36, 0.4);
+        .gallery-item:hover .gallery-image img {
+            transform: scale(1.1);
         }
 
-        .contact-title {
-            font-size: 1.5rem;
+        .gallery-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to bottom, transparent 0%, rgba(15, 23, 42, 0.8) 100%);
+            opacity: 0;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: flex-end;
+            padding: 2rem;
+        }
+
+        .gallery-item:hover .gallery-overlay {
+            opacity: 1;
+        }
+
+        .gallery-info {
+            color: var(--snow-white);
+            z-index: 2;
+        }
+
+        .gallery-title {
+            font-size: 1.3rem;
             font-weight: 700;
-            color: var(--midnight-blue);
-            margin-bottom: 1.5rem;
+            margin-bottom: 0.5rem;
             font-family: 'Playfair Display', serif;
         }
 
-        .contact-info {
-            font-size: 1.1rem;
-            line-height: 1.8;
-            color: var(--ocean-blue);
-            margin-bottom: 2rem;
+        .gallery-meta {
+            font-size: 0.9rem;
+            opacity: 0.9;
         }
 
-        .contact-action {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 12px 25px;
-            background: var(--gradient-ocean);
-            color: var(--snow-white);
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-
-        .contact-action:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(14, 165, 233, 0.3);
-            color: var(--snow-white);
-        }
-
-        .contact-action.whatsapp:hover {
-            background: #25d366;
-        }
-
-        /* Contact Form */
-        .contact-form-section {
+        /* Upload Section */
+        .upload-section {
             background: var(--gradient-heaven);
             padding: 4rem;
             border-radius: 30px;
-            margin-top: 4rem;
+            margin-bottom: 4rem;
             border: 1px solid var(--ice-blue);
         }
 
-        .contact-form {
+        .upload-form {
             background: var(--snow-white);
             padding: 3rem;
             border-radius: 25px;
             box-shadow: var(--shadow-soft);
-        }
-
-        .form-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-bottom: 2rem;
         }
 
         .form-group {
@@ -521,48 +527,23 @@ ob_end_clean();
             box-shadow: 0 0 20px rgba(14, 165, 233, 0.2);
         }
 
-        .form-control::placeholder {
-            color: rgba(15, 23, 42, 0.4);
-        }
-
-        textarea.form-control {
-            resize: vertical;
-            min-height: 150px;
-        }
-
-        .btn-submit {
+        .btn-upload {
             background: var(--gradient-ocean);
             color: var(--snow-white);
             border: none;
-            padding: 15px 40px;
+            padding: 12px 30px;
             border-radius: 50px;
             font-weight: 600;
-            font-size: 1.1rem;
             cursor: pointer;
             transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            position: relative;
-            overflow: hidden;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
-        .btn-submit::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: rgba(255, 255, 255, 0.2);
-            transition: all 0.4s ease;
-        }
-
-        .btn-submit:hover::before {
-            left: 100%;
-        }
-
-        .btn-submit:hover {
-            transform: translateY(-3px);
+        .btn-upload:hover {
+            transform: translateY(-2px);
             box-shadow: 0 10px 25px rgba(14, 165, 233, 0.3);
             color: var(--snow-white);
         }
@@ -590,62 +571,88 @@ ob_end_clean();
             border: 1px solid rgba(239, 68, 68, 0.2);
         }
 
-        /* Map Section */
-        .map-section {
-            margin-top: 4rem;
-            border-radius: 25px;
-            overflow: hidden;
-            box-shadow: var(--shadow-divine);
-            height: 400px;
+        /* Lightbox Styles */
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 9999;
+            cursor: pointer;
+        }
+
+        .lightbox.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .lightbox-content {
+            max-width: 90%;
+            max-height: 90%;
             position: relative;
         }
 
-        .map-section iframe {
+        .lightbox-content img {
             width: 100%;
-            height: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            background: var(--heavenly-gold);
+            color: var(--midnight-blue);
             border: none;
-        }
-
-        /* Service Times */
-        .service-times {
-            background: var(--gradient-heaven);
-            padding: 3rem;
-            border-radius: 25px;
-            margin-top: 4rem;
-            border: 1px solid var(--ice-blue);
-        }
-
-        .service-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-
-        .service-item {
-            text-align: center;
-            padding: 2rem;
-            background: var(--snow-white);
-            border-radius: 20px;
-            border: 1px solid var(--ice-blue);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
             transition: all 0.3s ease;
         }
 
-        .service-item:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--shadow-divine);
+        .lightbox-close:hover {
+            transform: scale(1.1);
+            box-shadow: 0 10px 25px rgba(251, 191, 36, 0.3);
         }
 
-        .service-time {
-            font-size: 2rem;
+        /* Stats Section */
+        .stats-bar {
+            background: var(--gradient-heaven);
+            padding: 2rem;
+            border-radius: 20px;
+            margin-bottom: 4rem;
+            text-align: center;
+            border: 1px solid var(--ice-blue);
+        }
+
+        .stats-content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
             font-weight: 900;
             color: var(--heavenly-gold);
             font-family: 'Playfair Display', serif;
-            margin-bottom: 0.5rem;
         }
 
-        .service-name {
-            font-size: 1.2rem;
+        .stat-label {
             color: var(--midnight-blue);
             font-weight: 600;
         }
@@ -669,26 +676,21 @@ ob_end_clean();
                 padding: 60px 0;
             }
 
-            .contact-grid {
-                grid-template-columns: 1fr;
-                gap: 2rem;
+            .gallery-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                gap: 1.5rem;
             }
 
-            .contact-form-section {
+            .upload-section {
                 padding: 2rem;
             }
 
-            .contact-form {
+            .upload-form {
                 padding: 2rem;
             }
 
-            .form-grid {
-                grid-template-columns: 1fr;
-                gap: 1rem;
-            }
-
-            .service-grid {
-                grid-template-columns: 1fr;
+            .stats-content {
+                gap: 1.5rem;
             }
         }
     </style>
@@ -712,8 +714,8 @@ ob_end_clean();
                     <li class="nav-item"><a class="nav-link" href="events.php">Events</a></li>
                     <li class="nav-item"><a class="nav-link" href="sermons.php">Sermons</a></li>
                     <li class="nav-item"><a class="nav-link" href="news.php">News</a></li>
-                    <li class="nav-item"><a class="nav-link" href="gallery.php">Gallery</a></li>
-                    <li class="nav-item"><a class="nav-link active" href="contact.php">Contact</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="gallery.php">Gallery</a></li>
+                    <li class="nav-item"><a class="nav-link" href="contact.php">Contact</a></li>
                     <li class="nav-item">
                         <a class="nav-link" href="login.php">
                             <i class="fas fa-sign-in-alt me-2"></i>Login
@@ -733,197 +735,200 @@ ob_end_clean();
             <div class="hero-logo">
                 <img src="assets/logo-DEFqnQ4s.jpeg" alt="Salem Dominion Ministries">
             </div>
-            <h1 class="hero-title">Contact Us</h1>
-            <p class="hero-subtitle">We'd Love to Hear From You</p>
+            <h1 class="hero-title">Gallery</h1>
+            <p class="hero-subtitle">Capturing God's Faithfulness</p>
         </div>
     </section>
 
-    <!-- Contact Information Section -->
+    <!-- Stats Section -->
     <section class="section section-heaven">
         <div class="container">
-            <h2 class="section-title" data-aos="fade-up">Get in Touch</h2>
-            <p class="section-subtitle" data-aos="fade-up" data-aos-delay="100">Connect with us through various channels</p>
-            
-            <div class="contact-grid">
-                <div class="contact-card" data-aos="fade-up" data-aos-delay="200">
-                    <div class="contact-icon">
-                        <i class="fas fa-map-marker-alt"></i>
+            <div class="stats-bar" data-aos="fade-up">
+                <div class="stats-content">
+                    <div class="stat-item">
+                        <div class="stat-number"><?php echo number_format($total_images); ?></div>
+                        <div class="stat-label">Photos</div>
                     </div>
-                    <h3 class="contact-title">Visit Us</h3>
-                    <div class="contact-info">
-                        Main Street<br>
-                        Iganga Town, Uganda<br>
-                        East Africa
+                    <div class="stat-item">
+                        <div class="stat-number">∞</div>
+                        <div class="stat-label">Events</div>
                     </div>
-                    <a href="map.php" class="contact-action">
-                        <i class="fas fa-directions"></i> Get Directions
-                    </a>
-                </div>
-
-                <div class="contact-card" data-aos="fade-up" data-aos-delay="300">
-                    <div class="contact-icon">
-                        <i class="fas fa-phone"></i>
+                    <div class="stat-item">
+                        <div class="stat-number">∞</div>
+                        <div class="stat-label">Ministries</div>
                     </div>
-                    <h3 class="contact-title">Call Us</h3>
-                    <div class="contact-info">
-                        Office: +256 753 244 480<br>
-                        Pastor: +256 753 244 480<br>
-                        Available: Mon-Sat, 9AM-6PM
+                    <div class="stat-item">
+                        <div class="stat-number">∞</div>
+                        <div class="stat-label">Memories</div>
                     </div>
-                    <a href="tel:+256753244480" class="contact-action">
-                        <i class="fas fa-phone-alt"></i> Call Now
-                    </a>
-                </div>
-
-                <div class="contact-card" data-aos="fade-up" data-aos-delay="400">
-                    <div class="contact-icon">
-                        <i class="fab fa-whatsapp"></i>
-                    </div>
-                    <h3 class="contact-title">WhatsApp</h3>
-                    <div class="contact-info">
-                        Pastor Faty Musasizi<br>
-                        +256 753 244 480<br>
-                        Quick responses 24/7
-                    </div>
-                    <a href="https://wa.me/256753244480" class="contact-action whatsapp" target="_blank">
-                        <i class="fab fa-whatsapp"></i> Chat on WhatsApp
-                    </a>
-                </div>
-
-                <div class="contact-card" data-aos="fade-up" data-aos-delay="500">
-                    <div class="contact-icon">
-                        <i class="fas fa-envelope"></i>
-                    </div>
-                    <h3 class="contact-title">Email Us</h3>
-                    <div class="contact-info">
-                        apostle@salemdominionministries.com<br>
-                        info@salemdominionministries.com<br>
-                        We respond within 24 hours
-                    </div>
-                    <a href="mailto:apostle@salemdominionministries.com" class="contact-action">
-                        <i class="fas fa-paper-plane"></i> Send Email
-                    </a>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Contact Form Section -->
-    <section class="section section-light">
-        <div class="container">
-            <h2 class="section-title" data-aos="fade-up">Send Us a Message</h2>
-            <p class="section-subtitle" data-aos="fade-up" data-aos-delay="100">We'd love to hear from you</p>
-            
-            <div class="contact-form-section" data-aos="fade-up" data-aos-delay="200">
-                <form class="contact-form" method="POST">
-                    <?php if ($success_message): ?>
+    <!-- Upload Section (for logged-in users) -->
+    <?php if (isset($_SESSION['user_id'])): ?>
+        <section class="section section-light">
+            <div class="container">
+                <div class="upload-section" data-aos="fade-up">
+                    <h2 class="section-title">Share Your Photos</h2>
+                    <p class="section-subtitle">Help us capture our church journey by sharing your photos</p>
+                    
+                    <?php if ($upload_success): ?>
                         <div class="alert alert-success">
                             <i class="fas fa-check-circle"></i>
-                            <?php echo htmlspecialchars($success_message); ?>
+                            <?php echo htmlspecialchars($upload_success); ?>
                         </div>
                     <?php endif; ?>
                     
-                    <?php if ($error_message): ?>
+                    <?php if ($upload_error): ?>
                         <div class="alert alert-danger">
                             <i class="fas fa-exclamation-circle"></i>
-                            <?php echo htmlspecialchars($error_message); ?>
+                            <?php echo htmlspecialchars($upload_error); ?>
                         </div>
                     <?php endif; ?>
                     
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label for="name" class="form-label">Your Name *</label>
-                            <input type="text" id="name" name="name" class="form-control" 
-                                   value="<?php echo htmlspecialchars($_POST['name'] ?? ''); ?>" 
-                                   placeholder="Enter your full name" required>
+                    <form class="upload-form" method="POST" enctype="multipart/form-data">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="gallery_image" class="form-label">Choose Photo</label>
+                                    <input type="file" id="gallery_image" name="gallery_image" class="form-control" accept="image/*" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="title" class="form-label">Title (Optional)</label>
+                                    <input type="text" id="title" name="title" class="form-control" placeholder="Photo title">
+                                </div>
+                            </div>
                         </div>
-                        
                         <div class="form-group">
-                            <label for="email" class="form-label">Email Address *</label>
-                            <input type="email" id="email" name="email" class="form-control" 
-                                   value="<?php echo htmlspecialchars($_POST['email'] ?? ''); ?>" 
-                                   placeholder="your.email@example.com" required>
+                            <label for="description" class="form-label">Description (Optional)</label>
+                            <textarea id="description" name="description" class="form-control" rows="3" placeholder="Describe this photo..."></textarea>
                         </div>
-                        
-                        <div class="form-group">
-                            <label for="phone" class="form-label">Phone Number</label>
-                            <input type="tel" id="phone" name="phone" class="form-control" 
-                                   value="<?php echo htmlspecialchars($_POST['phone'] ?? ''); ?>" 
-                                   placeholder="+256 XXX XXX XXX">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="subject" class="form-label">Subject *</label>
-                            <input type="text" id="subject" name="subject" class="form-control" 
-                                   value="<?php echo htmlspecialchars($_POST['subject'] ?? ''); ?>" 
-                                   placeholder="How can we help you?" required>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="message" class="form-label">Message *</label>
-                        <textarea id="message" name="message" class="form-control" 
-                                  placeholder="Tell us more about your inquiry..." required><?php echo htmlspecialchars($_POST['message'] ?? ''); ?></textarea>
-                    </div>
-                    
-                    <div class="text-center">
-                        <button type="submit" class="btn-submit">
-                            <i class="fas fa-paper-plane me-2"></i>
-                            Send Message
+                        <button type="submit" class="btn-upload">
+                            <i class="fas fa-upload"></i>
+                            Upload Photo
                         </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </section>
-
-    <!-- Map Section -->
-    <section class="section section-light">
-        <div class="container">
-            <h2 class="section-title" data-aos="fade-up">Find Us</h2>
-            <p class="section-subtitle" data-aos="fade-up" data-aos-delay="100">Visit our church location</p>
-            
-            <div class="map-section" data-aos="fade-up" data-aos-delay="200">
-                <iframe src="https://www.openstreetmap.org/export/embed.html?bbox=33.4700%2C0.5600%2C33.4900%2C0.5800&layer=mapnik&marker=0.5700%2C33.4800" 
-                        allowfullscreen="" 
-                        loading="lazy" 
-                        referrerpolicy="no-referrer-when-downgrade">
-                </iframe>
-            </div>
-        </div>
-    </section>
-
-    <!-- Service Times Section -->
-    <section class="section section-heaven">
-        <div class="container">
-            <h2 class="section-title" data-aos="fade-up">Service Times</h2>
-            <p class="section-subtitle" data-aos="fade-up" data-aos-delay="100">Join us for worship and fellowship</p>
-            
-            <div class="service-times" data-aos="fade-up" data-aos-delay="200">
-                <div class="service-grid">
-                    <div class="service-item">
-                        <div class="service-time">8:00 AM</div>
-                        <div class="service-name">Early Morning Service</div>
-                    </div>
-                    <div class="service-item">
-                        <div class="service-time">10:00 AM</div>
-                        <div class="service-name">Main Service</div>
-                    </div>
-                    <div class="service-item">
-                        <div class="service-time">12:00 PM</div>
-                        <div class="service-name">Youth Service</div>
-                    </div>
-                    <div class="service-item">
-                        <div class="service-time">6:00 PM</div>
-                        <div class="service-name">Evening Service</div>
-                    </div>
+                    </form>
                 </div>
             </div>
+        </section>
+    <?php endif; ?>
+
+    <!-- Gallery Section -->
+    <section class="section section-light">
+        <div class="container">
+            <h2 class="section-title" data-aos="fade-up">Our Gallery</h2>
+            <p class="section-subtitle" data-aos="fade-up" data-aos-delay="100">Moments that capture our journey of faith</p>
+            
+            <div class="gallery-grid">
+                <?php if ($gallery_images && $gallery_images->num_rows > 0): ?>
+                    <?php while ($image = $gallery_images->fetch_assoc()): ?>
+                        <div class="gallery-item" data-aos="fade-up" data-aos-delay="200" onclick="openLightbox('<?php echo htmlspecialchars($image['file_url']); ?>')">
+                            <div class="gallery-image">
+                                <img src="<?php echo htmlspecialchars($image['file_url']); ?>" alt="<?php echo htmlspecialchars($image['title'] ?? 'Gallery Image'); ?>">
+                                <div class="gallery-overlay">
+                                    <div class="gallery-info">
+                                        <div class="gallery-title"><?php echo htmlspecialchars($image['title'] ?? 'Church Event'); ?></div>
+                                        <div class="gallery-meta">
+                                            <?php echo date('M j, Y', strtotime($image['created_at'])); ?> • 
+                                            <?php echo htmlspecialchars(($image['first_name'] ?? 'Church') . ' ' . ($image['last_name'] ?? 'Team')); ?>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endwhile; ?>
+                <?php else: ?>
+                    <!-- Sample Gallery Items -->
+                    <div class="gallery-item" data-aos="fade-up" data-aos-delay="200" onclick="openLightbox('assets/hero-worship-CWyaH0tr.jpg')">
+                        <div class="gallery-image">
+                            <img src="assets/hero-worship-CWyaH0tr.jpg" alt="Worship Service">
+                            <div class="gallery-overlay">
+                                <div class="gallery-info">
+                                    <div class="gallery-title">Sunday Worship</div>
+                                    <div class="gallery-meta">Powerful praise and worship service</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="gallery-item" data-aos="fade-up" data-aos-delay="300" onclick="openLightbox('assets/hero-community-CDAgPtPb.jpg')">
+                        <div class="gallery-image">
+                            <img src="assets/hero-community-CDAgPtPb.jpg" alt="Community Outreach">
+                            <div class="gallery-overlay">
+                                <div class="gallery-info">
+                                    <div class="gallery-title">Community Outreach</div>
+                                    <div class="gallery-meta">Serving our local community</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="gallery-item" data-aos="fade-up" data-aos-delay="400" onclick="openLightbox('assets/hero-choir-6lo-hX_h.jpg')">
+                        <div class="gallery-image">
+                            <img src="assets/hero-choir-6lo-hX_h.jpg" alt="Choir Performance">
+                            <div class="gallery-overlay">
+                                <div class="gallery-info">
+                                    <div class="gallery-title">Choir Ministry</div>
+                                    <div class="gallery-meta">Beautiful voices in harmony</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="gallery-item" data-aos="fade-up" data-aos-delay="500" onclick="openLightbox('assets/logo-DEFqnQ4s.jpeg')">
+                        <div class="gallery-image">
+                            <img src="assets/logo-DEFqnQ4s.jpeg" alt="Church Logo">
+                            <div class="gallery-overlay">
+                                <div class="gallery-info">
+                                    <div class="gallery-title">Our Church Logo</div>
+                                    <div class="gallery-meta">Salem Dominion Ministries</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="gallery-item" data-aos="fade-up" data-aos-delay="600" onclick="openLightbox('assets/APOSTLE-IRENE-MIREMBE-CwWfzcRx.jpeg')">
+                        <div class="gallery-image">
+                            <img src="assets/APOSTLE-IRENE-MIREMBE-CwWfzcRx.jpeg" alt="Leadership">
+                            <div class="gallery-overlay">
+                                <div class="gallery-info">
+                                    <div class="gallery-title">Our Leadership</div>
+                                    <div class="gallery-meta">Dedicated servant leaders</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="gallery-item" data-aos="fade-up" data-aos-delay="700" onclick="openLightbox('assets/PASTOR-NABULYA-JOYCE-BdB4SkbM.jpeg')">
+                        <div class="gallery-image">
+                            <img src="assets/PASTOR-NABULYA-JOYCE-BdB4SkbM.jpeg" alt="Women Ministry">
+                            <div class="gallery-overlay">
+                                <div class="gallery-info">
+                                    <div class="gallery-title">Women Ministry</div>
+                                    <div class="gallery-meta">Empowering women in faith</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <?php endif; ?>
+            </div>
         </div>
     </section>
 
+    <!-- Lightbox -->
+    <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+        <div class="lightbox-content">
+            <button class="lightbox-close" onclick="closeLightbox()">×</button>
+            <img id="lightbox-image" src="" alt="Gallery Image">
+        </div>
+    </div>
+
     <!-- Ultimate Footer -->
-    <?php require_once 'components/ultimate_footer_enhanced.php'; ?>
+    <?php require_once 'components/ultimate_footer.php'; ?>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -968,6 +973,29 @@ ob_end_clean();
 
         // Initialize particles
         createParticles();
+
+        // Lightbox functions
+        function openLightbox(imageSrc) {
+            const lightbox = document.getElementById('lightbox');
+            const lightboxImage = document.getElementById('lightbox-image');
+            
+            lightboxImage.src = imageSrc;
+            lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox() {
+            const lightbox = document.getElementById('lightbox');
+            lightbox.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Keyboard navigation for lightbox
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeLightbox();
+            }
+        });
 
         // Smooth scroll for anchor links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {

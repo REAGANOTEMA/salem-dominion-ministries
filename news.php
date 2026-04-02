@@ -1143,7 +1143,7 @@ ob_end_clean();
     </section>
 
     <!-- Ultimate Footer -->
-    <?php require_once 'components/ultimate_footer.php'; ?>
+    <?php require_once 'components/ultimate_footer_enhanced.php'; ?>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

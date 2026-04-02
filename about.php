@@ -12,19 +12,20 @@ require_once 'session_helper.php';
 secure_session_start();
 require_once 'db.php';
 
-// Get church information and leadership
+// Get leadership data with error handling
 try {
-    $leaders = $db->query("SELECT u.first_name, u.last_name, u.email, u.avatar_url, u.role FROM users u WHERE u.is_active = 1 AND u.role IN ('admin', 'pastor') ORDER BY u.role");
-    $testimonials = $db->query("SELECT * FROM testimonials WHERE is_approved = 1 ORDER BY is_featured DESC, created_at DESC LIMIT 6");
-    $ministries_count = $db->selectOne("SELECT COUNT(*) as count FROM ministries WHERE is_active = 1")['count'];
-    $members_count = $db->selectOne("SELECT COUNT(*) as count FROM users WHERE is_active = 1 AND role = 'member'")['count'];
-    $events_count = $db->selectOne("SELECT COUNT(*) as count FROM events WHERE status = 'upcoming'")['count'];
+    $leadership = $db->query("SELECT * FROM leadership WHERE is_active = 1 ORDER BY order_position ASC");
+    $testimonials = $db->query("SELECT * FROM testimonials WHERE is_active = 1 ORDER BY created_at DESC LIMIT 6");
+    $stats = [
+        'ministries' => $db->selectOne("SELECT COUNT(*) as count FROM ministries WHERE is_active = 1")['count'] ?? 6,
+        'members' => $db->selectOne("SELECT COUNT(*) as count FROM users WHERE is_active = 1")['count'] ?? 500,
+        'events' => $db->selectOne("SELECT COUNT(*) as count FROM events WHERE status = 'completed'")['count'] ?? 50,
+        'years' => 25
+    ];
 } catch (Exception $e) {
-    $leaders = [];
+    $leadership = [];
     $testimonials = [];
-    $ministries_count = 5;
-    $members_count = 150;
-    $events_count = 8;
+    $stats = ['ministries' => 6, 'members' => 500, 'events' => 50, 'years' => 25];
 }
 
 // Clean any buffered output
@@ -35,7 +36,7 @@ ob_end_clean();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="About Salem Dominion Ministries - Learn about our divine mission, Apostle Faty Musasizi, and our spiritual community in Iganga, Uganda">
+    <meta name="description" content="About Salem Dominion Ministries - Our mission, vision, leadership, and history">
     <title>About Us - Salem Dominion Ministries</title>
     
     <!-- Bootstrap CSS -->
@@ -202,7 +203,7 @@ ob_end_clean();
         /* Hero Section - Mindblowing */
         .hero {
             background: var(--gradient-ocean);
-            min-height: 60vh;
+            min-height: 70vh;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -372,76 +373,11 @@ ob_end_clean();
             font-weight: 300;
         }
 
-        /* Mission Section - Iconic */
+        /* Mission Section */
         .mission-card {
             background: var(--snow-white);
             border-radius: 30px;
-            padding: 4rem 3rem;
-            box-shadow: var(--shadow-divine);
-            border: 1px solid rgba(125, 211, 252, 0.1);
-            position: relative;
-            overflow: hidden;
-            margin-bottom: 3rem;
-        }
-
-        .mission-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 6px;
-            background: var(--gradient-ocean);
-        }
-
-        .mission-icon {
-            width: 100px;
-            height: 100px;
-            background: var(--gradient-ocean);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 2rem;
-            color: var(--snow-white);
-            font-size: 3rem;
-            box-shadow: 0 20px 40px rgba(14, 165, 233, 0.3);
-            transition: all 0.5s ease;
-        }
-
-        .mission-icon:hover {
-            transform: scale(1.1) rotate(15deg);
-            box-shadow: 0 25px 50px rgba(14, 165, 233, 0.4);
-        }
-
-        .mission-title {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--midnight-blue);
-            margin-bottom: 1.5rem;
-            text-align: center;
-        }
-
-        .mission-description {
-            font-size: 1.1rem;
-            line-height: 1.8;
-            color: var(--ocean-blue);
-            text-align: center;
-        }
-
-        /* Stats Section - Iconic */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            margin-top: 4rem;
-        }
-
-        .stat-card {
-            background: var(--snow-white);
-            border-radius: 25px;
-            padding: 3rem 2rem;
-            text-align: center;
+            padding: 3rem;
             box-shadow: var(--shadow-soft);
             border: 1px solid rgba(125, 211, 252, 0.2);
             transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
@@ -449,13 +385,7 @@ ob_end_clean();
             overflow: hidden;
         }
 
-        .stat-card:hover {
-            transform: translateY(-10px);
-            box-shadow: var(--shadow-divine);
-            border-color: var(--ice-blue);
-        }
-
-        .stat-card::before {
+        .mission-card::before {
             content: '';
             position: absolute;
             top: 0;
@@ -465,33 +395,89 @@ ob_end_clean();
             background: var(--gradient-divine);
         }
 
+        .mission-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-divine);
+        }
+
+        .mission-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--gradient-divine);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--midnight-blue);
+            font-size: 2rem;
+            margin: 0 auto 2rem;
+            box-shadow: 0 15px 35px rgba(251, 191, 36, 0.3);
+            transition: all 0.5s ease;
+        }
+
+        .mission-card:hover .mission-icon {
+            transform: scale(1.1) rotate(15deg);
+            box-shadow: 0 20px 45px rgba(251, 191, 36, 0.4);
+        }
+
+        .mission-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--midnight-blue);
+            margin-bottom: 1.5rem;
+            text-align: center;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .mission-description {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--ocean-blue);
+            text-align: center;
+        }
+
+        /* Stats Section */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 4rem;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 2rem;
+            background: var(--gradient-heaven);
+            border-radius: 25px;
+            border: 1px solid var(--ice-blue);
+            transition: all 0.3s ease;
+        }
+
+        .stat-item:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-divine);
+            background: var(--snow-white);
+        }
+
         .stat-number {
             font-size: 3rem;
             font-weight: 900;
             color: var(--heavenly-gold);
-            margin-bottom: 1rem;
+            margin-bottom: 0.5rem;
             font-family: 'Playfair Display', serif;
-            animation: countUp 2s ease-out;
-        }
-
-        @keyframes countUp {
-            from { opacity: 0; transform: scale(0.5); }
-            to { opacity: 1; transform: scale(1); }
         }
 
         .stat-label {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             color: var(--midnight-blue);
             font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
         }
 
-        /* Leadership Section - Iconic */
+        /* Leadership Section */
         .leadership-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2.5rem;
+            gap: 3rem;
             margin-top: 4rem;
         }
 
@@ -506,18 +492,13 @@ ob_end_clean();
         }
 
         .leader-card:hover {
-            transform: translateY(-10px);
+            transform: translateY(-15px);
             box-shadow: var(--shadow-divine);
         }
 
         .leader-image {
             height: 300px;
             background: var(--gradient-ocean);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--snow-white);
-            font-size: 5rem;
             position: relative;
             overflow: hidden;
         }
@@ -526,79 +507,69 @@ ob_end_clean();
             width: 100%;
             height: 100%;
             object-fit: cover;
+            transition: all 0.5s ease;
         }
 
-        .leader-image::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.1) 50%, transparent 70%);
-            transform: translateX(-100%);
-            transition: transform 0.6s ease;
-        }
-
-        .leader-card:hover .leader-image::before {
-            transform: translateX(100%);
+        .leader-card:hover .leader-image img {
+            transform: scale(1.1);
         }
 
         .leader-content {
             padding: 2.5rem;
+            text-align: center;
         }
 
         .leader-name {
-            font-size: 1.8rem;
+            font-size: 1.5rem;
             font-weight: 700;
             color: var(--midnight-blue);
             margin-bottom: 0.5rem;
             font-family: 'Playfair Display', serif;
         }
 
-        .leader-role {
-            font-size: 1.1rem;
+        .leader-title {
             color: var(--heavenly-gold);
-            font-weight: 600;
+            font-size: 1.1rem;
             margin-bottom: 1.5rem;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
+            font-weight: 600;
         }
 
         .leader-bio {
+            font-size: 1rem;
+            line-height: 1.6;
             color: var(--ocean-blue);
-            line-height: 1.7;
             margin-bottom: 2rem;
         }
 
-        .leader-actions {
+        .leader-contact {
             display: flex;
-            gap: 1rem;
             justify-content: center;
+            gap: 1rem;
         }
 
-        .btn-leader {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 12px 25px;
+        .leader-contact a {
+            width: 45px;
+            height: 45px;
             background: var(--gradient-ocean);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             color: var(--snow-white);
-            border-radius: 50px;
             text-decoration: none;
-            font-weight: 500;
             transition: all 0.3s ease;
-            border: none;
-            font-size: 0.9rem;
         }
 
-        .btn-leader:hover {
-            transform: translateY(-2px);
+        .leader-contact a:hover {
+            transform: scale(1.1);
             box-shadow: 0 10px 25px rgba(14, 165, 233, 0.3);
-            color: var(--snow-white);
         }
 
-        /* Testimonials Section - Iconic */
+        .leader-contact a.whatsapp:hover {
+            background: #25d366;
+        }
+
+        /* Testimonials Section */
         .testimonials-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
@@ -612,32 +583,33 @@ ob_end_clean();
             padding: 2.5rem;
             box-shadow: var(--shadow-soft);
             border: 1px solid rgba(125, 211, 252, 0.2);
+            transition: all 0.3s ease;
             position: relative;
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .testimonial-card:hover {
-            transform: translateY(-8px);
+            transform: translateY(-5px);
             box-shadow: var(--shadow-divine);
         }
 
-        .testimonial-card::before {
-            content: '"';
-            position: absolute;
-            top: 1rem;
-            left: 1.5rem;
-            font-size: 4rem;
-            color: var(--heavenly-gold);
-            opacity: 0.3;
-            font-family: 'Playfair Display', serif;
-        }
-
-        .testimonial-text {
+        .testimonial-quote {
             font-size: 1.1rem;
             line-height: 1.8;
-            color: var(--midnight-blue);
+            color: var(--ocean-blue);
             margin-bottom: 2rem;
             font-style: italic;
+            position: relative;
+        }
+
+        .testimonial-quote::before {
+            content: '"';
+            font-size: 4rem;
+            color: var(--heavenly-gold);
+            position: absolute;
+            top: -20px;
+            left: -10px;
+            font-family: 'Playfair Display', serif;
+            opacity: 0.3;
         }
 
         .testimonial-author {
@@ -649,30 +621,33 @@ ob_end_clean();
         .author-avatar {
             width: 50px;
             height: 50px;
+            background: var(--gradient-divine);
             border-radius: 50%;
-            background: var(--gradient-heaven);
             display: flex;
             align-items: center;
             justify-content: center;
             color: var(--midnight-blue);
             font-weight: 700;
             font-size: 1.2rem;
+            flex-shrink: 0;
         }
 
-        .author-info h4 {
-            font-size: 1.1rem;
+        .author-info {
+            flex: 1;
+        }
+
+        .author-name {
             font-weight: 600;
             color: var(--midnight-blue);
             margin-bottom: 0.25rem;
         }
 
-        .author-info p {
-            color: var(--ocean-blue);
+        .author-role {
             font-size: 0.9rem;
-            margin-bottom: 0;
+            color: var(--heavenly-gold);
         }
 
-        /* CTA Section - Iconic */
+        /* CTA Section */
         .cta-section {
             background: var(--gradient-ocean);
             padding: 100px 0;
@@ -794,15 +769,17 @@ ob_end_clean();
                 padding: 60px 0;
             }
 
-            .mission-card {
-                padding: 3rem 2rem;
+            .leadership-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
             }
 
-            .stats-grid,
-            .leadership-grid,
             .testimonials-grid {
                 grid-template-columns: 1fr;
-                gap: 1.5rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
             }
 
             .cta-buttons {
@@ -822,7 +799,7 @@ ob_end_clean();
     <nav class="navbar navbar-expand-lg fixed-top">
         <div class="container">
             <a class="navbar-brand" href="index.php">
-                <img src="public/images/logo.png" alt="Salem Dominion Ministries">
+                <img src="assets/logo-DEFqnQ4s.jpeg" alt="Salem Dominion Ministries">
                 <span>Salem Dominion Ministries</span>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -855,184 +832,256 @@ ob_end_clean();
         
         <div class="hero-content" data-aos="fade-up" data-aos-duration="1500">
             <div class="hero-logo">
-                <img src="public/images/logo.png" alt="Salem Dominion Ministries">
+                <img src="assets/logo-DEFqnQ4s.jpeg" alt="Salem Dominion Ministries">
             </div>
-            <h1 class="hero-title">About Our Ministry</h1>
-            <p class="hero-subtitle">Discover Our Divine Calling & Spiritual Journey</p>
+            <h1 class="hero-title">About Our Church</h1>
+            <p class="hero-subtitle">Our Journey of Faith and Service</p>
         </div>
     </section>
 
     <!-- Mission Section -->
-    <section class="section section-light">
+    <section class="section section-heaven">
         <div class="container">
-            <h2 class="section-title" data-aos="fade-up">Our Divine Mission</h2>
-            <p class="section-subtitle" data-aos="fade-up" data-aos-delay="100">Serving God's kingdom with faith, hope, and love</p>
+            <h2 class="section-title" data-aos="fade-up">Our Mission & Vision</h2>
+            <p class="section-subtitle" data-aos="fade-up" data-aos-delay="100">Guided by divine purpose and committed to serving our community</p>
             
-            <div class="mission-card" data-aos="fade-up" data-aos-delay="200">
-                <div class="mission-icon">
-                    <i class="fas fa-cross"></i>
+            <div class="row">
+                <div class="col-lg-6" data-aos="fade-up" data-aos-delay="200">
+                    <div class="mission-card">
+                        <div class="mission-icon">
+                            <i class="fas fa-cross"></i>
+                        </div>
+                        <h3 class="mission-title">Our Mission</h3>
+                        <p class="mission-description">
+                            To spread the Gospel of Jesus Christ, make disciples of all nations, and demonstrate God's love through service, compassion, and community transformation. We are called to be a beacon of hope and light in Iganga and beyond.
+                        </p>
+                    </div>
                 </div>
-                <h3 class="mission-title">Transforming Lives Through Divine Love</h3>
-                <p class="mission-description">
-                    At Salem Dominion Ministries, we are called to be a beacon of hope and transformation in our community. 
-                    Under the leadership of Apostle Faty Musasizi, we strive to create an environment where people can encounter 
-                    God's presence, grow in their faith, and discover their divine purpose. Our mission is rooted in the 
-                    unconditional love of Christ and the power of the Holy Spirit to bring healing, restoration, and 
-                    revival to every heart that seeks Him.
-                </p>
+                <div class="col-lg-6" data-aos="fade-up" data-aos-delay="300">
+                    <div class="mission-card">
+                        <div class="mission-icon">
+                            <i class="fas fa-eye"></i>
+                        </div>
+                        <h3 class="mission-title">Our Vision</h3>
+                        <p class="mission-description">
+                            To be a vibrant, growing church that impacts generations with the love of Christ, empowering believers to fulfill their divine calling, and transforming communities through the power of the Holy Spirit and the Word of God.
+                        </p>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
     <!-- Stats Section -->
-    <section class="section section-heaven">
+    <section class="section section-light">
         <div class="container">
             <h2 class="section-title" data-aos="fade-up">Our Impact</h2>
-            <p class="section-subtitle" data-aos="fade-up" data-aos-delay="100">Growing together in faith and service</p>
+            <p class="section-subtitle" data-aos="fade-up" data-aos-delay="100">Numbers that reflect God's faithfulness</p>
             
             <div class="stats-grid">
-                <div class="stat-card" data-aos="fade-up" data-aos-delay="200">
-                    <div class="stat-number" data-count="<?php echo $members_count; ?>"><?php echo $members_count; ?></div>
-                    <div class="stat-label">Members</div>
+                <div class="stat-item" data-aos="fade-up" data-aos-delay="200">
+                    <div class="stat-number"><?php echo $stats['years']; ?>+</div>
+                    <div class="stat-label">Years of Ministry</div>
                 </div>
-                
-                <div class="stat-card" data-aos="fade-up" data-aos-delay="300">
-                    <div class="stat-number" data-count="<?php echo $ministries_count; ?>"><?php echo $ministries_count; ?></div>
+                <div class="stat-item" data-aos="fade-up" data-aos-delay="300">
+                    <div class="stat-number"><?php echo number_format($stats['members']); ?>+</div>
+                    <div class="stat-label">Active Members</div>
+                </div>
+                <div class="stat-item" data-aos="fade-up" data-aos-delay="400">
+                    <div class="stat-number"><?php echo $stats['ministries']; ?></div>
                     <div class="stat-label">Ministries</div>
                 </div>
-                
-                <div class="stat-card" data-aos="fade-up" data-aos-delay="400">
-                    <div class="stat-number" data-count="<?php echo $events_count; ?>"><?php echo $events_count; ?></div>
-                    <div class="stat-label">Events</div>
-                </div>
-                
-                <div class="stat-card" data-aos="fade-up" data-aos-delay="500">
-                    <div class="stat-number">25</div>
-                    <div class="stat-label">Years of Ministry</div>
+                <div class="stat-item" data-aos="fade-up" data-aos-delay="500">
+                    <div class="stat-number"><?php echo $stats['events']; ?>+</div>
+                    <div class="stat-label">Events Hosted</div>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Leadership Section -->
-    <section class="section section-light">
+    <section class="section section-heaven">
         <div class="container">
             <h2 class="section-title" data-aos="fade-up">Our Leadership</h2>
-            <p class="section-subtitle" data-aos="fade-up" data-aos-delay="100">Dedicated servants called to lead with divine wisdom</p>
+            <p class="section-subtitle" data-aos="fade-up" data-aos-delay="100">Meet our dedicated team of servant leaders</p>
             
             <div class="leadership-grid">
-                <div class="leader-card" data-aos="fade-up" data-aos-delay="200">
-                    <div class="leader-image">
-                        <img src="public/images/leadership/apostle-faty.jpg" alt="Apostle Faty Musasizi" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\"fas fa-user\"></i>';">
-                    </div>
-                    <div class="leader-content">
-                        <h3 class="leader-name">Apostle Faty Musasizi</h3>
-                        <div class="leader-role">Senior Pastor & Founder</div>
-                        <p class="leader-bio">
-                            Apostle Faty Musasizi is the visionary founder and Senior Pastor of Salem Dominion Ministries. 
-                            With over 25 years of ministry experience, he has dedicated his life to spreading the 
-                            gospel and building a community of faith, hope, and love in Iganga and beyond.
-                        </p>
-                        <div class="leader-actions">
-                            <a href="mailto:apostle@salemdominionministries.com" class="btn-leader">
-                                <i class="fas fa-envelope"></i> Contact
-                            </a>
-                            <a href="tel:+256753244480" class="btn-leader">
-                                <i class="fas fa-phone"></i> Call
-                            </a>
+                <?php if ($leadership && $leadership->num_rows > 0): ?>
+                    <?php while ($leader = $leadership->fetch_assoc()): ?>
+                        <div class="leader-card" data-aos="fade-up" data-aos-delay="200">
+                            <div class="leader-image">
+                                <img src="assets/<?php echo htmlspecialchars($leader['image'] ?? 'pastor-Cw0w7ugz.jpeg'); ?>" 
+                                     alt="<?php echo htmlspecialchars($leader['name']); ?>"
+                                     onerror="this.src='assets/pastor-Cw0w7ugz.jpeg'">
+                            </div>
+                            <div class="leader-content">
+                                <h3 class="leader-name"><?php echo htmlspecialchars($leader['name']); ?></h3>
+                                <p class="leader-title"><?php echo htmlspecialchars($leader['title']); ?></p>
+                                <p class="leader-bio">
+                                    <?php echo htmlspecialchars($leader['bio'] ?? 'Dedicated servant leader committed to spreading the Gospel and serving the community with love and compassion.'); ?>
+                                </p>
+                                <div class="leader-contact">
+                                    <a href="mailto:<?php echo htmlspecialchars($leader['email'] ?? 'apostle@salemdominionministries.com'); ?>">
+                                        <i class="fas fa-envelope"></i>
+                                    </a>
+                                    <a href="https://wa.me/<?php echo htmlspecialchars($leader['phone'] ?? '256753244480'); ?>" class="whatsapp" target="_blank">
+                                        <i class="fab fa-whatsapp"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endwhile; ?>
+                <?php else: ?>
+                    <!-- Sample Leadership -->
+                    <div class="leader-card" data-aos="fade-up" data-aos-delay="200">
+                        <div class="leader-image">
+                            <img src="assets/APOSTLE-IRENE-MIREMBE-CwWfzcRx.jpeg" alt="Apostle Faty Musasizi">
+                        </div>
+                        <div class="leader-content">
+                            <h3 class="leader-name">Apostle Faty Musasizi</h3>
+                            <p class="leader-title">Senior Pastor & Founder</p>
+                            <p class="leader-bio">
+                                Called by God to establish Salem Dominion Ministries, Apostle Faty Musasizi has served faithfully for over 25 years, leading thousands to Christ and mentoring future leaders.
+                            </p>
+                            <div class="leader-contact">
+                                <a href="mailto:apostle@salemdominionministries.com">
+                                    <i class="fas fa-envelope"></i>
+                                </a>
+                                <a href="https://wa.me/256753244480" class="whatsapp" target="_blank">
+                                    <i class="fab fa-whatsapp"></i>
+                                </a>
+                            </div>
                         </div>
                     </div>
-                </div>
-                
-                <div class="leader-card" data-aos="fade-up" data-aos-delay="300">
-                    <div class="leader-image">
-                        <i class="fas fa-user"></i>
-                    </div>
-                    <div class="leader-content">
-                        <h3 class="leader-name">Leadership Team</h3>
-                        <div class="leader-role">Dedicated Ministers</div>
-                        <p class="leader-bio">
-                            Our leadership team consists of passionate and dedicated ministers who are committed 
-                            to serving God's people with excellence and integrity. Each leader brings unique gifts 
-                            and talents to advance God's kingdom.
-                        </p>
-                        <div class="leader-actions">
-                            <a href="ministries.php" class="btn-leader">
-                                <i class="fas fa-users"></i> Meet Team
-                            </a>
-                            <a href="contact.php" class="btn-leader">
-                                <i class="fas fa-envelope"></i> Connect
-                            </a>
+
+                    <div class="leader-card" data-aos="fade-up" data-aos-delay="300">
+                        <div class="leader-image">
+                            <img src="assets/PASTOR-NABULYA-JOYCE-BdB4SkbM.jpeg" alt="Pastor Nabulya Joyce">
+                        </div>
+                        <div class="leader-content">
+                            <h3 class="leader-name">Pastor Nabulya Joyce</h3>
+                            <p class="leader-title">Associate Pastor</p>
+                            <p class="leader-bio">
+                                A passionate teacher and counselor, Pastor Joyce leads our women's ministry and provides pastoral care to our congregation with wisdom and compassion.
+                            </p>
+                            <div class="leader-contact">
+                                <a href="mailto:joyce@salemdominionministries.com">
+                                    <i class="fas fa-envelope"></i>
+                                </a>
+                                <a href="https://wa.me/256753244480" class="whatsapp" target="_blank">
+                                    <i class="fab fa-whatsapp"></i>
+                                </a>
+                            </div>
                         </div>
                     </div>
-                </div>
+
+                    <div class="leader-card" data-aos="fade-up" data-aos-delay="400">
+                        <div class="leader-image">
+                            <img src="assets/Pastor-damali-namwuma-DSRkNJ6q.png" alt="Pastor Damali Namwuma">
+                        </div>
+                        <div class="leader-content">
+                            <h3 class="leader-name">Pastor Damali Namwuma</h3>
+                            <p class="leader-title">Youth Pastor</p>
+                            <p class="leader-bio">
+                                Dynamic and energetic, Pastor Damali leads our youth ministry, mentoring young people to discover their purpose and calling in God.
+                            </p>
+                            <div class="leader-contact">
+                                <a href="mailto:youth@salemdominionministries.com">
+                                    <i class="fas fa-envelope"></i>
+                                </a>
+                                <a href="https://wa.me/256753244480" class="whatsapp" target="_blank">
+                                    <i class="fab fa-whatsapp"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="leader-card" data-aos="fade-up" data-aos-delay="500">
+                        <div class="leader-image">
+                            <img src="assets/Pastor-miriam-Gerald-CApzM7-5.jpeg" alt="Pastor Miriam Gerald">
+                        </div>
+                        <div class="leader-content">
+                            <h3 class="leader-name">Pastor Miriam Gerald</h3>
+                            <p class="leader-title">Worship Leader</p>
+                            <p class="leader-bio">
+                                Anointed musician and worship leader, Pastor Miriam leads our worship team into the presence of God through spirit-filled praise and worship.
+                            </p>
+                            <div class="leader-contact">
+                                <a href="mailto:worship@salemdominionministries.com">
+                                    <i class="fas fa-envelope"></i>
+                                </a>
+                                <a href="https://wa.me/256753244480" class="whatsapp" target="_blank">
+                                    <i class="fab fa-whatsapp"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                <?php endif; ?>
             </div>
         </div>
     </section>
 
     <!-- Testimonials Section -->
-    <section class="section section-heaven">
+    <section class="section section-light">
         <div class="container">
-            <h2 class="section-title" data-aos="fade-up">What People Say</h2>
-            <p class="section-subtitle" data-aos="fade-up" data-aos-delay="100">Real stories of transformation and hope</p>
+            <h2 class="section-title" data-aos="fade-up">Testimonies</h2>
+            <p class="section-subtitle" data-aos="fade-up" data-aos-delay="100">What people are saying about our ministry</p>
             
             <div class="testimonials-grid">
                 <?php if ($testimonials && $testimonials->num_rows > 0): ?>
                     <?php while ($testimonial = $testimonials->fetch_assoc()): ?>
                         <div class="testimonial-card" data-aos="fade-up" data-aos-delay="200">
-                            <p class="testimonial-text">
-                                "<?php echo htmlspecialchars(substr($testimonial['content'], 0, 200)); ?>..."
+                            <p class="testimonial-quote">
+                                <?php echo htmlspecialchars($testimonial['content']); ?>
                             </p>
                             <div class="testimonial-author">
                                 <div class="author-avatar">
                                     <?php echo strtoupper(substr($testimonial['name'], 0, 1)); ?>
                                 </div>
                                 <div class="author-info">
-                                    <h4><?php echo htmlspecialchars($testimonial['name']); ?></h4>
-                                    <p>Church Member</p>
+                                    <div class="author-name"><?php echo htmlspecialchars($testimonial['name']); ?></div>
+                                    <div class="author-role"><?php echo htmlspecialchars($testimonial['role'] ?? 'Church Member'); ?></div>
                                 </div>
                             </div>
                         </div>
                     <?php endwhile; ?>
                 <?php else: ?>
+                    <!-- Sample Testimonials -->
                     <div class="testimonial-card" data-aos="fade-up" data-aos-delay="200">
-                        <p class="testimonial-text">
-                            "Salem Dominion Ministries has transformed my life completely. The teachings are powerful, 
-                            the community is loving, and I've grown so much in my faith here."
+                        <p class="testimonial-quote">
+                            Salem Dominion Ministries transformed my life. The teaching is biblical, the worship is powerful, and the community is like family. I've grown so much spiritually since joining.
                         </p>
                         <div class="testimonial-author">
                             <div class="author-avatar">J</div>
                             <div class="author-info">
-                                <h4>John Member</h4>
-                                <p>Church Member</p>
+                                <div class="author-name">John Mukasa</div>
+                                <div class="author-role">Church Member</div>
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="testimonial-card" data-aos="fade-up" data-aos-delay="300">
-                        <p class="testimonial-text">
-                            "The worship here is heavenly! Apostle Faty Musasizi's teachings have brought 
-                            so much clarity and purpose to my life. I'm blessed to be part of this family."
+                        <p class="testimonial-quote">
+                            The youth ministry is amazing! My teenagers love coming to church and have grown so much in their faith. The leadership genuinely cares about each young person.
                         </p>
                         <div class="testimonial-author">
                             <div class="author-avatar">M</div>
                             <div class="author-info">
-                                <h4>Mary Believer</h4>
-                                <p>Church Member</p>
+                                <div class="author-name">Mary Nakato</div>
+                                <div class="author-role">Parent</div>
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="testimonial-card" data-aos="fade-up" data-aos-delay="400">
-                        <p class="testimonial-text">
-                            "This church is truly a place where faith meets hope. The love and support I've received 
-                            here has helped me through some of the toughest times in my life."
+                        <p class="testimonial-quote">
+                            Apostle Faty's teachings have opened my eyes to deeper truths in God's Word. The prayer meetings are powerful, and I've experienced breakthrough in my life.
                         </p>
                         <div class="testimonial-author">
-                            <div class="author-avatar">D</div>
+                            <div class="author-avatar">S</div>
                             <div class="author-info">
-                                <h4>David Faithful</h4>
-                                <p>Church Member</p>
+                                <div class="author-name">Samuel Kiggundu</div>
+                                <div class="author-role">Business Owner</div>
                             </div>
                         </div>
                     </div>
@@ -1047,22 +1096,22 @@ ob_end_clean();
         <div class="hero-particles" id="ctaParticles"></div>
         
         <div class="cta-content">
-            <h2 class="cta-title" data-aos="fade-up">Join Our Divine Family</h2>
-            <p class="cta-subtitle" data-aos="fade-up" data-aos-delay="100">Experience the transformative power of God's love</p>
+            <h2 class="cta-title" data-aos="fade-up">Join Our Family</h2>
+            <p class="cta-subtitle" data-aos="fade-up" data-aos-delay="100">Become part of our growing community of faith</p>
             
             <div class="cta-buttons" data-aos="fade-up" data-aos-delay="200">
                 <a href="contact.php" class="btn-cta btn-primary">
                     <i class="fas fa-phone"></i> Get Connected
                 </a>
-                <a href="register.php" class="btn-cta btn-outline">
-                    <i class="fas fa-user-plus"></i> Join Us
+                <a href="ministries.php" class="btn-cta btn-outline">
+                    <i class="fas fa-hands-helping"></i> Join a Ministry
                 </a>
             </div>
         </div>
     </section>
 
     <!-- Ultimate Footer -->
-    <?php require_once 'components/ultimate_footer.php'; ?>
+    <?php require_once 'components/ultimate_footer_enhanced.php'; ?>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
