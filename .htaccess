@@ -3,6 +3,9 @@
     RewriteEngine On
     RewriteBase /salem-dominion-ministries/
 
+    # Set directory index priority - PHP files first
+    DirectoryIndex index.php index.html
+
     # Handle API requests - route directly to api.php
     RewriteCond %{REQUEST_URI} ^/salem-dominion-ministries/api\.php$ [NC]
     RewriteRule ^ - [L]
