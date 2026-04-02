@@ -75,28 +75,30 @@ if (isset($_SERVER['HTTP_IF_MODIFIED_SINCE'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Welcome to Salem Dominion Ministries - Experience God's love, grow in faith, and serve our community together">
-    <meta name="keywords" content="church, ministry, faith, God, Jesus, worship, community, Salem Dominion Ministries">
+    <meta name="description" content="Salem Dominion Ministries - Where Faith Meets Hope. Experience divine worship, spiritual growth, and community fellowship in Iganga, Uganda.">
+    <meta name="keywords" content="church, Iganga, Uganda, worship, spiritual, community, fellowship, Salem Dominion Ministries, divine, heaven">
     <meta name="author" content="Salem Dominion Ministries">
     <meta name="robots" content="index, follow">
     
     <!-- Open Graph Meta Tags -->
-    <meta property="og:title" content="Salem Dominion Ministries - Welcome Home">
-    <meta property="og:description" content="Experience God's love, grow in faith, and serve our community together">
+    <meta property="og:title" content="Salem Dominion Ministries - Where Faith Meets Hope">
+    <meta property="og:description" content="Experience divine worship and spiritual growth at Salem Dominion Ministries in Iganga, Uganda">
     <meta property="og:type" content="website">
     <meta property="og:url" content="<?php echo APP_URL; ?>">
-    <meta property="og:image" content="<?php echo APP_URL; ?>/assets/images/og-image.jpg">
+    <meta property="og:image" content="<?php echo APP_URL; ?>/public/images/logo.png">
+    <meta property="og:image:alt" content="Salem Dominion Ministries Logo">
     <meta property="og:site_name" content="Salem Dominion Ministries">
     
     <!-- Twitter Card Meta Tags -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Salem Dominion Ministries - Welcome Home">
-    <meta name="twitter:description" content="Experience God's love, grow in faith, and serve our community together">
-    <meta name="twitter:image" content="<?php echo APP_URL; ?>/assets/images/twitter-image.jpg">
+    <meta name="twitter:title" content="Salem Dominion Ministries - Where Faith Meets Hope">
+    <meta name="twitter:description" content="Experience divine worship and spiritual growth in Iganga, Uganda">
+    <meta name="twitter:image" content="<?php echo APP_URL; ?>/public/images/logo.png">
     
     <!-- Favicon and App Icons -->
-    <link rel="icon" type="image/x-icon" href="/favicon.ico">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/x-icon" href="public/images/logo.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="public/images/logo.png">
+    <link rel="apple-touch-icon" href="public/images/logo.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <link rel="manifest" href="/manifest.json">
@@ -121,10 +123,11 @@ if (isset($_SERVER['HTTP_IF_MODIFIED_SINCE'])) {
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Montserrat:wght@300;400;500;600;700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Montserrat:wght@300;400;500;600;700&family=Dancing+Script:wght@700&family=Great+Vibes&display=swap" rel="stylesheet">
     
     <!-- Custom CSS -->
     <link href="assets/css/perfect_responsive.css" rel="stylesheet">
+    <link href="assets/css/heavenly_design.css" rel="stylesheet">
     
     <style>
         /* Critical CSS for immediate rendering */
@@ -135,6 +138,293 @@ if (isset($_SERVER['HTTP_IF_MODIFIED_SINCE'])) {
             --heavenly-gold: #FFD700;
             --angel-white: #F8F8FF;
             --divine-blue: #4169E1;
+            --grace-purple: #9370DB;
+            --eternal-pink: #FFB6C1;
+            --celestial-teal: #40E0D0;
+            --gradient-heaven: linear-gradient(135deg, #FFD700 0%, #FFA500 25%, #FFB6C1 50%, #87CEEB 75%, #9370DB 100%);
+            --gradient-angel: linear-gradient(135deg, #FFFFFF 0%, #F8F8FF 25%, #E6E6FA 50%, #DDA0DD 75%, #FFB6C1 100%);
+            --gradient-divine: linear-gradient(135deg, #4B0082 0%, #9370DB 25%, #FFD700 50%, #FFA500 75%, #FF6347 100%);
+            --gradient-heavenly-light: linear-gradient(135deg, rgba(255,215,0,0.1) 0%, rgba(255,182,193,0.1) 25%, rgba(135,206,235,0.1) 50%, rgba(147,112,219,0.1) 75%, rgba(255,165,0,0.1) 100%);
+        }
+        
+        /* Heavenly Logo Styles */
+        .heavenly-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            position: relative;
+            z-index: 10;
+            transition: all 0.3s ease;
+        }
+        
+        .heavenly-logo img {
+            height: 40px;
+            width: auto;
+            filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.5));
+            transition: all 0.3s ease;
+            border-radius: 50%;
+            background: white;
+            padding: 2px;
+        }
+        
+        .heavenly-logo:hover img {
+            transform: scale(1.1);
+            filter: drop-shadow(0 0 25px rgba(255, 215, 0, 0.8));
+        }
+        
+        .heavenly-logo .brand-text {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: var(--gradient-divine);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .heavenly-logo:hover .brand-text {
+            transform: scale(1.05);
+            text-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+        }
+        
+        /* Hero Logo Styles */
+        .hero-logo {
+            margin-bottom: 2rem;
+            animation: logoFloat 6s ease-in-out infinite;
+        }
+        
+        @keyframes logoFloat {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-10px) scale(1.05); }
+        }
+        
+        .hero-logo img {
+            height: 120px;
+            width: auto;
+            filter: drop-shadow(0 0 30px rgba(255, 215, 0, 0.8));
+            border-radius: 50%;
+            background: white;
+            padding: 10px;
+            transition: all 0.3s ease;
+            animation: logoGlow 3s ease-in-out infinite;
+        }
+        
+        @keyframes logoGlow {
+            0%, 100% { 
+                box-shadow: 0 0 30px rgba(255, 215, 0, 0.8);
+                transform: scale(1);
+            }
+            50% { 
+                box-shadow: 0 0 50px rgba(255, 215, 0, 1);
+                transform: scale(1.05);
+            }
+        }
+        
+        .hero-logo:hover img {
+            transform: scale(1.1);
+            filter: drop-shadow(0 0 40px rgba(255, 215, 0, 1));
+        }
+        
+        /* Heavenly Typography */
+        .heavenly-welcome {
+            font-family: 'Great Vibes', cursive;
+            font-size: clamp(3rem, 6vw, 5rem);
+            margin-bottom: 1rem;
+            background: var(--gradient-heaven);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+            animation: welcomeGlow 3s ease-in-out infinite;
+        }
+        
+        @keyframes welcomeGlow {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 1; }
+        }
+        
+        .divine-subtitle {
+            font-family: 'Dancing Script', cursive;
+            font-size: clamp(1.5rem, 3vw, 2.5rem);
+            margin-bottom: 2rem;
+            color: rgba(255, 255, 255, 0.9);
+            animation: subtitleFloat 5s ease-in-out infinite;
+        }
+        
+        @keyframes subtitleFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+        
+        /* Divine CTA Buttons */
+        .divine-cta {
+            background: var(--gradient-heaven);
+            color: #1a1a2e;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 25px rgba(255, 215, 0, 0.3);
+            text-decoration: none;
+            display: inline-block;
+            margin: 0 10px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .divine-cta::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: all 0.5s ease;
+        }
+        
+        .divine-cta:hover::before {
+            left: 100%;
+        }
+        
+        .divine-cta:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(255, 215, 0, 0.4);
+            color: #1a1a2e;
+        }
+        
+        /* Service Cards with Heavenly Enhancement */
+        .service-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 20px 40px rgba(255, 215, 0, 0.15);
+            border: 2px solid rgba(255, 215, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-heaven);
+            animation: cardShimmer 3s ease-in-out infinite;
+        }
+        
+        @keyframes cardShimmer {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+        
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 30px 60px rgba(255, 215, 0, 0.25);
+        }
+        
+        .service-icon {
+            font-size: 3rem;
+            color: var(--heavenly-gold);
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+            animation: iconPulse 3s ease-in-out infinite;
+        }
+        
+        @keyframes iconPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        /* Navbar Enhancement */
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.1);
+            border-bottom: 2px solid rgba(255, 215, 0, 0.2);
+            position: relative;
+            z-index: 1000;
+        }
+        
+        .navbar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--gradient-heaven);
+            animation: navbarShimmer 3s ease-in-out infinite;
+        }
+        
+        @keyframes navbarShimmer {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+        
+        /* Hero Section Enhancement */
+        .hero-section {
+            background: var(--gradient-divine);
+            color: white;
+            padding: 150px 0 100px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 200%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            animation: heroShimmer 4s ease-in-out infinite;
+        }
+        
+        @keyframes heroShimmer {
+            0%, 100% { transform: translateX(-100%); }
+            50% { transform: translateX(100%); }
+        }
+        
+        /* Responsive Heaven */
+        @media (max-width: 768px) {
+            .heavenly-logo img {
+                height: 30px;
+            }
+            
+            .heavenly-logo .brand-text {
+                font-size: 1.3rem;
+            }
+            
+            .hero-logo img {
+                height: 80px;
+            }
+            
+            .heavenly-welcome {
+                font-size: 2.5rem;
+            }
+            
+            .divine-subtitle {
+                font-size: 1.5rem;
+            }
+            
+            .divine-cta {
+                padding: 12px 30px;
+                font-size: 1rem;
+                margin: 5px;
+            }
+        }
+    </style>
             --grace-purple: #9370DB;
             --light-color: #ecf0f1;
             --dark-color: #34495e;
@@ -855,8 +1145,9 @@ if (isset($_SERVER['HTTP_IF_MODIFIED_SINCE'])) {
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg fixed-top" role="navigation" aria-label="Main navigation">
         <div class="container">
-            <a class="navbar-brand" href="index.php" aria-label="Salem Dominion Ministries Home">
-                <i class="fas fa-church" aria-hidden="true"></i> Salem Dominion Ministries
+            <a class="navbar-brand heavenly-logo" href="index.php" aria-label="Salem Dominion Ministries Home">
+                <img src="public/images/logo.png" alt="Salem Dominion Ministries Logo" class="img-fluid">
+                <span class="brand-text">Salem Dominion Ministries</span>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
                     aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -895,14 +1186,17 @@ if (isset($_SERVER['HTTP_IF_MODIFIED_SINCE'])) {
             <div class="hero-angel angel-left" role="img" aria-label="Decorative angel">👼</div>
             <div class="hero-angel angel-right" role="img" aria-label="Decorative angel">🕊️</div>
             <div class="hero-content">
-                <h1 class="hero-title" id="hero-title">Welcome to Salem Dominion Ministries</h1>
-                <p class="hero-subtitle">Experience God's love, grow in faith, and serve our community together</p>
-                <div class="hero-buttons">
-                    <a href="about.php" class="btn btn-hero btn-primary-hero" aria-label="Learn more about our church">
-                        <i class="fas fa-info-circle" aria-hidden="true"></i> Learn More
+                <div class="hero-logo" data-aos="fade-down">
+                    <img src="public/images/logo.png" alt="Salem Dominion Ministries Logo" class="img-fluid">
+                </div>
+                <h1 class="hero-title heavenly-welcome" id="hero-title" data-aos="fade-up">Welcome Home</h1>
+                <p class="hero-subtitle divine-subtitle" data-aos="fade-up" data-aos-delay="100">Where Faith Meets Hope in Iganga, Uganda</p>
+                <div class="hero-buttons" data-aos="fade-up" data-aos-delay="200">
+                    <a href="about.php" class="divine-cta" aria-label="Learn more about our church">
+                        <i class="fas fa-info-circle" aria-hidden="true"></i> Discover More
                     </a>
-                    <a href="contact.php" class="btn btn-hero btn-outline-hero" aria-label="Contact our church">
-                        <i class="fas fa-envelope" aria-hidden="true"></i> Contact Us
+                    <a href="contact.php" class="divine-cta" aria-label="Contact our church">
+                        <i class="fas fa-envelope" aria-hidden="true"></i> Connect With Us
                     </a>
                 </div>
             </div>
@@ -1178,7 +1472,8 @@ if (isset($_SERVER['HTTP_IF_MODIFIED_SINCE'])) {
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 <script src="assets/js/heavenly_sounds.js"></script>
 <script src="assets/js/perfect_animations.js"></script>
-    <script src="assets/js/spiritual_enhancement.js"></script>
+<script src="assets/js/spiritual_enhancement.js"></script>
+<script src="assets/js/heavenly_functionality.js"></script>
 <script>
 // Initialize everything when DOM is ready
 document.addEventListener('DOMContentLoaded', function() {
@@ -1309,11 +1604,56 @@ document.addEventListener('visibilitychange', function() {
         if (window.perfectAnimations) {
             window.perfectAnimations.pauseAnimations();
         }
+        if (window.heavenlySystem) {
+            window.heavenlySystem.pauseInterventions();
+        }
     } else {
         // Page is visible, resume animations
         if (window.perfectAnimations) {
             window.perfectAnimations.resumeAnimations();
         }
+        if (window.heavenlySystem) {
+            window.heavenlySystem.resumeInterventions();
+        }
+    }
+});
+
+// Initialize heavenly system when DOM is ready
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize heavenly functionality
+    if (window.HeavenlySystem) {
+        window.heavenlySystem = new HeavenlySystem();
+        
+        // Start divine interventions after 10 seconds
+        setTimeout(function() {
+            window.heavenlySystem.startDivineInterventions();
+        }, 10000);
+        
+        // Add floating scripture periodically
+        setInterval(function() {
+            if (Math.random() > 0.7) {
+                window.heavenlySystem.addFloatingScripture();
+            }
+        }, 45000);
+    }
+    
+    // Add heavenly hover effects
+    document.querySelectorAll('.divine-cta, .heavenly-card, .service-card').forEach(function(element) {
+        element.addEventListener('mouseenter', function() {
+            if (window.heavenlySystem && Math.random() > 0.8) {
+                window.heavenlySystem.playHeavenlyChime();
+            }
+        });
+    });
+    
+    // Logo hover effect
+    const logo = document.querySelector('.heavenly-logo');
+    if (logo) {
+        logo.addEventListener('mouseenter', function() {
+            if (window.heavenlySystem && Math.random() > 0.7) {
+                window.heavenlySystem.showDivineLight();
+            }
+        });
     }
 });
 </script>
