@@ -1,133 +1,157 @@
-// Service Worker for Salem Dominion Ministries PWA
-const CACHE_NAME = 'salem-dominion-v1.0.4';
-const STATIC_CACHE = 'salem-static-v1.0.4';
+const CACHE_NAME = 'salem-dominion-v1';
+const urlsToCache = [
+  '/',
+  '/index.php',
+  '/about.php',
+  '/ministries.php',
+  '/events.php',
+  '/sermons.php',
+  '/news.php',
+  '/gallery.php',
+  '/contact.php',
+  '/pastor_booking.php',
+  '/login.php',
+  '/register.php',
+  '/dashboard.php',
+  '/assets/css/style.css',
+  '/assets/js/main.js',
+  'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css',
+  'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css',
+  'https://unpkg.com/aos@2.3.1/dist/aos.css',
+  'https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Montserrat:wght@300;400;500;600;700&family=Dancing+Script:wght@700&display=swap',
+  'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js',
+  'https://unpkg.com/aos@2.3.1/dist/aos.js'
+];
 
-// Install event - skip waiting immediately
-self.addEventListener('install', (event) => {
-  console.log('🔧 Service Worker: Installing');
-  self.skipWaiting();
-});
-
-// Activate event - clean up old caches
-self.addEventListener('activate', (event) => {
-  console.log('🚀 Service Worker: Activating');
+// Install Service Worker
+self.addEventListener('install', event => {
   event.waitUntil(
-    caches.keys()
-      .then((cacheNames) => {
-        return Promise.all(
-          cacheNames.map((cache) => {
-            if (cache !== STATIC_CACHE) {
-              console.log('🗑️ Service Worker: Deleting old cache:', cache);
-              return caches.delete(cache);
-            }
-          })
-        );
+    caches.open(CACHE_NAME)
+      .then(cache => {
+        console.log('Opened cache');
+        return cache.addAll(urlsToCache);
       })
-      .then(() => self.clients.claim())
   );
 });
 
-// Fetch event - only cache static assets, bypass API requests
-self.addEventListener('fetch', (event) => {
-  const url = new URL(event.request.url);
+// Activate Service Worker
+self.addEventListener('activate', event => {
+  event.waitUntil(
+    caches.keys().then(cacheNames => {
+      return Promise.all(
+        cacheNames.map(cacheName => {
+          if (cacheName !== CACHE_NAME) {
+            console.log('Deleting old cache:', cacheName);
+            return caches.delete(cacheName);
+          }
+        })
+      );
+    })
+  );
+});
 
-  // Skip API requests completely - let them go directly to backend
-  if (url.origin.includes('localhost:5000') || 
-      url.pathname.includes('/api') ||
-      url.pathname.includes('/api.php') ||
-      url.search.includes('route=')) {
-    console.log('⏭️ Service Worker: Skipping API request:', url.href);
-    return;
-  }
-
-  // Only cache GET requests for static assets
-  if (event.request.method !== 'GET') {
-    return;
-  }
-
-  // Skip non-HTTP requests
-  if (!url.protocol.startsWith('http')) {
-    return;
-  }
-
+// Fetch Strategy - Network first, fallback to cache
+self.addEventListener('fetch', event => {
   event.respondWith(
-    caches.match(event.request)
-      .then((cachedResponse) => {
-        if (cachedResponse) {
-          console.log('💾 Service Worker: Serving from cache:', url.pathname);
-          return cachedResponse;
+    fetch(event.request)
+      .then(response => {
+        // If request is successful, cache it and return
+        if (response.status === 200) {
+          const responseClone = response.clone();
+          caches.open(CACHE_NAME)
+            .then(cache => {
+              cache.put(event.request, responseClone);
+            });
         }
-
-        // Fetch from network
-        return fetch(event.request)
-          .then((response) => {
-            // Don't cache non-ok responses
-            if (!response || response.status !== 200) {
-              return response;
-            }
-
-            // Clone the response
-            const responseToCache = response.clone();
-
-            // Cache static assets only
-            if (event.request.destination === 'style' || 
-                event.request.destination === 'script' || 
-                event.request.destination === 'image' ||
-                event.request.destination === 'font') {
-              caches.open(STATIC_CACHE)
-                .then((cache) => {
-                  cache.put(event.request, responseToCache);
-                });
-            }
-
-            return response;
-          })
-          .catch(() => {
-            // Return offline response only for static assets
-            if (event.request.destination === 'document') {
-              return caches.match('/offline.html');
-            }
-            return new Response('Offline', { status: 503 });
-          });
+        return response;
       })
       .catch(() => {
-        return new Response('Offline', { status: 503 });
+        // If network fails, try cache
+        return caches.match(event.request)
+          .then(response => {
+            if (response) {
+              return response;
+            }
+            
+            // If it's a navigation request, return offline page
+            if (event.request.mode === 'navigate') {
+              return caches.match('/index.php');
+            }
+            
+            // For other requests, return a basic offline response
+            return new Response('Offline - Please check your internet connection', {
+              status: 503,
+              statusText: 'Service Unavailable'
+            });
+          });
       })
   );
 });
 
-// Push notifications
-self.addEventListener('push', (event) => {
+// Background Sync for offline actions
+self.addEventListener('sync', event => {
+  if (event.tag === 'background-sync') {
+    event.waitUntil(
+      // Handle background sync for form submissions, etc.
+      console.log('Background sync triggered')
+    );
+  }
+});
+
+// Push Notifications
+self.addEventListener('push', event => {
   const options = {
     body: event.data ? event.data.text() : 'New update from Salem Dominion Ministries',
-    icon: '/icons/icon-192x192.svg',
-    badge: '/icons/icon-72x72.svg',
+    icon: '/favicon.ico',
+    badge: '/favicon.ico',
+    vibrate: [100, 50, 100],
+    data: {
+      dateOfArrival: Date.now(),
+      primaryKey: 1
+    },
+    actions: [
+      {
+        action: 'explore',
+        title: 'Explore',
+        icon: '/images/checkmark.png'
+      },
+      {
+        action: 'close',
+        title: 'Close notification',
+        icon: '/images/xmark.png'
+      }
+    ]
   };
+
   event.waitUntil(
     self.registration.showNotification('Salem Dominion Ministries', options)
   );
 });
 
 // Notification click handler
-self.addEventListener('notificationclick', (event) => {
+self.addEventListener('notificationclick', event => {
   event.notification.close();
-  event.waitUntil(
-    clients.matchAll().then((clientList) => {
-      for (const client of clientList) {
-        if (client.url === '/' && 'focus' in client) {
-          return client.focus();
-        }
-      }
-      if (clients.openWindow) {
-        return clients.openWindow('/');
-      }
-    })
-  );
+
+  if (event.action === 'explore') {
+    event.waitUntil(
+      clients.openWindow('/')
+    );
+  } else if (event.action === 'close') {
+    // Just close the notification
+  } else {
+    // Default action - open the app
+    event.waitUntil(
+      clients.openWindow('/')
+    );
+  }
 });
 
-// Message handling
-self.addEventListener('message', (event) => {
-  if (event.data && event.data.type === 'SKIP_WAITING') {
-    event.waitUntil(self.skipWaiting());
+// Periodic Background Sync for content updates
+self.addEventListener('periodicsync', event => {
+  if (event.tag === 'content-sync') {
+    event.waitUntil(
+      // Sync latest content from server
+      console.log('Periodic sync for content updates')
+    );
   }
 });
