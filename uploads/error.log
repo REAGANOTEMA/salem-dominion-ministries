@@ -477,3 +477,27 @@ Stack trace:
 Stack trace:
 #0 {main}
   thrown in C:\xampp\htdocs\salem-dominion-ministries\leadership.php on line 36
+[02-Apr-2026 13:10:25 UTC] PHP Warning:  ini_set(): Session ini settings cannot be changed after headers have already been sent in C:\xampp\htdocs\salem-dominion-ministries\config.php on line 160
+[02-Apr-2026 13:10:25 UTC] PHP Warning:  ini_set(): Session ini settings cannot be changed after headers have already been sent in C:\xampp\htdocs\salem-dominion-ministries\config.php on line 161
+[02-Apr-2026 13:10:25 UTC] PHP Warning:  ini_set(): Session ini settings cannot be changed after headers have already been sent in C:\xampp\htdocs\salem-dominion-ministries\config.php on line 162
+[02-Apr-2026 13:10:25 UTC] PHP Warning:  ini_set(): Session ini settings cannot be changed after headers have already been sent in C:\xampp\htdocs\salem-dominion-ministries\config.php on line 163
+[02-Apr-2026 13:10:25 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in C:\xampp\htdocs\salem-dominion-ministries\config.php on line 164
+[02-Apr-2026 13:10:25 UTC] Environment Info: {"environment":"development","debug_mode":true,"database_host":"localhost","database_name":"salem_dominion_ministries","database_user":"root","app_url":"http:\/\/localhost\/salem-dominion-ministries","mail_enabled":false,"server_name":"localhost","http_host":"localhost","document_root":"C:\/xampp\/htdocs"}
+[02-Apr-2026 13:10:25 UTC] Database Connection Test: SUCCESS
+[02-Apr-2026 13:10:29 UTC] Environment Info: {"environment":"development","debug_mode":true,"database_host":"localhost","database_name":"salem_dominion_ministries","database_user":"root","app_url":"http:\/\/localhost\/salem-dominion-ministries","mail_enabled":false,"server_name":"localhost","http_host":"localhost","document_root":"C:\/xampp\/htdocs"}
+[02-Apr-2026 13:10:29 UTC] PHP Fatal error:  Uncaught Error: Call to undefined method mysqli::selectOne() in C:\xampp\htdocs\salem-dominion-ministries\leadership.php:36
+Stack trace:
+#0 {main}
+  thrown in C:\xampp\htdocs\salem-dominion-ministries\leadership.php on line 36
+[02-Apr-2026 13:10:32 UTC] Environment Info: {"environment":"development","debug_mode":true,"database_host":"localhost","database_name":"salem_dominion_ministries","database_user":"root","app_url":"http:\/\/localhost\/salem-dominion-ministries","mail_enabled":false,"server_name":"localhost","http_host":"localhost","document_root":"C:\/xampp\/htdocs"}
+[02-Apr-2026 13:10:32 UTC] PHP Fatal error:  Uncaught Error: Call to undefined method mysqli::selectOne() in C:\xampp\htdocs\salem-dominion-ministries\leadership.php:36
+Stack trace:
+#0 {main}
+  thrown in C:\xampp\htdocs\salem-dominion-ministries\leadership.php on line 36
+[02-Apr-2026 13:10:36 UTC] Environment Info: {"environment":"development","debug_mode":true,"database_host":"localhost","database_name":"salem_dominion_ministries","database_user":"root","app_url":"http:\/\/localhost\/salem-dominion-ministries","mail_enabled":false,"server_name":"localhost","http_host":"localhost","document_root":"C:\/xampp\/htdocs"}
+[02-Apr-2026 13:10:37 UTC] Environment Info: {"environment":"development","debug_mode":true,"database_host":"localhost","database_name":"salem_dominion_ministries","database_user":"root","app_url":"http:\/\/localhost\/salem-dominion-ministries","mail_enabled":false,"server_name":"localhost","http_host":"localhost","document_root":"C:\/xampp\/htdocs"}
+[02-Apr-2026 13:10:37 UTC] PHP Fatal error:  Uncaught Error: Call to undefined method mysqli::selectOne() in C:\xampp\htdocs\salem-dominion-ministries\dashboard.php:22
+Stack trace:
+#0 {main}
+  thrown in C:\xampp\htdocs\salem-dominion-ministries\dashboard.php on line 22
+[02-Apr-2026 13:11:12 UTC] Environment Info: {"environment":"development","debug_mode":true,"database_host":"localhost","database_name":"salem_dominion_ministries","database_user":"root","app_url":"http:\/\/localhost\/salem-dominion-ministries","mail_enabled":false,"server_name":"localhost","http_host":"localhost","document_root":"C:\/xampp\/htdocs"}
