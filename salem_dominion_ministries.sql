@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 02, 2026 at 03:15 PM
+-- Generation Time: Apr 03, 2026 at 11:12 AM
 -- Server version: 8.0.45
 -- PHP Version: 8.2.12
 
@@ -38,6 +38,24 @@ CREATE TABLE `activity_logs` (
   `ip_address` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `user_agent` text COLLATE utf8mb4_unicode_ci,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `admin_communications`
+--
+
+CREATE TABLE `admin_communications` (
+  `id` int NOT NULL,
+  `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `content` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `target_audience` enum('all','admins','pastors','members') COLLATE utf8mb4_unicode_ci DEFAULT 'all',
+  `priority` enum('high','normal','low') COLLATE utf8mb4_unicode_ci DEFAULT 'normal',
+  `sent_by` int NOT NULL,
+  `sent_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -477,8 +495,10 @@ CREATE TABLE `gallery` (
   `id` int NOT NULL,
   `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `description` text COLLATE utf8mb4_unicode_ci,
+  `writing_content` text COLLATE utf8mb4_unicode_ci,
   `file_url` varchar(500) COLLATE utf8mb4_unicode_ci NOT NULL,
   `file_type` enum('image','video') COLLATE utf8mb4_unicode_ci DEFAULT 'image',
+  `content_type` enum('image','writing','mixed') COLLATE utf8mb4_unicode_ci DEFAULT 'image',
   `file_size` bigint DEFAULT NULL,
   `dimensions` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `category` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -486,7 +506,11 @@ CREATE TABLE `gallery` (
   `is_featured` tinyint(1) DEFAULT '0',
   `status` enum('draft','published','archived') COLLATE utf8mb4_unicode_ci DEFAULT 'draft',
   `uploaded_by` int DEFAULT NULL,
+  `writing_author` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `writing_category` enum('testimony','devotion','reflection','prayer','announcement','other') COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `expires_at` timestamp NULL DEFAULT NULL,
+  `auto_expire` tinyint(1) DEFAULT '0',
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -494,9 +518,12 @@ CREATE TABLE `gallery` (
 -- Dumping data for table `gallery`
 --
 
-INSERT INTO `gallery` (`id`, `title`, `description`, `file_url`, `file_type`, `file_size`, `dimensions`, `category`, `tags`, `is_featured`, `status`, `uploaded_by`, `created_at`, `updated_at`) VALUES
-(1, 'Sunday Service', 'Congregation worshiping together', '/assets/gallery/sunday-service-1.jpg', 'image', NULL, NULL, 'services', NULL, 0, 'published', 1, '2026-03-31 07:30:22', '2026-03-31 07:30:22'),
-(2, 'Youth Event', 'Youth fellowship activities', '/assets/gallery/youth-event-1.jpg', 'image', NULL, NULL, 'youth', NULL, 0, 'published', 1, '2026-03-31 07:30:22', '2026-03-31 07:30:22');
+INSERT INTO `gallery` (`id`, `title`, `description`, `writing_content`, `file_url`, `file_type`, `content_type`, `file_size`, `dimensions`, `category`, `tags`, `is_featured`, `status`, `uploaded_by`, `writing_author`, `writing_category`, `created_at`, `expires_at`, `auto_expire`, `updated_at`) VALUES
+(1, 'Sunday Service', 'Congregation worshiping together', NULL, '/assets/gallery/sunday-service-1.jpg', 'image', 'image', NULL, NULL, 'services', NULL, 0, 'published', 1, NULL, NULL, '2026-03-31 07:30:22', NULL, 0, '2026-03-31 07:30:22'),
+(2, 'Youth Event', 'Youth fellowship activities', NULL, '/assets/gallery/youth-event-1.jpg', 'image', 'image', NULL, NULL, 'youth', NULL, 0, 'published', 1, NULL, NULL, '2026-03-31 07:30:22', NULL, 0, '2026-03-31 07:30:22'),
+(3, 'fhlwkujqbykvwik.nugykv efqe', 'fbuksgdykwhdf;wlygflwbfulwe', NULL, 'uploads/gallery/69ce9a3a3374a_me1.jpeg', 'image', 'image', NULL, NULL, NULL, NULL, 0, 'published', 3, NULL, NULL, '2026-04-02 16:32:58', NULL, 0, '2026-04-02 16:32:58'),
+(4, 'fhlwkujqbykvwik.nugykv efqe', 'fbuksgdykwhdf;wlygflwbfulwe', NULL, 'uploads/gallery/69ce9b42e0944_me1.jpeg', 'image', 'image', NULL, NULL, NULL, NULL, 0, 'published', 3, NULL, NULL, '2026-04-02 16:37:22', NULL, 0, '2026-04-02 16:37:22'),
+(5, 'fhlwkujqbykvwik.nugykv efqe', 'fbuksgdykwhdf;wlygflwbfulwe', NULL, 'uploads/gallery/69ce9d0e9ea20_me1.jpeg', 'image', 'image', NULL, NULL, NULL, NULL, 0, 'published', 3, NULL, NULL, '2026-04-02 16:45:02', NULL, 0, '2026-04-02 16:45:02');
 
 -- --------------------------------------------------------
 
@@ -832,6 +859,7 @@ CREATE TABLE `users` (
   `password_hash` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `role` enum('admin','pastor','member','visitor','teacher') COLLATE utf8mb4_unicode_ci DEFAULT 'visitor',
   `avatar_url` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `bio` text COLLATE utf8mb4_unicode_ci,
   `is_active` tinyint(1) DEFAULT '1',
   `email_verified` tinyint(1) DEFAULT '0',
   `last_login` timestamp NULL DEFAULT NULL,
@@ -843,10 +871,30 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `first_name`, `last_name`, `email`, `phone`, `password_hash`, `role`, `avatar_url`, `is_active`, `email_verified`, `last_login`, `created_at`, `updated_at`) VALUES
-(1, 'Admin', 'User', 'admin@salemministries.com', NULL, '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'admin', NULL, 1, 1, NULL, '2026-03-31 07:30:21', '2026-03-31 07:30:21'),
-(2, 'Senior', 'Pastor', 'pastor@salemdominionministries.com', NULL, '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'pastor', NULL, 1, 1, NULL, '2026-03-31 07:30:21', '2026-03-31 07:30:21'),
-(3, 'Otema', 'Reagan', 'reaganotema2022@gmail.com', '0772514889', '$2y$10$o8gSsAlP15oTuxxK5oDy3OHzKlITYUyJBP2TfhU3Jg890zfxRW2Pq', 'member', 'uploads/avatars/69ce3921db46d_me1.jpeg', 1, 0, '2026-04-02 12:22:49', '2026-04-02 09:37:52', '2026-04-02 12:22:49');
+INSERT INTO `users` (`id`, `first_name`, `last_name`, `email`, `phone`, `password_hash`, `role`, `avatar_url`, `bio`, `is_active`, `email_verified`, `last_login`, `created_at`, `updated_at`) VALUES
+(1, 'Admin', 'User', 'admin@salemministries.com', NULL, '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'admin', NULL, NULL, 1, 1, NULL, '2026-03-31 07:30:21', '2026-03-31 07:30:21'),
+(2, 'Senior', 'Pastor', 'pastor@salemdominionministries.com', NULL, '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'pastor', NULL, NULL, 1, 1, NULL, '2026-03-31 07:30:21', '2026-03-31 07:30:21'),
+(3, 'Otema', 'Reagan', 'otema@salemdominionministries.com', '0772514889', '$2y$10$o8gSsAlP15oTuxxK5oDy3OHzKlITYUyJBP2TfhU3Jg890zfxRW2Pq', 'member', 'uploads/avatars/69ce3921db46d_me1.jpeg', NULL, 1, 0, '2026-04-02 12:22:49', '2026-04-02 09:37:52', '2026-04-02 16:51:10'),
+(4, 'Visitor', 'Team', 'visit@salemdominionministries.com', NULL, '$2y$10$PWNNbkZRB9OoelENkwynheSChf9OOAmEgL7cU/eZ5DUJJEVrVYBUG', 'member', NULL, NULL, 1, 0, NULL, '2026-04-02 16:54:25', '2026-04-02 16:54:25'),
+(5, 'Ministry', 'Team', 'ministers@salemdominionministries.com', NULL, '$2y$10$8fJ5iK5QhJLpkFcSueibm.wkcTVpmaRJJOdTvvM.NocS7SjkAqrHC', 'pastor', NULL, NULL, 1, 0, NULL, '2026-04-02 16:54:25', '2026-04-02 16:54:25'),
+(6, 'Children', 'Ministry', 'childrenministry@salemdominionministries.com', NULL, '$2y$10$dqKDjjgiKZk4U.3O7mp5uebqxcmCK1y2zbKiNZw0TB7p7WyGiqx56', 'pastor', NULL, NULL, 1, 0, NULL, '2026-04-02 16:54:26', '2026-04-02 16:54:26'),
+(7, 'Admin', 'User', 'admin@salemdominionministries.com', NULL, '$2y$10$jbpNu0b.zbUB4bDadPKeYOBcRB1PDw5igi.g8oyhh5h522pZ1LYZu', 'admin', NULL, NULL, 1, 0, NULL, '2026-04-02 16:54:26', '2026-04-02 16:54:26'),
+(8, 'Otema', 'Reagan', 'reaganotema2022@gmail.com', '0772514889', '$2y$10$puO7eEw01W.IZMqYUM8YPO8oC9gTBP15YkURgOMvZ6jX/U/pDIfHK', 'member', NULL, NULL, 1, 0, NULL, '2026-04-03 09:08:07', '2026-04-03 09:08:07');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `user_communications`
+--
+
+CREATE TABLE `user_communications` (
+  `id` int NOT NULL,
+  `communication_id` int NOT NULL,
+  `user_id` int NOT NULL,
+  `status` enum('sent','read','archived') COLLATE utf8mb4_unicode_ci DEFAULT 'sent',
+  `received_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `read_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -877,6 +925,14 @@ ALTER TABLE `activity_logs`
   ADD KEY `idx_action` (`action`),
   ADD KEY `idx_created_at` (`created_at`),
   ADD KEY `idx_table` (`table_name`);
+
+--
+-- Indexes for table `admin_communications`
+--
+ALTER TABLE `admin_communications`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idx_sent_by` (`sent_by`),
+  ADD KEY `idx_sent_at` (`sent_at`);
 
 --
 -- Indexes for table `blog_posts`
@@ -1152,6 +1208,15 @@ ALTER TABLE `users`
   ADD KEY `idx_active` (`is_active`);
 
 --
+-- Indexes for table `user_communications`
+--
+ALTER TABLE `user_communications`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idx_communication_id` (`communication_id`),
+  ADD KEY `idx_user_id` (`user_id`),
+  ADD KEY `idx_status` (`status`);
+
+--
 -- Indexes for table `user_sessions`
 --
 ALTER TABLE `user_sessions`
@@ -1169,6 +1234,12 @@ ALTER TABLE `user_sessions`
 -- AUTO_INCREMENT for table `activity_logs`
 --
 ALTER TABLE `activity_logs`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `admin_communications`
+--
+ALTER TABLE `admin_communications`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
@@ -1265,7 +1336,7 @@ ALTER TABLE `event_registrations`
 -- AUTO_INCREMENT for table `gallery`
 --
 ALTER TABLE `gallery`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `leadership`
@@ -1337,13 +1408,30 @@ ALTER TABLE `testimonials`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
+-- AUTO_INCREMENT for table `user_communications`
+--
+ALTER TABLE `user_communications`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `user_sessions`
 --
 ALTER TABLE `user_sessions`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `user_communications`
+--
+ALTER TABLE `user_communications`
+  ADD CONSTRAINT `user_communications_ibfk_1` FOREIGN KEY (`communication_id`) REFERENCES `admin_communications` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `user_communications_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
