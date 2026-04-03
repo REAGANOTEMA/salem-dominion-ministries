@@ -8,7 +8,7 @@ ini_set('log_errors', 0);
 ob_start();
 
 session_start();
-require_once 'db.php';
+require_once 'config_force.php';
 
 // Get recent sermons
 try {
@@ -859,8 +859,8 @@ ob_end_clean();
             <p class="section-subtitle" data-aos="fade-up" data-aos-delay="100">Explore our collection of powerful teaching series</p>
             
             <div class="series-grid">
-                <?php if ($sermon_series && $sermon_series->num_rows > 0): ?>
-                    <?php while ($series = $sermon_series->fetch_assoc()): ?>
+                <?php if ($sermon_series && count($sermon_series) > 0): ?>
+                    <?php foreach ($sermon_series as $series): ?>
                         <div class="series-card" data-aos="fade-up" data-aos-delay="200">
                             <div class="series-icon">
                                 <i class="fas fa-book-open"></i>
@@ -868,7 +868,7 @@ ob_end_clean();
                             <h3 class="series-name"><?php echo htmlspecialchars($series['series']); ?></h3>
                             <div class="series-count"><?php echo $series['count']; ?> Messages</div>
                         </div>
-                    <?php endwhile; ?>
+                    <?php endforeach; ?>
                 <?php else: ?>
                     <div class="series-card" data-aos="fade-up" data-aos-delay="200">
                         <div class="series-icon">
@@ -903,8 +903,8 @@ ob_end_clean();
             <p class="section-subtitle" data-aos="fade-up" data-aos-delay="100">Latest messages from our pulpit</p>
             
             <div class="sermons-grid">
-                <?php if ($recent_sermons && $recent_sermons->num_rows > 0): ?>
-                    <?php while ($sermon = $recent_sermons->fetch_assoc()): ?>
+                <?php if ($recent_sermons && count($recent_sermons) > 0): ?>
+                    <?php foreach ($recent_sermons as $sermon): ?>
                         <div class="sermon-card" data-aos="fade-up" data-aos-delay="200">
                             <div class="sermon-header">
                                 <img src="assets/hero-worship-CWyaH0tr.jpg" alt="Sermon" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\"fas fa-microphone\"></i>';">
@@ -948,7 +948,7 @@ ob_end_clean();
                                 </div>
                             </div>
                         </div>
-                    <?php endwhile; ?>
+                    <?php endforeach; ?>
                 <?php else: ?>
                     <!-- Sample Sermons -->
                     <div class="sermon-card" data-aos="fade-up" data-aos-delay="200">

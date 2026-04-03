@@ -38,203 +38,762 @@ $params[] = $per_page;
 $params[] = $offset;
 $types .= 'ii';
 
-$stmt = $db->prepare($query);
-if (!empty($params)) {
-    $stmt->bind_param($types, ...$params);
-}
-$stmt->execute();
-$blog_result = $stmt->get_result();
+try {
+    $stmt = $db->prepare($query);
+    if (!empty($params)) {
+        $stmt->bind_param($types, ...$params);
+    }
+    $stmt->execute();
+    $blog_result = $stmt->get_result();
 
-$count_stmt = $db->prepare($count_query);
-if (!empty($params) && strlen($types) > 2) {
-    $count_params = array_slice($params, 0, -2);
-    $count_types = substr($types, 0, -2);
-    $count_stmt->bind_param($count_types, ...$count_params);
+    $count_stmt = $db->prepare($count_query);
+    if (!empty($params) && strlen($types) > 2) {
+        $count_params = array_slice($params, 0, -2);
+        $count_types = substr($types, 0, -2);
+        $count_stmt->bind_param($count_types, ...$count_params);
+    } elseif (!empty($params)) {
+        $count_stmt->bind_param(substr($types, 0, -2), ...array_slice($params, 0, -2));
+    }
+    $count_stmt->execute();
+    $total_result = $count_stmt->get_result();
+    $total_posts = $total_result->fetch_assoc()['total'];
+    $total_pages = ceil($total_posts / $per_page);
+} catch (Exception $e) {
+    $blog_result = [];
+    $total_posts = 0;
+    $total_pages = 1;
 }
-$count_stmt->execute();
-$total_result = $count_stmt->get_result();
-$total_posts = $total_result->fetch_assoc()['total'];
-$total_pages = ceil($total_posts / $per_page);
 
 // Get categories
-$categories = $db->query("SELECT category, COUNT(*) as count FROM blog_posts WHERE status = 'published' AND category IS NOT NULL AND category != '' GROUP BY category ORDER BY count DESC");
+try {
+    $categories = $db->query("SELECT category, COUNT(*) as count FROM blog_posts WHERE status = 'published' AND category IS NOT NULL AND category != '' GROUP BY category ORDER BY count DESC");
+} catch (Exception $e) {
+    $categories = [];
+}
 
 // Get featured posts
-$featured_posts = $db->query("SELECT bp.*, u.first_name, u.last_name FROM blog_posts bp LEFT JOIN users u ON bp.author_id = u.id WHERE bp.status = 'published' AND bp.is_featured = 1 ORDER BY bp.published_at DESC LIMIT 3");
+try {
+    $featured_posts = $db->query("SELECT bp.*, u.first_name, u.last_name FROM blog_posts bp LEFT JOIN users u ON bp.author_id = u.id WHERE bp.status = 'published' AND bp.is_featured = 1 ORDER BY bp.published_at DESC LIMIT 3");
+} catch (Exception $e) {
+    $featured_posts = [];
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Blog & Articles - Salem Dominion Ministries - Inspiring thoughts, spiritual growth, and community stories">
     <title>Blog - Salem Dominion Ministries</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- AOS Animation -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Montserrat:wght@100;200;300;400;500;600;700;800;900&family=Great+Vibes&display=swap" rel="stylesheet">
+    
     <style>
-        .blog-hero {
-            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1519451241324-20b4ea2c4220?ixlib=rb-4.0.3');
-            background-size: cover;
-            background-position: center;
-            color: white;
-            padding: 80px 0;
+        /* ICONIC DESIGN SYSTEM */
+        :root {
+            --midnight-blue: #0f172a;
+            --ocean-blue: #0ea5e9;
+            --sky-blue: #38bdf8;
+            --ice-blue: #7dd3fc;
+            --snow-white: #ffffff;
+            --pearl-white: #f8fafc;
+            --heavenly-gold: #fbbf24;
+            --divine-light: #fef3c7;
+            --shadow-divine: 0 20px 40px rgba(15, 23, 42, 0.15);
+            --shadow-soft: 0 10px 25px rgba(15, 23, 42, 0.08);
+            --gradient-ocean: linear-gradient(135deg, var(--midnight-blue) 0%, var(--ocean-blue) 50%, var(--sky-blue) 100%);
+            --gradient-heaven: linear-gradient(135deg, var(--snow-white) 0%, var(--pearl-white) 50%, var(--ice-blue) 100%);
+            --gradient-divine: linear-gradient(135deg, var(--heavenly-gold) 0%, var(--divine-light) 100%);
         }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 300;
+            line-height: 1.6;
+            color: var(--midnight-blue);
+            background: var(--snow-white);
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(251, 191, 36, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(14, 165, 233, 0.03) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .font-divine {
+            font-family: 'Great Vibes', cursive;
+            color: var(--heavenly-gold);
+        }
+
+        /* Navigation */
+        .navbar {
+            background: rgba(255, 255, 255, 0.95) !important;
+            backdrop-filter: blur(20px);
+            box-shadow: var(--shadow-soft);
+            padding: 1rem 0;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            z-index: 1000;
+        }
+
+        .navbar.scrolled {
+            padding: 0.5rem 0;
+            box-shadow: var(--shadow-divine);
+        }
+
         .navbar-brand {
-            font-weight: bold;
-            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-family: 'Great Vibes', cursive;
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--midnight-blue) !important;
+            text-decoration: none !important;
         }
-        .blog-card {
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            border: none;
-            border-radius: 15px;
-            transition: transform 0.3s ease;
+
+        .navbar-brand img {
+            height: 50px;
+            width: auto;
+            border-radius: 50%;
+            background: var(--gradient-heaven);
+            padding: 8px;
+            box-shadow: 0 0 30px rgba(251, 191, 36, 0.3);
+        }
+
+        .navbar-nav .nav-link {
+            color: var(--midnight-blue) !important;
+            font-weight: 400;
+            font-size: 0.95rem;
+            margin: 0 12px;
+            transition: all 0.3s ease;
+            text-decoration: none !important;
+        }
+
+        .navbar-nav .nav-link:hover,
+        .navbar-nav .nav-link.active {
+            color: var(--ocean-blue) !important;
+            font-weight: 500;
+        }
+
+        .navbar-nav .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: var(--gradient-divine);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateX(-50%);
+        }
+
+        .navbar-nav .nav-link:hover::after,
+        .navbar-nav .nav-link.active::after {
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: var(--gradient-ocean);
+            min-height: 50vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
             overflow: hidden;
         }
-        .blog-card:hover {
-            transform: translateY(-5px);
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 300%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            animation: divineShimmer 15s infinite;
         }
-        .blog-card img {
-            height: 200px;
-            object-fit: cover;
+
+        @keyframes divineShimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
         }
-        .featured-blog {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+
+        .hero-particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--heavenly-gold);
+            border-radius: 50%;
+            opacity: 0.6;
+            animation: float 20s infinite linear;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(100vh) translateX(0); opacity: 0; }
+            10% { opacity: 0.6; }
+            90% { opacity: 0.6; }
+            100% { transform: translateY(-100vh) translateX(100px); opacity: 0; }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            color: var(--snow-white);
+            max-width: 800px;
+            padding: 0 20px;
+        }
+
+        .hero-title {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero-subtitle {
+            font-family: 'Great Vibes', cursive;
+            font-size: clamp(1.8rem, 4vw, 2.5rem);
+            opacity: 0.95;
+        }
+
+        /* Sections */
+        .section {
+            padding: 80px 0;
+            position: relative;
+        }
+
+        .section-light {
+            background: var(--snow-white);
+        }
+
+        .section-heaven {
+            background: var(--gradient-heaven);
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 900;
+            text-align: center;
+            margin-bottom: 1rem;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: var(--gradient-divine);
+            border-radius: 2px;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            font-size: 1.1rem;
+            margin-bottom: 3rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            color: var(--ocean-blue);
+        }
+
+        /* Search & Filter */
+        .search-section {
+            background: var(--gradient-heaven);
+            padding: 3rem;
+            border-radius: 25px;
+            margin-bottom: 3rem;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .form-control {
+            padding: 12px 15px;
+            border: 2px solid var(--ice-blue);
             border-radius: 15px;
-        }
-        .category-badge {
-            cursor: pointer;
+            background: var(--snow-white);
             transition: all 0.3s ease;
         }
-        .category-badge:hover {
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--ocean-blue);
+            box-shadow: 0 0 20px rgba(14, 165, 233, 0.2);
+        }
+
+        .btn-search {
+            background: var(--gradient-ocean);
+            color: var(--snow-white);
+            border: none;
+            padding: 12px 25px;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-search:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            box-shadow: 0 10px 25px rgba(14, 165, 233, 0.3);
+            color: var(--snow-white);
         }
-        .pagination .page-link {
-            color: #007bff;
-            border-color: #dee2e6;
+
+        .category-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            justify-content: center;
+            margin-top: 2rem;
         }
-        .pagination .page-item.active .page-link {
-            background-color: #007bff;
-            border-color: #007bff;
+
+        .category-badge {
+            padding: 10px 20px;
+            border-radius: 50px;
+            background: var(--snow-white);
+            color: var(--midnight-blue);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: 2px solid var(--ice-blue);
+        }
+
+        .category-badge:hover,
+        .category-badge.active {
+            background: var(--gradient-ocean);
+            color: var(--snow-white);
+            border-color: var(--ocean-blue);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(14, 165, 233, 0.3);
+        }
+
+        /* Blog Cards */
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .blog-card {
+            background: var(--snow-white);
+            border-radius: 25px;
+            overflow: hidden;
+            box-shadow: var(--shadow-soft);
+            border: 1px solid rgba(125, 211, 252, 0.2);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .blog-card:hover {
+            transform: translateY(-15px);
+            box-shadow: var(--shadow-divine);
+        }
+
+        .blog-image {
+            height: 220px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .blog-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .blog-card:hover .blog-image img {
+            transform: scale(1.1);
+        }
+
+        .blog-category {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: var(--gradient-ocean);
+            color: var(--snow-white);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .blog-content {
+            padding: 2rem;
+        }
+
+        .blog-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--midnight-blue);
+            margin-bottom: 1rem;
+            line-height: 1.3;
+        }
+
+        .blog-excerpt {
+            font-size: 0.95rem;
+            color: var(--ocean-blue);
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .blog-meta {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--pearl-white);
+            border-radius: 15px;
+            margin-bottom: 1.5rem;
+        }
+
+        .blog-author {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .author-avatar {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-ocean);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--snow-white);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .author-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--midnight-blue);
+        }
+
+        .blog-date {
+            font-size: 0.85rem;
+            color: var(--heavenly-gold);
+        }
+
+        .blog-views {
+            font-size: 0.85rem;
+            color: var(--midnight-blue);
+            opacity: 0.7;
+        }
+
+        .btn-read-more {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 25px;
+            background: var(--gradient-ocean);
+            color: var(--snow-white);
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-read-more:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(14, 165, 233, 0.3);
+            color: var(--snow-white);
+        }
+
+        /* Featured Blog */
+        .featured-section {
+            background: var(--gradient-heaven);
+            padding: 80px 0;
+        }
+
+        .featured-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .featured-card {
+            background: var(--gradient-ocean);
+            border-radius: 25px;
+            padding: 2.5rem;
+            color: var(--snow-white);
+            transition: all 0.5s ease;
+        }
+
+        .featured-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-divine);
+        }
+
+        .featured-card .blog-category {
+            background: var(--heavenly-gold);
+            color: var(--midnight-blue);
+        }
+
+        .featured-card .blog-title {
+            color: var(--snow-white);
+        }
+
+        .featured-card .blog-excerpt {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .featured-card .blog-meta {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .featured-card .author-name,
+        .featured-card .blog-views {
+            color: var(--snow-white);
+        }
+
+        .featured-card .btn-read-more {
+            background: var(--snow-white);
+            color: var(--midnight-blue);
+        }
+
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 3rem;
+        }
+
+        .page-link {
+            background: var(--snow-white);
+            color: var(--midnight-blue);
+            border: 2px solid var(--ice-blue);
+            padding: 10px 16px;
+            border-radius: 15px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .page-link:hover {
+            background: var(--gradient-ocean);
+            color: var(--snow-white);
+            border-color: var(--ocean-blue);
+            transform: translateY(-2px);
+        }
+
+        .page-item.active .page-link {
+            background: var(--gradient-ocean);
+            color: var(--snow-white);
+            border-color: var(--ocean-blue);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            color: var(--ice-blue);
+            margin-bottom: 1.5rem;
+        }
+
+        .empty-state h4 {
+            color: var(--midnight-blue);
+            margin-bottom: 1rem;
+        }
+
+        .empty-state p {
+            color: var(--ocean-blue);
+            margin-bottom: 2rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .section {
+                padding: 60px 0;
+            }
+
+            .blog-grid,
+            .featured-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .search-section {
+                padding: 2rem;
+            }
+
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1.8rem;
+            }
         }
     </style>
 </head>
 <body>
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav class="navbar navbar-expand-lg fixed-top">
         <div class="container">
             <a class="navbar-brand" href="index.php">
-                <i class="fas fa-church"></i> Salem Dominion Ministries
+                <img src="assets/logo-DEFqnQ4s.jpeg" alt="Salem Dominion Ministries">
+                <span>Salem Dominion Ministries</span>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
+                <ul class="navbar-nav ms-auto">
                     <li class="nav-item"><a class="nav-link" href="index.php">Home</a></li>
                     <li class="nav-item"><a class="nav-link" href="about.php">About</a></li>
                     <li class="nav-item"><a class="nav-link" href="ministries.php">Ministries</a></li>
                     <li class="nav-item"><a class="nav-link" href="events.php">Events</a></li>
                     <li class="nav-item"><a class="nav-link" href="sermons.php">Sermons</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="blog.php">Blog</a></li>
                     <li class="nav-item"><a class="nav-link" href="news.php">News</a></li>
                     <li class="nav-item"><a class="nav-link" href="gallery.php">Gallery</a></li>
                     <li class="nav-item"><a class="nav-link" href="contact.php">Contact</a></li>
-                </ul>
-                <ul class="navbar-nav">
-                    <?php if (isset($_SESSION['user_id'])): ?>
-                        <li class="nav-item"><a class="nav-link" href="dashboard.php">Dashboard</a></li>
-                        <li class="nav-item"><a class="nav-link" href="logout.php">Logout</a></li>
-                    <?php else: ?>
-                        <li class="nav-item"><a class="nav-link" href="login.php">Login</a></li>
-                        <li class="nav-item"><a class="nav-link" href="register.php">Register</a></li>
-                    <?php endif; ?>
+                    <li class="nav-item">
+                        <a class="nav-link" href="login.php">
+                            <i class="fas fa-sign-in-alt me-2"></i>Login
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>
     </nav>
 
     <!-- Hero Section -->
-    <section class="blog-hero">
-        <div class="container text-center">
-            <h1 class="display-4 fw-bold mb-4">Blog & Articles</h1>
-            <p class="lead mb-4">Inspiring thoughts, spiritual growth, and community stories from our church family.</p>
+    <section class="hero">
+        <div class="hero-particles" id="heroParticles"></div>
+        <div class="hero-content" data-aos="fade-up">
+            <h1 class="hero-title">Blog & Articles</h1>
+            <p class="hero-subtitle">Inspiring thoughts, spiritual growth, and community stories</p>
         </div>
     </section>
 
-    <!-- Search and Filter -->
-    <section class="py-4 bg-light">
+    <!-- Search & Filter Section -->
+    <section class="section section-heaven">
         <div class="container">
-            <div class="row">
-                <div class="col-lg-8 mx-auto">
-                    <form method="GET" action="" class="mb-4">
-                        <div class="row g-3">
-                            <div class="col-md-6">
-                                <input type="text" class="form-control" name="search" placeholder="Search articles..."
-                                       value="<?php echo htmlspecialchars($search); ?>">
-                            </div>
-                            <div class="col-md-4">
-                                <select class="form-control" name="category">
-                                    <option value="">All Categories</option>
-                                    <?php
-                                    $categories->data_seek(0);
-                                    while ($cat = $categories->fetch_assoc()):
-                                    ?>
-                                    <option value="<?php echo htmlspecialchars($cat['category']); ?>" <?php echo $category_filter === $cat['category'] ? 'selected' : ''; ?>>
-                                        <?php echo ucfirst(htmlspecialchars($cat['category'])); ?> (<?php echo $cat['count']; ?>)
-                                    </option>
-                                    <?php endwhile; ?>
-                                </select>
-                            </div>
-                            <div class="col-md-2">
-                                <button type="submit" class="btn btn-primary w-100">
-                                    <i class="fas fa-search"></i>
-                                </button>
-                            </div>
+            <div class="search-section" data-aos="fade-up">
+                <form method="GET" action="">
+                    <div class="row g-3">
+                        <div class="col-md-5">
+                            <input type="text" class="form-control" name="search" placeholder="Search articles..." value="<?php echo htmlspecialchars($search); ?>">
                         </div>
-                    </form>
-
-                    <!-- Category Filter -->
-                    <div class="d-flex flex-wrap gap-2 justify-content-center">
-                        <a href="blog.php" class="badge bg-primary category-badge px-3 py-2 text-decoration-none">All</a>
-                        <?php
-                        $categories->data_seek(0);
-                        while ($cat = $categories->fetch_assoc()):
-                        ?>
-                        <a href="blog.php?category=<?php echo urlencode($cat['category']); ?>"
-                           class="badge bg-secondary category-badge px-3 py-2 text-decoration-none <?php echo $category_filter === $cat['category'] ? 'bg-primary' : ''; ?>">
-                            <?php echo ucfirst(htmlspecialchars($cat['category'])); ?>
-                        </a>
-                        <?php endwhile; ?>
+                        <div class="col-md-4">
+                            <select class="form-control" name="category">
+                                <option value="">All Categories</option>
+                                <?php if ($categories): ?>
+                                    <?php $categories->data_seek(0); ?>
+                                    <?php while ($cat = $categories->fetch_assoc()): ?>
+                                        <option value="<?php echo htmlspecialchars($cat['category']); ?>" <?php echo $category_filter === $cat['category'] ? 'selected' : ''; ?>>
+                                            <?php echo ucfirst(htmlspecialchars($cat['category'])); ?> (<?php echo $cat['count']; ?>)
+                                        </option>
+                                    <?php endwhile; ?>
+                                <?php endif; ?>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <button type="submit" class="btn-search w-100">
+                                <i class="fas fa-search me-2"></i>Search
+                            </button>
+                        </div>
                     </div>
+                </form>
+
+                <!-- Category Badges -->
+                <div class="category-badges">
+                    <a href="blog.php" class="category-badge <?php echo !$category_filter ? 'active' : ''; ?>">All</a>
+                    <?php if ($categories): ?>
+                        <?php $categories->data_seek(0); ?>
+                        <?php while ($cat = $categories->fetch_assoc()): ?>
+                            <a href="blog.php?category=<?php echo urlencode($cat['category']); ?>" 
+                               class="category-badge <?php echo $category_filter === $cat['category'] ? 'active' : ''; ?>">
+                                <?php echo ucfirst(htmlspecialchars($cat['category'])); ?>
+                            </a>
+                        <?php endwhile; ?>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Featured Posts -->
-    <?php if ($page === 1 && !$category_filter && !$search && $featured_posts->num_rows > 0): ?>
-    <section class="py-5">
+    <?php if ($page === 1 && !$category_filter && !$search && $featured_posts && $featured_posts->num_rows > 0): ?>
+    <section class="featured-section">
         <div class="container">
-            <h2 class="text-center mb-5"><i class="fas fa-star text-warning"></i> Featured Articles</h2>
-            <div class="row g-4">
+            <h2 class="section-title" data-aos="fade-up"><i class="fas fa-star text-warning"></i> Featured Articles</h2>
+            <p class="section-subtitle" data-aos="fade-up">Handpicked content to inspire your faith journey</p>
+            
+            <div class="featured-grid">
                 <?php while ($post = $featured_posts->fetch_assoc()): ?>
-                    <div class="col-lg-4">
-                        <div class="card blog-card featured-blog h-100">
-                            <div class="card-body d-flex flex-column p-4">
-                                <div class="mb-3">
-                                    <span class="badge bg-light text-dark mb-2"><?php echo ucfirst(htmlspecialchars($post['category'] ?? 'General')); ?></span>
+                    <div class="featured-card" data-aos="fade-up" data-aos-delay="200">
+                        <span class="blog-category"><?php echo ucfirst(htmlspecialchars($post['category'] ?? 'General')); ?></span>
+                        <h3 class="blog-title"><?php echo htmlspecialchars($post['title']); ?></h3>
+                        <p class="blog-excerpt"><?php echo htmlspecialchars($post['excerpt'] ?: substr($post['content'], 0, 150) . '...'); ?></p>
+                        <div class="blog-meta">
+                            <div class="blog-author">
+                                <div class="author-avatar">
+                                    <?php echo strtoupper(substr($post['first_name'] ?? 'A', 0) . substr($post['last_name'] ?? 'M', 0)); ?>
                                 </div>
-                                <h4 class="card-title"><?php echo htmlspecialchars($post['title']); ?></h4>
-                                <p class="card-text flex-grow-1"><?php echo htmlspecialchars($post['excerpt'] ?: substr($post['content'], 0, 150) . '...'); ?></p>
-                                <div class="mt-auto">
-                                    <small class="text-light opacity-75 d-block mb-2">
-                                        <i class="fas fa-user"></i> <?php echo htmlspecialchars(($post['first_name'] ?? '') . ' ' . ($post['last_name'] ?? '') ?: 'Church Staff'); ?> &bull;
-                                        <i class="fas fa-calendar"></i> <?php echo date('M j, Y', strtotime($post['published_at'] ?? $post['created_at'])); ?>
-                                    </small>
-                                    <a href="blog_post.php?id=<?php echo $post['id']; ?>" class="btn btn-light">Read More</a>
-                                </div>
+                                <span class="author-name">
+                                    <?php echo htmlspecialchars(($post['first_name'] ?? 'Church') . ' ' . ($post['last_name'] ?? 'Staff')); ?>
+                                </span>
                             </div>
+                            <span class="blog-date">
+                                <i class="fas fa-calendar me-1"></i>
+                                <?php echo date('M j, Y', strtotime($post['published_at'] ?? $post['created_at'])); ?>
+                            </span>
                         </div>
+                        <a href="blog_post.php?id=<?php echo $post['id']; ?>" class="btn-read-more">
+                            Read More <i class="fas fa-arrow-right"></i>
+                        </a>
                     </div>
                 <?php endwhile; ?>
             </div>
@@ -243,104 +802,135 @@ $featured_posts = $db->query("SELECT bp.*, u.first_name, u.last_name FROM blog_p
     <?php endif; ?>
 
     <!-- Blog Grid -->
-    <section class="py-5 bg-light">
+    <section class="section section-light">
         <div class="container">
-            <h2 class="text-center mb-5"><i class="fas fa-blog text-primary"></i> Latest Articles</h2>
+            <h2 class="section-title" data-aos="fade-up"><i class="fas fa-blog"></i> Latest Articles</h2>
+            <p class="section-subtitle" data-aos="fade-up">Fresh perspectives on faith, life, and community</p>
 
-            <div class="row g-4">
-                <?php if ($blog_result->num_rows > 0): ?>
+            <div class="blog-grid">
+                <?php if ($blog_result && $blog_result->num_rows > 0): ?>
                     <?php while ($post = $blog_result->fetch_assoc()): ?>
-                        <div class="col-lg-6 col-xl-4">
-                            <div class="card blog-card h-100">
+                        <article class="blog-card" data-aos="fade-up" data-aos-delay="200">
+                            <div class="blog-image">
                                 <?php if ($post['featured_image_url']): ?>
-                                    <img src="<?php echo htmlspecialchars($post['featured_image_url']); ?>" class="card-img-top" alt="Blog Image">
+                                    <img src="<?php echo htmlspecialchars($post['featured_image_url']); ?>" alt="<?php echo htmlspecialchars($post['title']); ?>">
                                 <?php else: ?>
-                                    <img src="https://images.unsplash.com/photo-1519451241324-20b4ea2c4220?ixlib=rb-4.0.3&w=400" class="card-img-top" alt="Blog Image" style="height: 200px; object-fit: cover;">
+                                    <img src="https://images.unsplash.com/photo-1519451241324-20b4ea2c4220?ixlib=rb-4.0.3&w=400" alt="Blog Image">
                                 <?php endif; ?>
-                                <div class="card-body d-flex flex-column">
-                                    <div class="mb-2">
-                                        <span class="badge bg-primary"><?php echo ucfirst(htmlspecialchars($post['category'] ?? 'General')); ?></span>
-                                    </div>
-                                    <h5 class="card-title"><?php echo htmlspecialchars($post['title']); ?></h5>
-                                    <p class="card-text flex-grow-1"><?php echo htmlspecialchars($post['excerpt'] ?: substr(strip_tags($post['content']), 0, 120) . '...'); ?></p>
-                                    <div class="mt-auto">
-                                        <small class="text-muted d-block mb-2">
-                                            <i class="fas fa-user"></i> <?php echo htmlspecialchars(($post['first_name'] ?? '') . ' ' . ($post['last_name'] ?? '') ?: 'Church Staff'); ?> &bull;
-                                            <i class="fas fa-calendar"></i> <?php echo date('M j, Y', strtotime($post['published_at'] ?? $post['created_at'])); ?> &bull;
-                                            <i class="fas fa-eye"></i> <?php echo $post['views_count']; ?> views
-                                        </small>
-                                        <a href="blog_post.php?id=<?php echo $post['id']; ?>" class="btn btn-primary btn-sm">Read More</a>
-                                    </div>
-                                </div>
+                                <span class="blog-category"><?php echo ucfirst(htmlspecialchars($post['category'] ?? 'General')); ?></span>
                             </div>
-                        </div>
+                            <div class="blog-content">
+                                <h3 class="blog-title"><?php echo htmlspecialchars($post['title']); ?></h3>
+                                <p class="blog-excerpt"><?php echo htmlspecialchars($post['excerpt'] ?: substr(strip_tags($post['content']), 0, 120) . '...'); ?></p>
+                                <div class="blog-meta">
+                                    <div class="blog-author">
+                                        <div class="author-avatar">
+                                            <?php echo strtoupper(substr($post['first_name'] ?? 'C', 0) . substr($post['last_name'] ?? 'S', 0)); ?>
+                                        </div>
+                                        <div>
+                                            <span class="author-name">
+                                                <?php echo htmlspecialchars(($post['first_name'] ?? 'Church') . ' ' . ($post['last_name'] ?? 'Staff')); ?>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <span class="blog-date">
+                                        <?php echo date('M j, Y', strtotime($post['published_at'] ?? $post['created_at'])); ?>
+                                    </span>
+                                    <span class="blog-views">
+                                        <i class="fas fa-eye me-1"></i><?php echo $post['views_count'] ?? 0; ?>
+                                    </span>
+                                </div>
+                                <a href="blog_post.php?id=<?php echo $post['id']; ?>" class="btn-read-more">
+                                    Read More <i class="fas fa-arrow-right"></i>
+                                </a>
+                            </div>
+                        </article>
                     <?php endwhile; ?>
                 <?php else: ?>
-                    <div class="col-12 text-center py-5">
-                        <i class="fas fa-blog fa-3x text-muted mb-3"></i>
-                        <h4 class="text-muted">No articles found</h4>
-                        <p class="text-muted">Try adjusting your search or filter criteria.</p>
-                        <a href="blog.php" class="btn btn-primary">View All Articles</a>
+                    <div class="col-12">
+                        <div class="empty-state" data-aos="fade-up">
+                            <i class="fas fa-blog"></i>
+                            <h4>No articles found</h4>
+                            <p>Try adjusting your search or filter criteria.</p>
+                            <a href="blog.php" class="btn-read-more">View All Articles</a>
+                        </div>
                     </div>
                 <?php endif; ?>
             </div>
 
             <!-- Pagination -->
             <?php if ($total_pages > 1): ?>
-                <div class="d-flex justify-content-center mt-5">
-                    <nav>
-                        <ul class="pagination">
-                            <?php if ($page > 1): ?>
-                                <li class="page-item">
-                                    <a class="page-link" href="?page=<?php echo $page - 1; ?>&category=<?php echo urlencode($category_filter); ?>&search=<?php echo urlencode($search); ?>">Previous</a>
-                                </li>
-                            <?php endif; ?>
+                <nav>
+                    <ul class="pagination">
+                        <?php if ($page > 1): ?>
+                            <li class="page-item">
+                                <a class="page-link" href="?page=<?php echo $page - 1; ?>&category=<?php echo urlencode($category_filter); ?>&search=<?php echo urlencode($search); ?>">
+                                    <i class="fas fa-chevron-left"></i> Previous
+                                </a>
+                            </li>
+                        <?php endif; ?>
 
-                            <?php for ($i = max(1, $page - 2); $i <= min($total_pages, $page + 2); $i++): ?>
-                                <li class="page-item <?php echo $i === $page ? 'active' : ''; ?>">
-                                    <a class="page-link" href="?page=<?php echo $i; ?>&category=<?php echo urlencode($category_filter); ?>&search=<?php echo urlencode($search); ?>"><?php echo $i; ?></a>
-                                </li>
-                            <?php endfor; ?>
+                        <?php for ($i = max(1, $page - 2); $i <= min($total_pages, $page + 2); $i++): ?>
+                            <li class="page-item <?php echo $i === $page ? 'active' : ''; ?>">
+                                <a class="page-link" href="?page=<?php echo $i; ?>&category=<?php echo urlencode($category_filter); ?>&search=<?php echo urlencode($search); ?>">
+                                    <?php echo $i; ?>
+                                </a>
+                            </li>
+                        <?php endfor; ?>
 
-                            <?php if ($page < $total_pages): ?>
-                                <li class="page-item">
-                                    <a class="page-link" href="?page=<?php echo $page + 1; ?>&category=<?php echo urlencode($category_filter); ?>&search=<?php echo urlencode($search); ?>">Next</a>
-                                </li>
-                            <?php endif; ?>
-                        </ul>
-                    </nav>
-                </div>
+                        <?php if ($page < $total_pages): ?>
+                            <li class="page-item">
+                                <a class="page-link" href="?page=<?php echo $page + 1; ?>&category=<?php echo urlencode($category_filter); ?>&search=<?php echo urlencode($search); ?>">
+                                    Next <i class="fas fa-chevron-right"></i>
+                                </a>
+                            </li>
+                        <?php endif; ?>
+                    </ul>
+                </nav>
             <?php endif; ?>
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="bg-dark text-light py-4">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-4">
-                    <h5>Salem Dominion Ministries</h5>
-                    <p>Serving our community with faith, hope, and love.</p>
-                </div>
-                <div class="col-md-4">
-                    <h5>Quick Links</h5>
-                    <ul class="list-unstyled">
-                        <li><a href="index.php" class="text-light">Home</a></li>
-                        <li><a href="about.php" class="text-light">About Us</a></li>
-                        <li><a href="donate.php" class="text-light">Donate</a></li>
-                    </ul>
-                </div>
-                <div class="col-md-4">
-                    <h5>Contact Info</h5>
-                    <p><i class="fas fa-envelope"></i> visit@salemdominionministries.com</p>
-                    <p><i class="fas fa-phone"></i> Contact us for service times</p>
-                </div>
-            </div>
-            <hr>
-            <p class="text-center mb-0">&copy; 2026 Salem Dominion Ministries. All rights reserved.</p>
-        </div>
-    </footer>
+    <!-- Ultimate Footer -->
+    <?php require_once 'components/ultimate_footer_clean.php'; ?>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap/5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- AOS Animation -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 1200,
+            once: true,
+            offset: 100,
+            easing: 'ease-in-out'
+        });
+
+        // Create particles
+        function createParticles() {
+            const container = document.getElementById('heroParticles');
+            for (let i = 0; i < 15; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 20 + 's';
+                particle.style.animationDuration = (15 + Math.random() * 10) + 's';
+                container.appendChild(particle);
+            }
+        }
+        createParticles();
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+    </script>
 </body>
 </html>

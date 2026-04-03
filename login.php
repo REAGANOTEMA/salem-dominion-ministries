@@ -39,9 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $_SESSION['is_active'] = $user['is_active'];
                 
                 // Update last login
-                $update_login = $db->prepare("UPDATE users SET last_login = CURRENT_TIMESTAMP WHERE id = ?");
-                $update_login->bind_param('i', $user['id']);
-                $update_login->execute();
+                $db->update("UPDATE users SET last_login = CURRENT_TIMESTAMP WHERE id = ?", [$user['id']]);
                 
                 // Redirect based on role
                 if ($user['role'] === 'admin') {

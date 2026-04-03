@@ -52,27 +52,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Check if email already exists
     if (empty($errors)) {
-        $stmt = $db->prepare("SELECT id FROM users WHERE email = ?");
-        $stmt->bind_param('s', $email);
-        $stmt->execute();
-        if ($stmt->get_result()->num_rows > 0) {
+        $existing_user = $db->selectOne("SELECT id FROM users WHERE email = ?", [$email]);
+        if ($existing_user) {
             $errors[] = 'Email address is already registered.';
         }
-        $stmt->close();
     }
 
     if (empty($errors)) {
         $password_hash = password_hash($password, PASSWORD_DEFAULT);
 
-        $stmt = $db->prepare("INSERT INTO users (first_name, last_name, email, phone, password_hash, role) VALUES (?, ?, ?, ?, ?, 'member')");
-        $stmt->bind_param('sssss', $first_name, $last_name, $email, $phone, $password_hash);
+        $result = $db->insert(
+            "INSERT INTO users (first_name, last_name, email, phone, password_hash, role) VALUES (?, ?, ?, ?, ?, 'member')",
+            [$first_name, $last_name, $email, $phone, $password_hash]
+        );
 
-        if ($stmt->execute()) {
+        if ($result) {
             $success = 'Registration successful! You can now login.';
         } else {
             $errors[] = 'Registration failed. Please try again.';
         }
-        $stmt->close();
     }
 }
 ?>

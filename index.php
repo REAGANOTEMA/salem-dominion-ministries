@@ -69,6 +69,11 @@ ob_end_clean();
     <meta name="description" content="Salem Dominion Ministries - Divine Worship Experience with Apostle Faty Musasizi">
     <meta name="keywords" content="church, divine worship, Apostle Faty Musasizi, Iganga, Uganda, spiritual">
     
+    <!-- Favicon -->
+    <link rel="icon" href="public/logo-icon.jpeg" type="image/jpeg">
+    <link rel="shortcut icon" href="public/logo-icon.jpeg" type="image/jpeg">
+    <link rel="apple-touch-icon" href="public/logo-icon.jpeg">
+    
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
@@ -79,29 +84,42 @@ ob_end_clean();
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Montserrat:wght@100;200;300;400;500;600;700;800;900&family=Great+Vibes&display=swap" rel="stylesheet">
     
     <style>
-        /* ICONIC DESIGN SYSTEM - Top Notch Colors Only */
+        /* SPIRITUAL DESIGN SYSTEM - Divine Colors & 3D Effects */
         :root {
-            /* Primary Palette - Ultra Premium */
+            /* Primary Palette - Divine & Professional */
             --midnight-blue: #0f172a;
+            --deep-navy: #1e3a5f;
             --ocean-blue: #0ea5e9;
             --sky-blue: #38bdf8;
             --ice-blue: #7dd3fc;
             --snow-white: #ffffff;
             --pearl-white: #f8fafc;
+            --cream: #fef9f3;
             
-            /* Divine Accents */
+            /* Divine Accents - Spiritual Colors */
             --heavenly-gold: #fbbf24;
             --divine-light: #fef3c7;
+            --royal-purple: #7c3aed;
+            --spirit-glow: #f59e0b;
+            --holy-fire: #ef4444;
+            --grace-pink: #ec4899;
             
-            /* Shadows & Effects */
+            /* 3D Shadows & Depth */
             --shadow-divine: 0 20px 40px rgba(15, 23, 42, 0.15);
             --shadow-heavenly: 0 25px 50px rgba(251, 191, 36, 0.2);
             --shadow-soft: 0 10px 25px rgba(15, 23, 42, 0.08);
+            --shadow-3d: 0 30px 60px rgba(15, 23, 42, 0.2), 0 0 0 1px rgba(255,255,255,0.1);
+            --shadow-float: 0 40px 80px rgba(15, 23, 42, 0.25), 0 0 0 1px rgba(255,255,255,0.15);
+            --shadow-glow: 0 0 40px rgba(14, 165, 233, 0.3);
+            --shadow-neon: 0 0 20px rgba(251, 191, 36, 0.5), 0 0 40px rgba(251, 191, 36, 0.3);
             
-            /* Gradients - Iconic */
-            --gradient-ocean: linear-gradient(135deg, var(--midnight-blue) 0%, var(--ocean-blue) 50%, var(--sky-blue) 100%);
+            /* Gradients - Spiritual & 3D */
+            --gradient-ocean: linear-gradient(135deg, var(--midnight-blue) 0%, var(--deep-navy) 30%, var(--ocean-blue) 60%, var(--sky-blue) 100%);
             --gradient-heaven: linear-gradient(135deg, var(--snow-white) 0%, var(--pearl-white) 50%, var(--ice-blue) 100%);
-            --gradient-divine: linear-gradient(135deg, var(--heavenly-gold) 0%, var(--divine-light) 100%);
+            --gradient-divine: linear-gradient(135deg, var(--heavenly-gold) 0%, var(--spirit-glow) 50%, var(--divine-light) 100%);
+            --gradient-spiritual: linear-gradient(135deg, var(--royal-purple) 0%, var(--ocean-blue) 50%, var(--heavenly-gold) 100%);
+            --gradient-fire: linear-gradient(135deg, var(--holy-fire) 0%, var(--spirit-glow) 50%, var(--heavenly-gold) 100%);
+            --gradient-3d: linear-gradient(145deg, #ffffff 0%, #f0f0f0 50%, #e0e0e0 100%);
         }
 
         * {
@@ -1031,7 +1049,7 @@ ob_end_clean();
     <nav class="navbar navbar-expand-lg fixed-top">
         <div class="container">
             <a class="navbar-brand" href="index.php">
-                <img src="public/images/logo.png" alt="Salem Dominion Ministries">
+                <img src="assets/logo-DEFqnQ4s.jpeg" alt="Salem Dominion Ministries">
                 <span>Salem Dominion Ministries</span>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -1081,7 +1099,7 @@ ob_end_clean();
             <?php endif; ?>
             
             <div class="hero-logo">
-                <img src="public/images/logo.png" alt="Salem Dominion Ministries">
+                <img src="assets/logo-DEFqnQ4s.jpeg" alt="Salem Dominion Ministries">
             </div>
             <h1 class="hero-title">Salem Dominion Ministries</h1>
             <p class="hero-subtitle">Where Faith Meets Divine Purpose</p>
@@ -1118,8 +1136,8 @@ ob_end_clean();
             <p class="section-subtitle" data-aos="fade-up" data-aos-delay="100">Join us in worship and fellowship</p>
             
             <div class="service-grid">
-                <?php if ($services && $services->num_rows > 0): ?>
-                    <?php while ($service = $services->fetch_assoc()): ?>
+                <?php if ($services && count($services) > 0): ?>
+                    <?php foreach ($services as $service): ?>
                         <div class="service-card" data-aos="fade-up" data-aos-delay="200">
                             <div class="service-icon">
                                 <i class="fas fa-cross"></i>
@@ -1130,7 +1148,7 @@ ob_end_clean();
                             </div>
                             <div class="service-day"><?php echo ucfirst($service['day_of_week']); ?></div>
                         </div>
-                    <?php endwhile; ?>
+                    <?php endforeach; ?>
                 <?php else: ?>
                     <div class="service-card" data-aos="fade-up" data-aos-delay="200">
                         <div class="service-icon">
@@ -1165,8 +1183,8 @@ ob_end_clean();
             <p class="section-subtitle" data-aos="fade-up" data-aos-delay="100">Discover your divine calling</p>
             
             <div class="ministry-grid">
-                <?php if ($ministries && $ministries->num_rows > 0): ?>
-                    <?php while ($ministry = $ministries->fetch_assoc()): ?>
+                <?php if ($ministries && count($ministries) > 0): ?>
+                    <?php foreach ($ministries as $ministry): ?>
                         <div class="ministry-card" data-aos="fade-up" data-aos-delay="200">
                             <div class="ministry-image">
                                 <i class="fas fa-hands-helping"></i>
@@ -1177,7 +1195,7 @@ ob_end_clean();
                                 <a href="ministries.php" class="btn-ministry">Explore Ministry</a>
                             </div>
                         </div>
-                    <?php endwhile; ?>
+                    <?php endforeach; ?>
                 <?php else: ?>
                     <div class="ministry-card" data-aos="fade-up" data-aos-delay="200">
                         <div class="ministry-image">
@@ -1210,6 +1228,96 @@ ob_end_clean();
                         </div>
                     </div>
                 <?php endif; ?>
+            </div>
+        </div>
+    </section>
+
+    <!-- Welcome Section -->
+    <section class="section section-light">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6" data-aos="fade-right">
+                    <h2 class="section-title" style="text-align: left;">Welcome to Salem Dominion Ministries</h2>
+                    <p class="lead" style="margin-top: 2rem; color: var(--ocean-blue);">
+                        A vibrant church community committed to spreading the love of Christ, making disciples, and serving our community with compassion and excellence.
+                    </p>
+                    <p style="line-height: 1.8; margin-top: 1.5rem;">
+                        At Salem Dominion Ministries, we believe in the transformative power of God's love. Under the leadership of Apostle Faty Musasizi, we are dedicated to nurturing faith, building relationships, and making a positive impact in Iganga and beyond.
+                    </p>
+                    <div style="margin-top: 2rem;">
+                        <a href="about.php" class="btn-hero btn-primary">
+                            <i class="fas fa-book-open"></i> Learn More
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-6" data-aos="fade-left">
+                    <div style="background: var(--gradient-ocean); border-radius: 30px; padding: 3rem; color: white; text-align: center; min-height: 400px; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                        <i class="fas fa-church" style="font-size: 5rem; margin-bottom: 2rem; opacity: 0.8;"></i>
+                        <h3 style="font-size: 2rem; margin-bottom: 1rem;">Join Us This Sunday</h3>
+                        <p style="font-size: 1.2rem; opacity: 0.9;">Experience worship that transforms lives</p>
+                        <div style="margin-top: 2rem;">
+                            <a href="contact.php" class="btn-hero btn-outline">
+                                <i class="fas fa-calendar-check"></i> Plan Your Visit
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Events & News Section -->
+    <section class="section section-heaven">
+        <div class="container">
+            <h2 class="section-title" data-aos="fade-up">What's Happening</h2>
+            <p class="section-subtitle" data-aos="fade-up" data-aos-delay="100">Stay updated with our latest news and events</p>
+            
+            <div class="row">
+                <div class="col-lg-6" data-aos="fade-up" data-aos-delay="200">
+                    <div class="info-card" style="background: var(--snow-white); border-radius: 25px; padding: 2.5rem; height: 100%; box-shadow: var(--shadow-soft);">
+                        <h3 style="font-size: 1.8rem; margin-bottom: 1.5rem; color: var(--midnight-blue);">
+                            <i class="fas fa-calendar-alt" style="color: var(--ocean-blue); margin-right: 0.5rem;"></i> Upcoming Events
+                        </h3>
+                        <?php if ($events && count($events) > 0): ?>
+                            <?php foreach ($events as $event): ?>
+                                <div style="padding: 1rem; background: var(--pearl-white); border-radius: 15px; margin-bottom: 1rem; transition: all 0.3s ease;" onmouseover="this.style.background='var(--ice-blue)'" onmouseout="this.style.background='var(--pearl-white)'">
+                                    <h6 style="font-weight: 600; margin-bottom: 0.25rem; color: var(--midnight-blue);"><?php echo safe_html($event['title']); ?></h6>
+                                    <small style="color: var(--heavenly-gold); font-weight: 600;"><i class="fas fa-calendar"></i> <?php echo safe_date($event['event_date'], 'M j, Y'); ?></small>
+                                    <p style="font-size: 0.9rem; color: var(--ocean-blue); margin-top: 0.5rem; margin-bottom: 0;"><?php echo safe_html(substr($event['description'], 0, 100)); ?>...</p>
+                                </div>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <p class="text-muted">No upcoming events scheduled. Check back soon!</p>
+                        <?php endif; ?>
+                        <div style="margin-top: 1.5rem;">
+                            <a href="events.php" class="btn-ministry">View All Events</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-6" data-aos="fade-up" data-aos-delay="300">
+                    <div class="info-card" style="background: var(--snow-white); border-radius: 25px; padding: 2.5rem; height: 100%; box-shadow: var(--shadow-soft);">
+                        <h3 style="font-size: 1.8rem; margin-bottom: 1.5rem; color: var(--midnight-blue);">
+                            <i class="fas fa-newspaper" style="color: var(--ocean-blue); margin-right: 0.5rem;"></i> Latest News
+                        </h3>
+                        <?php if ($news && count($news) > 0): ?>
+                            <?php foreach ($news as $article): ?>
+                                <div style="padding: 1rem; background: var(--pearl-white); border-radius: 15px; margin-bottom: 1rem; transition: all 0.3s ease;" onmouseover="this.style.background='var(--ice-blue)'" onmouseout="this.style.background='var(--pearl-white)'">
+                                    <h6 style="font-weight: 600; margin-bottom: 0.25rem; color: var(--midnight-blue);">
+                                        <a href="news.php" style="color: inherit; text-decoration: none;"><?php echo safe_html($article['title']); ?></a>
+                                    </h6>
+                                    <small style="color: var(--heavenly-gold); font-weight: 600;"><i class="fas fa-clock"></i> <?php echo safe_date($article['published_at'], 'M j, Y'); ?></small>
+                                    <p style="font-size: 0.9rem; color: var(--ocean-blue); margin-top: 0.5rem; margin-bottom: 0;"><?php echo safe_html(substr($article['content'], 0, 120)); ?>...</p>
+                                </div>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <p class="text-muted">No recent news available.</p>
+                        <?php endif; ?>
+                        <div style="margin-top: 1.5rem;">
+                            <a href="news.php" class="btn-ministry">View All News</a>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>

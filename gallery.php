@@ -525,20 +525,6 @@ if (ob_get_length() > 0) {
 .gallery-item:hover .gallery-overlay {
     opacity: 1;
 }
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(to bottom, transparent 0%, rgba(15, 23, 42, 0.8) 100%);
-            opacity: 0;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: flex-end;
-            padding: 2rem;
-        }
-
-        .gallery-item:hover .gallery-overlay {
-            opacity: 1;
-        }
 
         .gallery-info {
             color: var(--snow-white);

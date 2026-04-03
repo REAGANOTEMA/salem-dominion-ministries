@@ -1,4 +1,4 @@
-<?php
+e<?php
 // Complete error suppression to prevent unwanted output
 error_reporting(0);
 ini_set('display_errors', 0);
@@ -8,7 +8,7 @@ ini_set('log_errors', 0);
 ob_start();
 
 session_start();
-require_once 'db.php';
+require_once 'config_force.php';
 
 // Get recent news
 $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
