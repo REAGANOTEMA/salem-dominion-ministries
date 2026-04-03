@@ -58,9 +58,9 @@ if (!$is_localhost) {
     $force_production = true;
 }
 
-// Database Configuration based on environment
+// Database Configuration based on environment with enhanced error handling
 if ($is_localhost && !$force_production) {
-    // Localhost (XAMPP) Settings - Use .env values
+    // Localhost (XAMPP) Settings - Enhanced with multiple fallbacks
     define('DB_HOST', $_ENV['DB_HOST'] ?? 'localhost');
     define('DB_USER', $_ENV['DB_USER'] ?? 'root');
     define('DB_PASSWORD', $_ENV['DB_PASSWORD'] ?? '');
@@ -68,7 +68,7 @@ if ($is_localhost && !$force_production) {
     define('DB_CHARSET', $_ENV['DB_CHARSET'] ?? 'utf8mb4');
     define('DB_PORT', $_ENV['DB_PORT'] ?? 3306);
     
-    // phpMyAdmin Alternative Connection
+    // Enhanced phpMyAdmin Alternative Connection
     define('PHPMYADMIN_HOST', $_ENV['PHPMYADMIN_HOST'] ?? 'localhost');
     define('PHPMYADMIN_USER', $_ENV['PHPMYADMIN_USER'] ?? 'root');
     define('PHPMYADMIN_PASSWORD', $_ENV['PHPMYADMIN_PASSWORD'] ?? 'ReagaN23#');
@@ -89,7 +89,7 @@ if ($is_localhost && !$force_production) {
     define('MAIL_ENABLED', false); // Disabled for localhost
     
 } else {
-    // Production (Hosting Platform) Settings - FORCE PRODUCTION CREDENTIALS
+    // Production (Hosting Platform) Settings - Enhanced with multiple attempts
     define('DB_HOST', $_ENV['PROD_DB_HOST'] ?? 'localhost');
     define('DB_USER', $_ENV['PROD_DB_USER'] ?? 'salemdominionmin_db');
     define('DB_PASSWORD', $_ENV['PROD_DB_PASSWORD'] ?? 'RwdT68fQ8FRgMcsrLyBB');

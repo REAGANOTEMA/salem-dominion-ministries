@@ -476,7 +476,7 @@ try {
                             <a href="#" title="Facebook"><i class="fab fa-facebook-f"></i></a>
                             <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
                             <a href="#" title="Instagram"><i class="fab fa-instagram"></i></a>
-                            <a href="#" title="YouTube"><i class="fab fa-youtube"></i></a>
+                            <a href="https://youtube.com/@musasizifaty?si=a-VP5-Qen45nV1Jf" title="YouTube"><i class="fab fa-youtube"></i></a>
                         </div>
                     </div>
                 </div>

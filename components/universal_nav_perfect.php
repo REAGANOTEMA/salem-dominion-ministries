@@ -201,8 +201,9 @@ $is_admin = $user_is_logged_in ? is_admin() : false;
 <!-- Production-Ready Navigation -->
 <nav class="navbar navbar-expand-lg navbar-dark universal-nav">
     <div class="container">
-        <a class="navbar-brand" href="index_perfect.php">
-            <i class="fas fa-church"></i> Salem Dominion Ministries
+        <a class="navbar-brand" href="index_live.php">
+            <img src="assets/images/logo" alt="Salem Dominion Ministries Logo" style="height: 40px; margin-right: 10px; border-radius: 8px;" onerror="this.style.display='none'; this.alt='Logo not available';">
+            <span style="vertical-align: middle;">Salem Dominion Ministries</span>
         </a>
         
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
