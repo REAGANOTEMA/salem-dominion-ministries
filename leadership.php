@@ -47,7 +47,7 @@ $leadership = [
         'bio' => 'Dedicated servant leader committed to spreading the Gospel and serving the community with love and compassion.',
         'email' => 'pastor@saleldominionministries.com',
         'phone' => '+256753244480',
-        'image' => 'pastor.jpeg',
+        'image' => 'general-pastor.jpeg',
         'order_position' => 5
     ]
 ];
@@ -405,16 +405,20 @@ $leadership = [
         }
         
         .leader-image {
-            height: 250px;
+            height: 200px;
             background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
             position: relative;
             overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         
         .leader-image img {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: contain;
+            object-position: top center;
         }
         
         .leader-content {
@@ -519,7 +523,7 @@ $leadership = [
             }
 
             .leader-image {
-                height: 280px;
+                height: 220px;
             }
 
             .cta-buttons {
@@ -700,13 +704,55 @@ $leadership = [
 
                     <div class="leader-card" data-aos="fade-up" data-aos-delay="600">
                         <div class="leader-image">
-                            <img src="assets/pastor.jpeg" alt="Pastor Faty Musasizi">
+                            <img src="assets/pastor-jotham-Bright-Mulinde-Ca8YLs3V.jpeg" alt="Pastor Jotham Bright Mulinde">
                         </div>
                         <div class="leader-content">
-                            <h3 class="leader-name">Pastor Faty Musasizi</h3>
-                            <p class="leader-title">General Pastor</p>
+                            <h3 class="leader-name">Pastor Jotham Bright Mulinde</h3>
+                            <p class="leader-title">Pastor</p>
                             <p class="leader-bio">
-                                Dedicated servant leader committed to spreading the Gospel and serving the community with love and compassion. Pastor Faty brings wisdom and experience to every aspect of ministry.
+                                Dedicated pastor committed to preaching the Gospel and shepherding God's flock with love and dedication. Pastor Jotham brings passion and biblical wisdom to every ministry.
+                            </p>
+                            <div class="leader-contact">
+                                <a href="mailto:pastor@salemdominionministries.com">
+                                    <i class="fas fa-envelope"></i>
+                                </a>
+                                <a href="https://wa.me/256753244480" class="whatsapp" target="_blank">
+                                    <i class="fab fa-whatsapp"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="leader-card" data-aos="fade-up" data-aos-delay="700">
+                        <div class="leader-image">
+                            <img src="assets/pastor-jonathan-Ngobi-B-Ezegv1.jpeg" alt="Pastor Jonathan Ngobi">
+                        </div>
+                        <div class="leader-content">
+                            <h3 class="leader-name">Pastor Jonathan Ngobi</h3>
+                            <p class="leader-title">Church Elder</p>
+                            <p class="leader-bio">
+                                Faithful church elder providing spiritual oversight and guidance to the congregation. Pastor Jonathan serves with humility and dedication, supporting the vision of the church.
+                            </p>
+                            <div class="leader-contact">
+                                <a href="mailto:elder@salemdominionministries.com">
+                                    <i class="fas fa-envelope"></i>
+                                </a>
+                                <a href="https://wa.me/256753244480" class="whatsapp" target="_blank">
+                                    <i class="fab fa-whatsapp"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="leader-card" data-aos="fade-up" data-aos-delay="100" style="border: 3px solid var(--heavenly-gold); box-shadow: 0 0 30px rgba(251, 191, 36, 0.3);">
+                        <div class="leader-image">
+                            <img src="assets/general-pastor.jpeg" alt="General Pastor Faty Musasizi">
+                        </div>
+                        <div class="leader-content">
+                            <h3 class="leader-name" style="color: var(--heavenly-gold);">General Pastor Faty Musasizi</h3>
+                            <p class="leader-title">General Pastor & Senior Leader</p>
+                            <p class="leader-bio">
+                                Dedicated servant leader committed to spreading the Gospel and serving the community with love and compassion. General Pastor Faty brings wisdom and experience to every aspect of ministry, leading with vision and purpose.
                             </p>
                             <div class="leader-contact">
                                 <a href="mailto:pastor@salemdominionministries.com">
@@ -743,203 +789,8 @@ $leadership = [
         </div>
     </section>
 
-    <!-- Clean Footer (without leadership images) -->
-    <footer class="footer-clean">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="footer-section">
-                        <h4>Salem Dominion Ministries</h4>
-                        <p>Spreading the Gospel and transforming lives through the power of the Holy Spirit.</p>
-                        <div class="social-links">
-                            <a href="https://facebook.com" target="_blank"><i class="fab fa-facebook"></i></a>
-                            <a href="https://twitter.com" target="_blank"><i class="fab fa-twitter"></i></a>
-                            <a href="https://instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
-                            <a href="https://youtube.com" target="_blank"><i class="fab fa-youtube"></i></a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="footer-section">
-                        <h4>Quick Links</h4>
-                        <ul>
-                            <li><a href="index.php">Home</a></li>
-                            <li><a href="about.php">About</a></li>
-                            <li><a href="ministries.php">Ministries</a></li>
-                            <li><a href="events.php">Events</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="footer-section">
-                        <h4>Contact</h4>
-                        <p><i class="fas fa-map-marker-alt"></i> Main Street, Iganga Town, Uganda</p>
-                        <p><i class="fas fa-phone"></i> +256 753 244 480</p>
-                        <p><i class="fas fa-envelope"></i> apostle@salemdominionministries.com</p>
-                    </div>
-                </div>
-                <div class="col-md-12">
-                    <div class="footer-section designer-credit">
-                        <p class="designer-text">
-                            <i class="fas fa-crown"></i>
-                            Designed and Managed by <a href="https://reaganotema.com" target="_blank" class="designer-link">Mr. Reagan Otema</a>
-                        </p>
-                        <div class="developer-contact">
-                            <a href="https://wa.me/256753244480" class="developer-whatsapp" target="_blank">
-                                <i class="fab fa-whatsapp"></i>
-                                <span>Developer WhatsApp</span>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-12 text-center">
-                    <p class="copyright">&copy; <?php echo date('Y'); ?> Salem Dominion Ministries. All rights reserved.</p>
-                </div>
-            </div>
-        </div>
-    </footer>
-
-    <style>
-        /* Clean Footer Styles */
-        .footer-clean {
-            background: var(--gradient-ocean);
-            color: var(--snow-white);
-            padding: 60px 0 30px;
-            position: relative;
-        }
-
-        .footer-section h4 {
-            color: var(--heavenly-gold);
-            font-family: 'Playfair Display', serif;
-            margin-bottom: 1.5rem;
-            font-size: 1.3rem;
-        }
-
-        .footer-section p {
-            margin-bottom: 1rem;
-            opacity: 0.9;
-        }
-
-        .footer-section ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        .footer-section ul li {
-            margin-bottom: 0.5rem;
-        }
-
-        .footer-section ul li a {
-            color: var(--snow-white);
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-
-        .footer-section ul li a:hover {
-            color: var(--heavenly-gold);
-        }
-
-        .social-links {
-            display: flex;
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-
-        .social-links a {
-            width: 40px;
-            height: 40px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--snow-white);
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
-
-        .social-links a:hover {
-            background: var(--heavenly-gold);
-            transform: scale(1.1);
-        }
-
-        .designer-credit {
-            text-align: center;
-            margin-top: 2rem;
-            padding-top: 2rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .designer-text {
-            font-size: 1.1rem;
-            margin-bottom: 1rem;
-        }
-
-        .designer-text i {
-            color: var(--heavenly-gold);
-            margin-right: 0.5rem;
-        }
-
-        .designer-link {
-            color: var(--heavenly-gold);
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-
-        .designer-link:hover {
-            color: var(--snow-white);
-            text-decoration: underline;
-        }
-
-        .developer-contact {
-            margin-top: 1rem;
-        }
-
-        .developer-whatsapp {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            background: #25d366;
-            color: var(--snow-white);
-            padding: 0.5rem 1rem;
-            border-radius: 50px;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            font-size: 0.9rem;
-        }
-
-        .developer-whatsapp:hover {
-            background: #128c7e;
-            transform: scale(1.05);
-        }
-
-        .copyright {
-            margin: 0;
-            padding: 0;
-            opacity: 0.7;
-            font-size: 0.9rem;
-        }
-
-        /* Responsive Footer */
-        @media (max-width: 768px) {
-            .footer-clean {
-                padding: 40px 0 20px;
-            }
-
-            .designer-credit {
-                margin-top: 1.5rem;
-                padding-top: 1.5rem;
-            }
-
-            .developer-whatsapp {
-                font-size: 0.8rem;
-                padding: 0.4rem 0.8rem;
-            }
-        }
-    </style>
+    <!-- Ultimate Footer -->
+    <?php require_once 'components/ultimate_footer_clean.php'; ?>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

@@ -1,11 +1,11 @@
-<?php
+m<?php
 // Error-Free Production Configuration - Force Database Connection
 // This eliminates all database connection errors
 
 // Force database configuration for localhost (XAMPP)
 define('DB_HOST', 'localhost');
 define('DB_USER', 'root');
-define('DB_PASSWORD', '');
+define('DB_PASSWORD', 'ReagaN23#');
 define('DB_NAME', 'salem_dominion_ministries');
 define('DB_CHARSET', 'utf8mb4');
 define('DB_PORT', 3306);

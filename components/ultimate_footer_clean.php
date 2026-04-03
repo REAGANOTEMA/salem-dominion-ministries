@@ -139,13 +139,17 @@ ob_end_clean();
                                 <a href="https://reaganotema.com" target="_blank" class="designer-link">Mr. Reagan Otema</a>
                             </div>
                             <div class="developer-contact">
-                                <a href="https://wa.me/256753244480" target="_blank" class="developer-whatsapp">
+                                <a href="https://wa.me/256772514889" target="_blank" class="developer-whatsapp">
                                     <i class="fab fa-whatsapp"></i>
-                                    <span>Developer</span>
+                                    <span>Developer: +256 772 514 889</span>
+                                </a>
+                                <a href="mailto:reaganotemas@gmail.com" class="developer-email">
+                                    <i class="fas fa-envelope"></i>
+                                    <span>reaganotemas@gmail.com</span>
                                 </a>
                                 <a href="https://wa.me/256753244480" target="_blank" class="pastor-whatsapp">
                                     <i class="fab fa-whatsapp"></i>
-                                    <span>Pastor</span>
+                                    <span>Pastor: +256 753 244 480</span>
                                 </a>
                             </div>
                         </div>
@@ -632,6 +636,26 @@ ob_end_clean();
     background: linear-gradient(135deg, #128c7e, #075e54);
     transform: scale(1.05);
     box-shadow: 0 5px 15px rgba(37, 211, 102, 0.3);
+}
+
+.developer-email {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: linear-gradient(135deg, #ea4335, #c5221f);
+    color: #ffffff;
+    padding: 0.5rem 1rem;
+    border-radius: 25px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    font-size: 0.85rem;
+}
+
+.developer-email:hover {
+    background: linear-gradient(135deg, #c5221f, #a31815);
+    transform: scale(1.05);
+    box-shadow: 0 5px 15px rgba(234, 67, 53, 0.3);
+    color: #ffffff;
 }
 
 /* WhatsApp Floating Button */
