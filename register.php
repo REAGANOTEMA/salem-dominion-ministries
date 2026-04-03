@@ -27,20 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors[] = 'Please enter a valid email address.';
     }
 
-    // Only allow official church emails
-    $official_emails = [
-        'visit@salemdominionministries.com',
-        'ministers@salemdominionministries.com', 
-        'childrenministry@salemdominionministries.com',
-        'admin@salemdominionministries.com',
-        'pastor@salemdominionministries.com',
-        'otema@salemdominionministries.com'
-    ];
-    
-    // Check if email is in the official list
-    if (!in_array($email, $official_emails)) {
-        $errors[] = 'Only official church email addresses are allowed for registration. Please contact administration for access.';
-    }
+    // Allow any email address for registration
 
     if (strlen($password) < 6) {
         $errors[] = 'Password must be at least 6 characters long.';
@@ -152,16 +139,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <div class="mb-3">
                         <label for="email" class="form-label"><i class="fas fa-envelope"></i> Email Address *</label>
                         <input type="email" class="form-control" id="email" name="email" required
-                               placeholder="your.name@salemdominionministries.com"
+                               placeholder="your.email@example.com"
                                value="<?php echo htmlspecialchars($_POST['email'] ?? ''); ?>">
                         <div class="form-text">
-                            <strong>Official church emails only:</strong><br>
-                            • visit@salemdominionministries.com<br>
-                            • ministers@salemdominionministries.com<br>
-                            • childrenministry@salemdominionministries.com<br>
-                            • admin@salemdominionministries.com<br>
-                            • pastor@salemdominionministries.com<br>
-                            • otema@salemdominionministries.com
+                            Any email address is accepted for registration.
                         </div>
                     </div>
                     <div class="mb-3">
