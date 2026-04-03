@@ -1,11 +1,11 @@
 <?php
 // Production-Ready Universal Navigation with WhatsApp
-require_once 'auth_system.php';
+require_once 'config_force.php';
 
 // Check if user is logged in
-$user_is_logged_in = is_logged_in();
-$current_user = $user_is_logged_in ? get_current_user() : null;
-$is_admin = $user_is_logged_in ? is_admin() : false;
+$user_is_logged_in = isset($_SESSION['user_id']);
+$current_user = $user_is_logged_in ? $_SESSION : null;
+$is_admin = $user_is_logged_in && ($_SESSION['role'] ?? '') === 'admin';
 ?>
 
 <!-- PWA Manifest Link -->

@@ -8,12 +8,11 @@ ini_set('log_errors', 0);
 ob_start();
 
 // Include session helper and start session safely
-require_once 'session_helper.php';
-secure_session_start();
-require_once 'db.php';
+require_once 'config_force.php';
 
 // Get leadership data with error handling
 try {
+    $db = new Database();
     $leadership = $db->query("SELECT * FROM leadership WHERE is_active = 1 ORDER BY order_position ASC");
     $testimonials = $db->query("SELECT * FROM testimonials WHERE is_active = 1 ORDER BY created_at DESC LIMIT 6");
     $stats = [
@@ -39,6 +38,13 @@ ob_end_clean();
     <meta name="description" content="About Salem Dominion Ministries - Our mission, vision, leadership, and history">
     <title>About Us - Salem Dominion Ministries</title>
     
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="apple-touch-icon" href="/favicon.ico">
+    <link rel="icon" sizes="192x192" href="/favicon.ico">
+    <link rel="icon" sizes="512x512" href="/favicon.ico">
+    
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
@@ -46,33 +52,32 @@ ob_end_clean();
     <!-- AOS Animation -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Montserrat:wght@100;200;300;400;500;600;700;800;900&family=Great+Vibes&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Final Clean CSS -->
+    <link rel="stylesheet" href="assets/css/final-clean.css">
     
     <style>
-        /* ICONIC DESIGN SYSTEM - Top Notch Colors Only */
+        /* Final Clean Design System */
         :root {
-            /* Primary Palette - Ultra Premium */
-            --midnight-blue: #0f172a;
-            --ocean-blue: #0ea5e9;
-            --sky-blue: #38bdf8;
-            --ice-blue: #7dd3fc;
-            --snow-white: #ffffff;
-            --pearl-white: #f8fafc;
-            
-            /* Divine Accents */
-            --heavenly-gold: #fbbf24;
-            --divine-light: #fef3c7;
-            
-            /* Shadows & Effects */
-            --shadow-divine: 0 20px 40px rgba(15, 23, 42, 0.15);
-            --shadow-heavenly: 0 25px 50px rgba(251, 191, 36, 0.2);
-            --shadow-soft: 0 10px 25px rgba(15, 23, 42, 0.08);
-            --shadow-glow: 0 0 40px rgba(14, 165, 233, 0.3);
-            
-            /* Gradients - Iconic */
-            --gradient-ocean: linear-gradient(135deg, var(--midnight-blue) 0%, var(--ocean-blue) 50%, var(--sky-blue) 100%);
-            --gradient-heaven: linear-gradient(135deg, var(--snow-white) 0%, var(--pearl-white) 50%, var(--ice-blue) 100%);
-            --gradient-divine: linear-gradient(135deg, var(--heavenly-gold) 0%, var(--divine-light) 100%);
+            --primary-color: #dc2626;
+            --secondary-color: #ea580c;
+            --accent-color: #f59e0b;
+            --dark-color: #450a0a;
+            --light-color: #fef2f2;
+            --text-color: #7f1d1d;
+            --gradient-primary: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+            --gradient-secondary: linear-gradient(135deg, #ea580c 0%, #dc2626 100%);
+            --gradient-accent: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%);
+            --gradient-dark: linear-gradient(135deg, #450a0a 0%, #7f1d1d 100%);
+            --shadow-sm: 0 2px 4px rgba(220, 38, 38, 0.1);
+            --shadow-md: 0 4px 6px rgba(220, 38, 38, 0.1);
+            --shadow-lg: 0 10px 15px rgba(220, 38, 38, 0.1);
+            --shadow-xl: 0 20px 25px rgba(220, 38, 38, 0.1);
+            --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --border-radius: 12px;
+            --border-radius-lg: 20px;
+            --font-primary: 'Poppins', sans-serif;
         }
 
         * {
@@ -82,11 +87,11 @@ ob_end_clean();
         }
 
         body {
-            font-family: 'Montserrat', sans-serif;
+            font-family: var(--font-primary);
             font-weight: 300;
             line-height: 1.6;
-            color: var(--midnight-blue);
-            background: var(--snow-white);
+            color: var(--text-color);
+            background: var(--light-color);
             overflow-x: hidden;
             position: relative;
         }

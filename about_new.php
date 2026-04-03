@@ -1,5 +1,5 @@
 <?php
-// Final Clean & Perfect Homepage - All Colors Applied
+// Complete Cleanup - Correct Spelling, Delete Old Versions, Remove Contact Info
 require_once 'config_force.php';
 
 // Initialize variables to prevent undefined errors
@@ -46,9 +46,17 @@ $pastor_info = [
     'name' => 'Apostle Faty Musasizi',
     'title' => 'Senior Pastor & Founder',
     'bio' => 'Apostle Faty Musasizi is a passionate servant of God with over 25 years of ministry experience. She founded Salem Dominion Ministries with a vision to empower believers and transform communities through the power of the Gospel.',
-    'email' => 'admin@saleldominionministries.com',
+    'email' => 'admin@salemdominionministries.com',
     'phone' => '+256 753 244480',
     'image' => 'assets/general-pastor.jpeg'
+];
+
+// Church statistics
+$church_stats = [
+    ['number' => '500+', 'label' => 'Members', 'icon' => 'fa-users'],
+    ['number' => '50+', 'label' => 'Ministries', 'icon' => 'fa-church'],
+    ['number' => '1000+', 'label' => 'Lives Touched', 'icon' => 'fa-heart'],
+    ['number' => '25+', 'label' => 'Years of Service', 'icon' => 'fa-calendar']
 ];
 ?>
 <!DOCTYPE html>
@@ -56,24 +64,24 @@ $pastor_info = [
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Salem Dominion Ministries - Welcome | Final Design</title>
+    <title>Salem Dominion Ministries - Welcome | Perfectly Clean & Updated</title>
     <meta name="description" content="Welcome to Salem Dominion Ministries - Your spiritual home where faith comes alive through worship, fellowship, and service.">
     <meta name="keywords" content="church, ministry, worship, fellowship, Salem Dominion, Christian, community">
     <meta name="author" content="Salem Dominion Ministries">
     
     <!-- Open Graph Meta Tags -->
-    <meta property="og:title" content="Salem Dominion Ministries - Welcome">
+    <meta property="og:title" content="Salem Dominion Ministries - Welcome | Perfectly Clean & Updated">
     <meta property="og:description" content="Your spiritual home where faith comes alive through worship, fellowship, and service.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="<?php echo (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']; ?>">
-    <meta property="og:image" content="<?php echo (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST']; ?>/assets/images/logo">
+    <meta property="og:image" content="<?php echo (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST']; ?>/assets/general-pastor.jpeg">
     <meta property="og:site_name" content="Salem Dominion Ministries">
     
     <!-- Twitter Card Meta Tags -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Salem Dominion Ministries - Welcome">
+    <meta name="twitter:title" content="Salem Dominion Ministries - Welcome | Perfectly Clean & Updated">
     <meta name="twitter:description" content="Your spiritual home where faith comes alive through worship, fellowship, and service.">
-    <meta name="twitter:image" content="<?php echo (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST']; ?>/assets/images/logo">
+    <meta name="twitter:image" content="<?php echo (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST']; ?>/assets/general-pastor.jpeg">
     
     <!-- Canonical URL -->
     <link rel="canonical" href="<?php echo (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']; ?>">
@@ -88,6 +96,13 @@ $pastor_info = [
     <meta name="application-name" content="Salem Dominion Ministries">
     <meta name="msapplication-TileColor" content="#dc2626">
     <meta name="msapplication-config" content="/salem_browserconfig.xml">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="apple-touch-icon" href="/favicon.ico">
+    <link rel="icon" sizes="192x192" href="/favicon.ico">
+    <link rel="icon" sizes="512x512" href="/favicon.ico">
     
     <!-- Preload Critical Resources -->
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" as="style">
@@ -107,13 +122,6 @@ $pastor_info = [
     
     <!-- Final Clean CSS -->
     <link rel="stylesheet" href="assets/css/final-clean.css">
-    
-    <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="/favicon.ico">
-    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
-    <link rel="apple-touch-icon" href="/favicon.ico">
-    <link rel="icon" sizes="192x192" href="/favicon.ico">
-    <link rel="icon" sizes="512x512" href="/favicon.ico">
 </head>
 <body>
     <!-- Production-Ready Navigation -->
@@ -123,8 +131,13 @@ $pastor_info = [
     <section class="hero-section">
         <div class="container">
             <div class="hero-content">
-                <h1 data-aos="fade-up"><i class="fas fa-church"></i> Salem Dominion Ministries</h1>
-                <p class="lead" data-aos="fade-up" data-aos-delay="200">Welcome to our spiritual home where faith comes alive through worship, fellowship, and service</p>
+                <h1 data-aos="fade-up">
+                    <i class="fas fa-church"></i> 
+                    <span style="display: inline-block; margin: 0 0.5rem;">Salem Dominion Ministries</span>
+                </h1>
+                <p class="lead" data-aos="fade-up" data-aos-delay="200">
+                    Spreading the Gospel • Transforming Lives • Building Community
+                </p>
                 <div class="action-buttons" data-aos="fade-up" data-aos-delay="400">
                     <a href="donations.php" class="btn btn-primary">
                         <i class="fas fa-donate"></i> Give
@@ -140,28 +153,40 @@ $pastor_info = [
         </div>
     </section>
 
-    <!-- Pastor Section -->
-    <section class="pastor-section">
+    <!-- About Section -->
+    <section class="py-5">
         <div class="container">
             <div class="section-title" data-aos="fade-up">
-                <h2>Meet Our Pastor</h2>
-                <p>Learn more about our spiritual leader</p>
+                <h2>About Us</h2>
+                <p>Learn more about our mission, vision, and values</p>
             </div>
             
-            <div class="pastor-card" data-aos="fade-up" data-aos-delay="200">
-                <div class="pastor-image">
-                    <img src="<?php echo htmlspecialchars($pastor_info['image']); ?>" alt="<?php echo htmlspecialchars($pastor_info['name']); ?>" onerror="this.style.display='none';">
-                    <div class="pastor-overlay">
-                        <i class="fas fa-cross"></i>
+            <div class="row">
+                <div class="col-lg-6" data-aos="fade-up" data-aos-delay="200">
+                    <div class="ministry-card">
+                        <div class="ministry-icon">
+                            <i class="fas fa-church"></i>
+                        </div>
+                        <h4>Our Mission</h4>
+                        <p>To empower believers and transform communities through the power of the Gospel, creating a vibrant church family that reflects God's love and grace.</p>
                     </div>
                 </div>
-                <div class="pastor-info">
-                    <h3><?php echo htmlspecialchars($pastor_info['name']); ?></h3>
-                    <div class="title"><?php echo htmlspecialchars($pastor_info['title']); ?></div>
-                    <p class="bio"><?php echo htmlspecialchars($pastor_info['bio']); ?></p>
-                    <div class="pastor-contact">
-                        <div><i class="fas fa-envelope"></i> <?php echo htmlspecialchars($pastor_info['email']); ?></div>
-                        <div><i class="fas fa-phone"></i> <?php echo htmlspecialchars($pastor_info['phone']); ?></div>
+                <div class="col-lg-6" data-aos="fade-up" data-aos-delay="300">
+                    <div class="ministry-card">
+                        <div class="ministry-icon">
+                            <i class="fas fa-eye"></i>
+                        </div>
+                        <h4>Our Vision</h4>
+                        <p>To be a beacon of hope and spiritual transformation in our community, reaching people with the life-changing message of Jesus Christ.</p>
+                    </div>
+                </div>
+                <div class="col-lg-6" data-aos="fade-up" data-aos-delay="400">
+                    <div class="ministry-card">
+                        <div class="ministry-icon">
+                            <i class="fas fa-heart"></i>
+                        </div>
+                        <h4>Our Values</h4>
+                        <p>We are committed to biblical teaching, authentic worship, genuine fellowship, compassionate service, and spiritual growth.</p>
                     </div>
                 </div>
             </div>
@@ -196,7 +221,7 @@ $pastor_info = [
                                 <i class="fas fa-users"></i>
                             </div>
                             <h4>Children's Ministry</h4>
-                            <p>Nurturing young hearts in Christ's love</p>
+                            <p>Nurturing young hearts in Christ's love through fun, engaging activities and biblical teaching.</p>
                         </div>
                     </div>
                     <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
@@ -205,7 +230,7 @@ $pastor_info = [
                                 <i class="fas fa-hands-helping"></i>
                             </div>
                             <h4>Outreach</h4>
-                            <p>Spreading God's love to our community</p>
+                            <p>Spreading God's love to our community through service projects, evangelism, and compassionate outreach programs.</p>
                         </div>
                     </div>
                     <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
@@ -213,8 +238,8 @@ $pastor_info = [
                             <div class="ministry-icon">
                                 <i class="fas fa-music"></i>
                             </div>
-                            <h4>Worship Team</h4>
-                            <p>Leading congregation in praise and worship</p>
+                            <h4>Worship Ministry</h4>
+                            <p>Leading our congregation in powerful worship and praise, creating an atmosphere where God's presence is tangibly felt.</p>
                         </div>
                     </div>
                 <?php endif; ?>
@@ -254,9 +279,9 @@ $pastor_info = [
                                 <i class="fas fa-newspaper"></i>
                             </div>
                             <div class="news-content">
-                                <h4>Welcome to Our Church</h4>
+                                <h4>Welcome to Salem Dominion Ministries</h4>
                                 <p class="small text-muted">Coming Soon</p>
-                                <p>Exciting things are happening at Salem Dominion Ministries. Stay tuned for updates!</p>
+                                <p>We're excited to share what God is doing in our church. Stay tuned for updates and announcements!</p>
                                 <a href="news.php" class="btn btn-sm btn-outline-primary">All News</a>
                             </div>
                         </div>
@@ -306,9 +331,9 @@ $pastor_info = [
                                 </div>
                             </div>
                             <div class="event-content">
-                                <h4>Christmas Service</h4>
+                                <h4>Christmas Celebration</h4>
                                 <p class="small text-muted">Sunday, December 15, 2024 - 10:00 AM</p>
-                                <p>Celebrate the birth of our Lord with special service and fellowship</p>
+                                <p>Celebrate the birth of our Lord with special service, carols, and fellowship time.</p>
                                 <a href="#" class="btn btn-sm btn-outline-success">Learn More</a>
                             </div>
                         </div>
@@ -363,22 +388,12 @@ $pastor_info = [
             </div>
             
             <div class="stats-grid">
-                <div class="stat-item" data-aos="fade-up">
-                    <div class="stat-number">500+</div>
-                    <div class="stat-label">Members</div>
-                </div>
-                <div class="stat-item" data-aos="fade-up" data-aos-delay="100">
-                    <div class="stat-number">50+</div>
-                    <div class="stat-label">Ministries</div>
-                </div>
-                <div class="stat-item" data-aos="fade-up" data-aos-delay="200">
-                    <div class="stat-number">1000+</div>
-                    <div class="stat-label">Lives Touched</div>
-                </div>
-                <div class="stat-item" data-aos="fade-up" data-aos-delay="300">
-                    <div class="stat-number">25+</div>
-                    <div class="stat-label">Years of Service</div>
-                </div>
+                <?php foreach ($church_stats as $index => $stat): ?>
+                    <div class="stat-item" data-aos="fade-up" data-aos-delay="<?php echo $index * 100; ?>">
+                        <div class="stat-number"><?php echo htmlspecialchars($stat['number']); ?></div>
+                        <div class="stat-label"><i class="fas <?php echo htmlspecialchars($stat['icon']); ?>"></i> <?php echo htmlspecialchars($stat['label']); ?></div>
+                    </div>
+                <?php endforeach; ?>
             </div>
         </div>
     </section>
@@ -387,7 +402,7 @@ $pastor_info = [
     <section class="cta-section">
         <div class="container">
             <div class="cta-content" data-aos="fade-up">
-                <h2>Ready to Join Our Family?</h2>
+                <h2>Join Our Family</h2>
                 <p>Experience the warmth and community of Salem Dominion Ministries</p>
                 <div class="action-buttons">
                     <a href="register.php" class="btn btn-primary btn-lg">
@@ -401,7 +416,7 @@ $pastor_info = [
         </div>
     </section>
 
-    <!-- Final Clean Footer -->
+    <!-- Clean Footer - No Contact Info -->
     <?php include 'components/final_footer.php'; ?>
 
     <!-- Developer WhatsApp Button -->

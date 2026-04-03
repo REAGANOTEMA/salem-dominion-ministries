@@ -5,9 +5,7 @@ require_once 'config_force.php';
 // Get church information and statistics
 $church_info = [
     'name' => 'Salem Dominion Ministries',
-    'address' => '123 Church Street, City, State',
-    'phone' => '+256 753 244480',
-    'email' => 'visit@saleldominionministries.com'
+    'description' => 'A vibrant church community committed to spreading the love of Christ, making disciples, and serving our community with compassion and excellence.'
 ];
 
 try {
@@ -41,7 +39,7 @@ try {
                             <i class="fas fa-church"></i> <?php echo htmlspecialchars($church_info['name']); ?>
                         </h5>
                         <p class="footer-description">
-                            Welcome to our spiritual home where faith comes alive through worship, fellowship, and service. Experience the power of God's love in our vibrant community.
+                            <?php echo htmlspecialchars($church_info['description']); ?>
                         </p>
                         
                         <!-- Social Links -->

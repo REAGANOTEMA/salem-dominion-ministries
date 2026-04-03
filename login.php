@@ -8,9 +8,7 @@ ini_set('log_errors', 0);
 ob_start();
 
 // Include session helper and start session safely
-require_once 'session_helper.php';
-secure_session_start();
-require_once 'db.php';
+require_once 'config_force.php';
 
 // Check if user is already logged in
 if (isset($_SESSION['user_id'])) {
@@ -28,6 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     if (!empty($email) && !empty($password)) {
         try {
+            $db = new Database();
             $user = $db->selectOne("SELECT * FROM users WHERE email = ? AND is_active = 1", [$email]);
             
             if ($user && password_verify($password, $user['password'])) {
