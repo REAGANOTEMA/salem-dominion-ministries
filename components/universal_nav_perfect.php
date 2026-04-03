@@ -218,8 +218,32 @@ $is_admin = $user_is_logged_in ? is_admin() : false;
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="about.php">
-                        <i class="fas fa-church"></i> About
+                    <a class="nav-link" href="children.php">
+                        <i class="fas fa-child"></i> Children
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="pastors.php">
+                        <i class="fas fa-users"></i> Pastors
+                    </a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="ministriesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-church"></i> Ministries
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="ministriesDropdown">
+                        <li><a class="dropdown-item" href="children.php"><i class="fas fa-child"></i> Children's Ministry</a></li>
+                        <li><a class="dropdown-item" href="youth.php"><i class="fas fa-user-graduate"></i> Youth Ministry</a></li>
+                        <li><a class="dropdown-item" href="women.php"><i class="fas fa-female"></i> Women's Ministry</a></li>
+                        <li><a class="dropdown-item" href="men.php"><i class="fas fa-male"></i> Men's Ministry</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="outreach.php"><i class="fas fa-hands-helping"></i> Outreach</a></li>
+                        <li><a class="dropdown-item" href="missions.php"><i class="fas fa-globe"></i> Missions</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="prayer.php">
+                        <i class="fas fa-pray"></i> Prayer
                     </a>
                 </li>
                 <li class="nav-item">
@@ -238,10 +262,6 @@ $is_admin = $user_is_logged_in ? is_admin() : false;
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="prayer.php">
-                        <i class="fas fa-pray"></i> Prayer
-                    </a>
-                </li>
                 <li class="nav-item">
                     <a class="nav-link" href="contact.php">
                         <i class="fas fa-envelope"></i> Contact

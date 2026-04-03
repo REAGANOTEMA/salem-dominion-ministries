@@ -110,6 +110,10 @@ $pastor_info = [
     
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="apple-touch-icon" href="/favicon.ico">
+    <link rel="icon" sizes="192x192" href="/favicon.ico">
+    <link rel="icon" sizes="512x512" href="/favicon.ico">
 </head>
 <body>
     <!-- Production-Ready Navigation -->
